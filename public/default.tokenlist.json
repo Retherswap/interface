@@ -1,0 +1,30 @@
+{
+  "name": "Rethereum Tokens",
+  "timestamp": "2023-09-21T20:37:00.000+00:00",
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "https://raw.githubusercontent.com/Retherswap/Default-token-list/main/tokens/0x0000000000E3448F3b4f0a59cDd084689a8eA3cB/logo.png",
+  "keywords": ["Retherswap", "Rethereum"],
+  "tokens": [
+    {
+      "name": "Wrapped Rether",
+      "address": "0x0000000000E3448F3b4f0a59cDd084689a8eA3cB",
+      "symbol": "WRTH",
+      "decimals": 18,
+      "chainId": 622277,
+      "logoURI": "https://raw.githubusercontent.com/Retherswap/Default-token-list/main/tokens/0x0000000000E3448F3b4f0a59cDd084689a8eA3cB/logo.png"
+    },
+    {
+      "name": "Retherswap Token",
+      "address": "0x12F2b8a966DF38DAAF2f0664caE1c525F3960427",
+      "symbol": "RETHERS",
+      "decimals": 18,
+      "chainId": 622277,
+      "logoURI": "https://raw.githubusercontent.com/Retherswap/Default-token-list/main/tokens/0x12F2b8a966DF38DAAF2f0664caE1c525F3960427/logo.png"
+    }
+  ]
+}
