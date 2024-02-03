@@ -157,6 +157,7 @@ export default function Manage({
                   stakingInfo.rewardRate.raw,
                   JSBI.BigInt(Math.round(new Date().getTime() - (stakingInfo.lastTimeRewardApplicable?.getTime() ?? 0)))
                 ),
+                // Convert it from milliseconds to seconds
                 JSBI.BigInt(1000)
               )
             )
@@ -299,7 +300,7 @@ export default function Manage({
                   <TYPE.white fontSize={36} fontWeight={600}>
                     {stakingInfo?.stakedAmount?.toSignificant(6) ?? '-'}
                   </TYPE.white>
-                  <AutoColumn>
+                  <AutoColumn style={{ gap: '5px' }}>
                     <TYPE.white>
                       LP: {currencyA?.symbol}-{currencyB?.symbol}
                     </TYPE.white>
