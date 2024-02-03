@@ -1,34 +1,35 @@
-import React, { useCallback, useState } from 'react'
-import { AutoColumn } from '../../components/Column'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
+import { AutoColumn } from '../../components/Column';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-import { JSBI, TokenAmount, ETHER } from '@retherswap/sdk'
-import { RouteComponentProps } from 'react-router-dom'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import { useCurrency } from '../../hooks/Tokens'
-import { useWalletModalToggle } from '../../state/application/hooks'
-import { TYPE } from '../../theme'
+import { JSBI, TokenAmount, ETHER } from '@retherswap/sdk';
+import { RouteComponentProps } from 'react-router-dom';
+import DoubleCurrencyLogo from '../../components/DoubleLogo';
+import { useCurrency } from '../../hooks/Tokens';
+import { useWalletModalToggle } from '../../state/application/hooks';
+import { TYPE } from '../../theme';
 
-import { RowBetween } from '../../components/Row'
-import { CardSection, DataCard, CardNoise } from '../../components/earn/styled'
-import { ButtonPrimary, ButtonSecondary } from '../../components/Button'
-import StakingModal from '../../components/earn/StakingModal'
-import { useStakingInfo } from '../../state/stake/hooks'
-import UnstakingModal from '../../components/earn/UnstakingModal'
-import ClaimRewardModal from '../../components/earn/ClaimRewardModal'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { useActiveWeb3React } from '../../hooks'
-import { useColor } from '../../hooks/useColor'
-import { CountUp } from 'use-count-up'
+import CurrencyLogo from '../../components/CurrencyLogo';
+import { RowBetween } from '../../components/Row';
+import { CardSection, DataCard, CardNoise } from '../../components/earn/styled';
+import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
+import StakingModal from '../../components/earn/StakingModal';
+import { useStakingInfo } from '../../state/stake/hooks';
+import UnstakingModal from '../../components/earn/UnstakingModal';
+import ClaimRewardModal from '../../components/earn/ClaimRewardModal';
+import { useTokenBalance } from '../../state/wallet/hooks';
+import { useActiveWeb3React } from '../../hooks';
+import { useColor } from '../../hooks/useColor';
+import { CountUp } from 'use-count-up';
 
-import { wrappedCurrency } from '../../utils/wrappedCurrency'
-import { currencyId } from '../../utils/currencyId'
-import { useTotalSupply } from '../../data/TotalSupply'
-import { usePair } from '../../data/Reserves'
-import usePrevious from '../../hooks/usePrevious'
-import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK } from '../../constants'
+import { wrappedCurrency } from '../../utils/wrappedCurrency';
+import { currencyId } from '../../utils/currencyId';
+import { useTotalSupply } from '../../data/TotalSupply';
+import { usePair } from '../../data/Reserves';
+import usePrevious from '../../hooks/usePrevious';
+import useUSDCPrice from '../../utils/useUSDCPrice';
+import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK } from '../../constants';
 
 const PageWrapper = styled(AutoColumn)`
   position: relative;
@@ -39,26 +40,26 @@ const PageWrapper = styled(AutoColumn)`
     width: 90%;
     max-width: 400px;
   `}
-`
+`;
 
 const PositionInfo = styled(AutoColumn)<{ dim: any }>`
   position: relative;
   max-width: 640px;
   width: 100%;
   opacity: ${({ dim }) => (dim ? 0.6 : 1)};
-`
+`;
 
 const BottomSection = styled(AutoColumn)`
   border-radius: 12px;
   width: 100%;
   position: relative;
-`
+`;
 
 const StyledDataCard = styled(DataCard)<{ bgColor?: any; showBackground?: any }>`
   background-color: ${({ theme }) => theme.blue2};
   z-index: 2;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-`
+`;
 
 const StyledBottomCard = styled(DataCard)<{ dim: any }>`
   background: ${({ theme }) => theme.bg3};
@@ -67,19 +68,19 @@ const StyledBottomCard = styled(DataCard)<{ dim: any }>`
   padding: 0 1.25rem 1rem 1.25rem;
   padding-top: 32px;
   z-index: 1;
-`
+`;
 
 const PoolData = styled(DataCard)`
   background-color: ${({ theme }) => theme.blue2};
   border: 1px solid ${({ theme }) => theme.bg4};
   padding: 1rem;
   z-index: 1;
-`
+`;
 
 const VoteCard = styled(DataCard)`
   background-color: ${({ theme }) => theme.blue2};
   overflow: hidden;
-`
+`;
 
 const DataRow = styled(RowBetween)`
   justify-content: center;
@@ -89,42 +90,44 @@ const DataRow = styled(RowBetween)`
     flex-direction: column;
     gap: 12px;
   `};
-`
+`;
 
 export default function Manage({
   match: {
-    params: { currencyIdA, currencyIdB }
-  }
+    params: { currencyIdA, currencyIdB },
+  },
 }: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React();
 
   // get currencies and pair
-  const [currencyA, currencyB] = [useCurrency(currencyIdA), useCurrency(currencyIdB)]
-  const tokenA = wrappedCurrency(currencyA ?? undefined, chainId)
-  const tokenB = wrappedCurrency(currencyB ?? undefined, chainId)
+  const [currencyA, currencyB] = [useCurrency(currencyIdA), useCurrency(currencyIdB)];
+  const tokenA = wrappedCurrency(currencyA ?? undefined, chainId);
+  const tokenB = wrappedCurrency(currencyB ?? undefined, chainId);
 
-  const [, stakingTokenPair] = usePair(tokenA, tokenB)
-  const stakingInfo = useStakingInfo(stakingTokenPair)?.[0]
+  const [, stakingTokenPair] = usePair(tokenA, tokenB);
+  const stakingInfo = useStakingInfo(stakingTokenPair)?.[0];
 
   // detect existing unstaked LP position to show add button if none found
-  const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
-  const showAddLiquidityButton = Boolean(stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0'))
+  const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token);
+  const showAddLiquidityButton = Boolean(
+    stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0')
+  );
 
   // toggle for staking modal and unstaking modal
-  const [showStakingModal, setShowStakingModal] = useState(false)
-  const [showUnstakingModal, setShowUnstakingModal] = useState(false)
-  const [showClaimRewardModal, setShowClaimRewardModal] = useState(false)
+  const [showStakingModal, setShowStakingModal] = useState(false);
+  const [showUnstakingModal, setShowUnstakingModal] = useState(false);
+  const [showClaimRewardModal, setShowClaimRewardModal] = useState(false);
 
   // fade cards if nothing staked or nothing earned yet
-  const disableTop = !stakingInfo?.stakedAmount || stakingInfo.stakedAmount.equalTo(JSBI.BigInt(0))
-  
-  const token = currencyA === ETHER ? tokenB : tokenA
-  const WETH = currencyA === ETHER ? tokenA : tokenB
-  const backgroundColor = useColor(token)
+  const disableTop = !stakingInfo?.stakedAmount || stakingInfo.stakedAmount.equalTo(JSBI.BigInt(0));
+
+  const token = currencyA === ETHER ? tokenB : tokenA;
+  const WETH = currencyA === ETHER ? tokenA : tokenB;
+  const backgroundColor = useColor(token);
 
   // get WETH value of staked LP tokens
-  const totalSupplyOfStakingToken = useTotalSupply(stakingInfo?.stakedAmount?.token)
-  let valueOfTotalStakedAmountInWETH: TokenAmount | undefined
+  const totalSupplyOfStakingToken = useTotalSupply(stakingInfo?.stakedAmount?.token);
+  let valueOfTotalStakedAmountInWETH: TokenAmount | undefined;
   if (totalSupplyOfStakingToken && !disableTop && stakingTokenPair && stakingInfo && WETH) {
     // take the total amount of LP tokens staked, multiply by ETH value of all LP tokens, divide by all LP tokens
     valueOfTotalStakedAmountInWETH = new TokenAmount(
@@ -136,28 +139,68 @@ export default function Manage({
         ),
         totalSupplyOfStakingToken.raw
       )
-    )
+    );
   }
+  const [countUpAmount, setCountUpAmount] = useState('0');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (stakingInfo && totalSupplyOfStakingToken) {
+        setCountUpAmount(
+          new TokenAmount(
+            stakingInfo.stakedAmount.token,
+            // Add the amount of token user has earned since last claim to the amount of token since last block reward
+            JSBI.add(
+              stakingInfo.earnedAmount.raw,
+              JSBI.divide(
+                // Multiply the reward rate by the time since the last reward was paid
+                JSBI.multiply(
+                  stakingInfo.rewardRate.raw,
+                  JSBI.BigInt(Math.round(new Date().getTime() - (stakingInfo.lastTimeRewardApplicable?.getTime() ?? 0)))
+                ),
+                JSBI.BigInt(1000)
+              )
+            )
+          ).toFixed(6)
+        );
+      }
+      return undefined;
+    }, 100);
+    return () => clearInterval(interval);
+  }, [stakingInfo, totalSupplyOfStakingToken]);
+  const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0';
 
-  const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
-  const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
+  // Get the count of each tokens in LP
+  const tokensCount = useMemo(() => {
+    if (stakingTokenPair && stakingInfo && totalSupplyOfStakingToken) {
+      return [
+        stakingTokenPair
+          .getLiquidityValue(stakingTokenPair.token0, totalSupplyOfStakingToken, stakingInfo.stakedAmount, false)
+          .toFixed(0, { groupSeparator: ',' }),
+        stakingTokenPair
+          .getLiquidityValue(stakingTokenPair.token1, totalSupplyOfStakingToken, stakingInfo.stakedAmount, false)
+          .toFixed(0, { groupSeparator: ',' }),
+      ];
+    }
+    return ['0', '0'];
+  }, [stakingInfo, stakingTokenPair, totalSupplyOfStakingToken]);
 
   // get the USD value of staked WETH
-  const USDPrice = useUSDCPrice(WETH)
+  const USDPrice = useUSDCPrice(WETH);
   const valueOfTotalStakedAmountInUSDC =
-    valueOfTotalStakedAmountInWETH && 
-    USDPrice && USDPrice.greaterThan('0') &&
-    USDPrice.quote(valueOfTotalStakedAmountInWETH)
+    valueOfTotalStakedAmountInWETH &&
+    USDPrice &&
+    USDPrice.greaterThan('0') &&
+    USDPrice.quote(valueOfTotalStakedAmountInWETH);
 
-  const toggleWalletModal = useWalletModalToggle()
+  const toggleWalletModal = useWalletModalToggle();
 
   const handleDepositClick = useCallback(() => {
     if (account) {
-      setShowStakingModal(true)
+      setShowStakingModal(true);
     } else {
-      toggleWalletModal()
+      toggleWalletModal();
     }
-  }, [account, toggleWalletModal])
+  }, [account, toggleWalletModal]);
 
   return (
     <PageWrapper gap="lg" justify="center">
@@ -252,13 +295,23 @@ export default function Manage({
                 <RowBetween>
                   <TYPE.white fontWeight={600}>Your liquidity deposits</TYPE.white>
                 </RowBetween>
-                <RowBetween style={{ alignItems: 'baseline' }}>
+                <RowBetween style={{ alignItems: 'top' }}>
                   <TYPE.white fontSize={36} fontWeight={600}>
                     {stakingInfo?.stakedAmount?.toSignificant(6) ?? '-'}
                   </TYPE.white>
-                  <TYPE.white>
-                    LP: {currencyA?.symbol}-{currencyB?.symbol}
-                  </TYPE.white>
+                  <AutoColumn>
+                    <TYPE.white>
+                      LP: {currencyA?.symbol}-{currencyB?.symbol}
+                    </TYPE.white>
+                    <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
+                      <span>{tokensCount[0]}</span>
+                      <CurrencyLogo currency={currencyA ?? undefined} size={'24px'} />
+                    </RowBetween>
+                    <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
+                      <span>{tokensCount[1]}</span>
+                      <CurrencyLogo currency={currencyB ?? undefined} size={'24px'} />
+                    </RowBetween>
+                  </AutoColumn>
                 </RowBetween>
               </AutoColumn>
             </CardSection>
@@ -293,8 +346,8 @@ export default function Manage({
                     duration={1}
                   />
                 </TYPE.largeHeader>
-                </RowBetween>
-                <RowBetween style={{ alignItems: 'baseline' }}>
+              </RowBetween>
+              <RowBetween style={{ alignItems: 'baseline' }}>
                 <TYPE.black fontSize={16} fontWeight={500}>
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                     ⚡
@@ -344,5 +397,5 @@ export default function Manage({
         )}
       </PositionInfo>
     </PageWrapper>
-  )
+  );
 }
