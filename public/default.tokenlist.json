@@ -1,0 +1,30 @@
+{
+  "name": "Retherswap Tokens",
+  "timestamp": "2023-09-21T20:37:00.000+00:00",
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "https://raw.githubusercontent.com/Retherswap/default-token-list/main/supported_chains/hypra/0x0000000000079c645A9bDE0Bd8Af1775FAF5598A/logo.png",
+  "keywords": ["Retherswap", "Hypra"],
+  "tokens": [
+    {
+      "name": "Wrapped Hypra",
+      "address": "0x0000000000079c645A9bDE0Bd8Af1775FAF5598A",
+      "symbol": "WHYP",
+      "decimals": 18,
+      "chainId": 622277,
+      "logoURI": "https://raw.githubusercontent.com/Retherswap/default-token-list/main/supported_chains/hypra/0x0000000000079c645A9bDE0Bd8Af1775FAF5598A/logo.png"
+    },
+    {
+      "name": "Retherswap Token",
+      "address": "0xCf52025D37f68dEdA9ef8307Ba4474eCbf15C33c",
+      "symbol": "RETHER",
+      "decimals": 18,
+      "chainId": 622277,
+      "logoURI": "https://raw.githubusercontent.com/Retherswap/Default-token-list/main/tokens/0x12F2b8a966DF38DAAF2f0664caE1c525F3960427/logo.png"
+    }
+  ]
+}
