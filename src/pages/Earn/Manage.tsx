@@ -30,6 +30,7 @@ import { usePair } from '../../data/Reserves';
 import usePrevious from '../../hooks/usePrevious';
 import useUSDCPrice from '../../utils/useUSDCPrice';
 import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK } from '../../constants';
+import usePoolAPR from 'hooks/usePoolAPR';
 
 const PageWrapper = styled(AutoColumn)`
   position: relative;
@@ -170,6 +171,8 @@ export default function Manage({
   }, [stakingInfo, totalSupplyOfStakingToken]);
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0';
 
+  const poolAPR = usePoolAPR(tokenA, tokenB);
+
   // Get the count of each tokens in LP
   const tokensCount = useMemo(() => {
     if (stakingTokenPair && stakingInfo && totalSupplyOfStakingToken) {
@@ -182,7 +185,7 @@ export default function Manage({
           .toFixed(0, { groupSeparator: ',' }),
       ];
     }
-    return ['0', '0'];
+    return ['-', '-'];
   }, [stakingInfo, stakingTokenPair, totalSupplyOfStakingToken]);
 
   // get the USD value of staked WETH
@@ -300,16 +303,16 @@ export default function Manage({
                   <TYPE.white fontSize={36} fontWeight={600}>
                     {stakingInfo?.stakedAmount?.toSignificant(6) ?? '-'}
                   </TYPE.white>
-                  <AutoColumn style={{ gap: '5px' }}>
-                    <TYPE.white>
+                  <AutoColumn style={{ gap: '3px' }}>
+                    <TYPE.white fontSize={15}>
                       LP: {currencyA?.symbol}-{currencyB?.symbol}
                     </TYPE.white>
                     <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
-                      <span>{tokensCount[0]}</span>
+                      <TYPE.white fontSize={15}>{tokensCount[0]}</TYPE.white>
                       <CurrencyLogo currency={currencyA ?? undefined} size={'24px'} />
                     </RowBetween>
                     <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
-                      <span>{tokensCount[1]}</span>
+                      <TYPE.white fontSize={15}>{tokensCount[1]}</TYPE.white>{' '}
                       <CurrencyLogo currency={currencyB ?? undefined} size={'24px'} />
                     </RowBetween>
                   </AutoColumn>
@@ -360,12 +363,18 @@ export default function Manage({
                     : '0'}
                   {' RETHER / week'}
                 </TYPE.black>
+                <TYPE.black fontSize={16} fontWeight={500}>
+                  {poolAPR}% APR
+                  <span role="img" aria-label="rocket-icon" style={{ marginLeft: '8px ' }}>
+                    🚀
+                  </span>
+                </TYPE.black>
               </RowBetween>
             </AutoColumn>
           </StyledBottomCard>
         </BottomSection>
         <TYPE.main style={{ textAlign: 'center' }} fontSize={14}>
-          <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
+          <span role="img" aria-label="star-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
           When you withdraw, the contract will automagically claim RETHER on your behalf!

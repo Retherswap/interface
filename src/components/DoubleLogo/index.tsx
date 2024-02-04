@@ -3,11 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 import CurrencyLogo from '../CurrencyLogo';
 
-const Wrapper = styled.div<{ margin: boolean; sizeraw: number }>`
+const Wrapper = styled.div<{ margin: boolean; sizeraw: number; gap: string }>`
   position: relative;
   display: flex;
   flex-direction: row;
   margin-right: ${({ sizeraw, margin }) => margin && (sizeraw / 3 + 8).toString() + 'px'};
+  gap: ${({ gap }) => gap};
 `;
 
 interface DoubleCurrencyLogoProps {
@@ -32,7 +33,7 @@ export default function DoubleCurrencyLogo({
   margin = false,
 }: DoubleCurrencyLogoProps) {
   return (
-    <Wrapper sizeraw={size} margin={margin}>
+    <Wrapper sizeraw={size} margin={margin} gap="3px">
       {currency0 && <HigherLogo currency={currency0} size={size.toString() + 'px'} />}
       {currency1 && <CoveredLogo currency={currency1} size={size.toString() + 'px'} sizeraw={size} />}
     </Wrapper>

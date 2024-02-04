@@ -48,6 +48,8 @@ export interface StakingInfo {
   // the current amount of token distributed to the active account per second.
   // equivalent to percent of total supply * reward rate
   rewardRate: TokenAmount;
+  // the duration of the rewards
+  rewardsDuration: number;
   // when the period ends
   periodFinish: Date | undefined;
   // when the last update was
@@ -105,6 +107,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     'lastTimeRewardApplicable'
   );
 
+  const rewardsDuration = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'rewardsDuration');
+
   // tokens per second, constants
   const rewardRates = useMultipleContractSingleData(
     rewardsAddresses,
@@ -134,6 +138,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
       const rewardRateState = rewardRates[index];
       const periodFinishState = periodFinishes[index];
       const lastTimeRewardApplicableState = lastTimeRewardApplicable[index];
+      const rewardsDurationState = rewardsDuration[index];
 
       if (
         // these may be undefined if not logged in
@@ -147,7 +152,9 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         periodFinishState &&
         !periodFinishState.loading &&
         lastTimeRewardApplicableState &&
-        !lastTimeRewardApplicableState.loading
+        !lastTimeRewardApplicableState.loading &&
+        rewardsDurationState &&
+        !rewardsDurationState.loading
       ) {
         if (
           balanceState?.error ||
@@ -155,7 +162,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           totalSupplyState.error ||
           rewardRateState.error ||
           periodFinishState.error ||
-          lastTimeRewardApplicableState.error
+          lastTimeRewardApplicableState.error ||
+          rewardsDurationState.error
         ) {
           console.error('Failed to load staking rewards info');
           return memo;
@@ -201,6 +209,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           tokens: info[index].tokens,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           lastTimeRewardApplicable: lastTimeRewardApplicableMs > 0 ? new Date(lastTimeRewardApplicableMs) : undefined,
+          rewardsDuration: rewardsDurationState.result?.[0]?.toNumber(),
           earnedAmount: new TokenAmount(stake, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           rewardRate: individualRewardRate,
           totalRewardRate: totalRewardRate,
