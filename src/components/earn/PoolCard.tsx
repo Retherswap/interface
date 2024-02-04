@@ -143,23 +143,23 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
         </RowBetween>
       </StatContainer>
 
-      {isStaking && (
-        <>
-          <Break />
-          <BottomSection showBackground={true}>
-            <AutoColumn style={{ width: '100%' }}>
-              <RowBetween style={{ width: '100%', justifyContent: 'space-between' }}>
-                <TYPE.black color={'white'} fontWeight={500}>
-                  <span>APR</span>
-                </TYPE.black>
+      <Break />
+      <BottomSection showBackground={true}>
+        <AutoColumn style={{ width: '100%' }}>
+          <RowBetween style={{ width: '100%', justifyContent: 'space-between' }}>
+            <TYPE.black color={'white'} fontWeight={500}>
+              <span>APR</span>
+            </TYPE.black>
 
-                <TYPE.black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
-                  <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
-                    🚀
-                  </span>
-                  {poolAPR}%
-                </TYPE.black>
-              </RowBetween>
+            <TYPE.black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
+              <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
+                🚀
+              </span>
+              {poolAPR}%
+            </TYPE.black>
+          </RowBetween>
+          {isStaking && (
+            <>
               <RowBetween style={{ width: '100%', justifyContent: 'space-between' }}>
                 <TYPE.black color={'white'} fontWeight={500}>
                   <span>Your rate</span>
@@ -178,10 +178,10 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                     : '-'}
                 </TYPE.black>
               </RowBetween>
-            </AutoColumn>
-          </BottomSection>
-        </>
-      )}
+            </>
+          )}
+        </AutoColumn>
+      </BottomSection>
     </Wrapper>
   );
 }
