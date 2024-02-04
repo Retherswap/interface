@@ -33,7 +33,7 @@ export default function DoubleCurrencyLogo({
   margin = false,
 }: DoubleCurrencyLogoProps) {
   return (
-    <Wrapper sizeraw={size} margin={margin} gap="5px">
+    <Wrapper sizeraw={size} margin={margin} gap="3px">
       {currency0 && <HigherLogo currency={currency0} size={size.toString() + 'px'} />}
       {currency1 && <CoveredLogo currency={currency1} size={size.toString() + 'px'} sizeraw={size} />}
     </Wrapper>

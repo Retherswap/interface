@@ -185,7 +185,7 @@ export default function Manage({
           .toFixed(0, { groupSeparator: ',' }),
       ];
     }
-    return ['0', '0'];
+    return ['-', '-'];
   }, [stakingInfo, stakingTokenPair, totalSupplyOfStakingToken]);
 
   // get the USD value of staked WETH
@@ -303,16 +303,16 @@ export default function Manage({
                   <TYPE.white fontSize={36} fontWeight={600}>
                     {stakingInfo?.stakedAmount?.toSignificant(6) ?? '-'}
                   </TYPE.white>
-                  <AutoColumn style={{ gap: '5px' }}>
-                    <TYPE.white>
+                  <AutoColumn style={{ gap: '3px' }}>
+                    <TYPE.white fontSize={15}>
                       LP: {currencyA?.symbol}-{currencyB?.symbol}
                     </TYPE.white>
                     <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
-                      <span>{tokensCount[0]}</span>
+                      <TYPE.white fontSize={15}>{tokensCount[0]}</TYPE.white>
                       <CurrencyLogo currency={currencyA ?? undefined} size={'24px'} />
                     </RowBetween>
                     <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
-                      <span>{tokensCount[1]}</span>
+                      <TYPE.white fontSize={15}>{tokensCount[1]}</TYPE.white>{' '}
                       <CurrencyLogo currency={currencyB ?? undefined} size={'24px'} />
                     </RowBetween>
                   </AutoColumn>
