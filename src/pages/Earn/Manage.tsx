@@ -30,6 +30,7 @@ import { usePair } from '../../data/Reserves';
 import usePrevious from '../../hooks/usePrevious';
 import useUSDCPrice from '../../utils/useUSDCPrice';
 import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK } from '../../constants';
+import usePoolAPR from 'hooks/usePoolAPR';
 
 const PageWrapper = styled(AutoColumn)`
   position: relative;
@@ -169,6 +170,8 @@ export default function Manage({
     return () => clearInterval(interval);
   }, [stakingInfo, totalSupplyOfStakingToken]);
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0';
+
+  const poolAPR = usePoolAPR(tokenA, tokenB);
 
   // Get the count of each tokens in LP
   const tokensCount = useMemo(() => {
@@ -360,12 +363,18 @@ export default function Manage({
                     : '0'}
                   {' RETHER / week'}
                 </TYPE.black>
+                <TYPE.black fontSize={16} fontWeight={500}>
+                  {poolAPR}% APR
+                  <span role="img" aria-label="rocket-icon" style={{ marginLeft: '8px ' }}>
+                    🚀
+                  </span>
+                </TYPE.black>
               </RowBetween>
             </AutoColumn>
           </StyledBottomCard>
         </BottomSection>
         <TYPE.main style={{ textAlign: 'center' }} fontSize={14}>
-          <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
+          <span role="img" aria-label="star-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
           When you withdraw, the contract will automagically claim RETHER on your behalf!
