@@ -122,7 +122,7 @@ export default function Menu() {
           </MenuItem>
           <MenuItem id="link" href="https://www.geckoterminal.com/hypra-network/pools">
             <PieChart size={14} />
-            Gecko Pools
+            Geckoterminal
           </MenuItem>
         </MenuFlyout>
       )}
