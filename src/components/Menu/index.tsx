@@ -120,9 +120,9 @@ export default function Menu() {
             <PieChart size={14} />
             Analytics
           </MenuItem>
-          <MenuItem id="link" href="https://www.hypra.network/">
+          <MenuItem id="link" href="https://www.geckoterminal.com/hypra-network/pools">
             <PieChart size={14} />
-            Bridge
+            Geckoterminal
           </MenuItem>
         </MenuFlyout>
       )}
