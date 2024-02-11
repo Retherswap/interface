@@ -232,6 +232,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     rewardsAddresses,
     totalSupplies,
     stake,
+    rewardsDuration,
     lastTimeRewardApplicable,
   ]);
 }
