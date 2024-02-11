@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PaddedColumn, Separator } from './styleds';
+import { PaddedColumn } from './styleds';
 import { RowBetween } from 'components/Row';
 import { ArrowLeft } from 'react-feather';
 import { Text } from 'rebass';
@@ -10,6 +10,7 @@ import { ManageLists } from './ManageLists';
 import ManageTokens from './ManageTokens';
 import { TokenList } from '@retherswap/token-lists';
 import { CurrencyModalView } from './CurrencySearchModal';
+import { Separator } from 'components/Separator/Separator';
 
 const Wrapper = styled.div`
   width: 100%;

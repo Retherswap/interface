@@ -24,6 +24,7 @@ import RemoveLiquidity from './RemoveLiquidity';
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects';
 import Swap from './Swap';
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects';
+import Bridge from './Bridge';
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -52,7 +53,6 @@ const BodyWrapper = styled.div`
   z-index: 1;
 `;
 
-
 export default function App() {
   return (
     <Suspense fallback={null}>
@@ -72,6 +72,7 @@ export default function App() {
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/find" component={PoolFinder} />
               <Route exact strict path="/pool" component={Pool} />
+              <Route exact strict path="/bridge" component={Bridge} />
               <Route exact strict path="/farm" component={Earn} />
               <Route exact strict path="/vote" component={Vote} />
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />

@@ -15,7 +15,7 @@ import { Moon, Sun } from 'react-feather';
 import Row, { RowFixed } from '../Row';
 import Web3Status from '../Web3Status';
 import { ETH_NAME_AND_SYMBOL } from '../../constants';
-import NetworkSelector from './NetworkSelector'
+import NetworkSelector from './NetworkSelector';
 
 const HeaderFrame = styled.div`
   width: 100vw;
@@ -56,8 +56,6 @@ const HeaderElement = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  
-  
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
    flex-direction: row-reverse;
@@ -73,7 +71,6 @@ const HeaderElementWrap = styled.div`
 const HeaderRow = styled(RowFixed)`
   display: flex;
   align-items: center;
-  
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
     width: 100%;
@@ -209,7 +206,6 @@ export const StyledMenuButton = styled.button`
   padding: 0.15rem 0.5rem;
   border-radius: 0.5rem;
 
-
   :hover,
   :focus {
     cursor: pointer;
@@ -240,13 +236,13 @@ export default function Header() {
   return (
     <HeaderFrame>
       <HeaderRow>
-          <Title href=".">
-            <Icon>
-              <HideSmall>
+        <Title href=".">
+          <Icon>
+            <HideSmall>
               <img width={'300px'} src={darkMode ? LogoDark : Logo} alt="logo" />
-              </HideSmall>
-            </Icon>
-          </Title>
+            </HideSmall>
+          </Icon>
+        </Title>
       </HeaderRow>
       <HeaderLinks>
         <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
@@ -268,13 +264,16 @@ export default function Header() {
         <StyledNavLink id={`stake-nav-link`} to={'/farm'}>
           {t('Farm')}
         </StyledNavLink>
+        <StyledNavLink id={`stake-nav-link`} to={'/bridge'}>
+          {t('Bridge')}
+        </StyledNavLink>
         <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
           {t('Vote')}
         </StyledNavLink>
       </HeaderLinks>
       <HeaderControls>
         <HeaderElement>
-        <NetworkSelector />
+          <NetworkSelector />
           <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
             {account && userEthBalance ? (
               <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
@@ -289,7 +288,7 @@ export default function Header() {
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
           </StyledMenuButton>
           <HideSmall>
-          <Menu />
+            <Menu />
           </HideSmall>
         </HeaderElementWrap>
       </HeaderControls>

@@ -20,12 +20,14 @@ import { ButtonEmpty, ButtonPrimary } from '../Button';
 import Column, { AutoColumn } from '../Column';
 import ListLogo from '../ListLogo';
 import Row, { RowFixed, RowBetween } from '../Row';
-import { PaddedColumn, SearchInput, Separator, SeparatorDark } from './styleds';
+import { PaddedColumn } from './styleds';
 import { useListColor } from 'hooks/useColor';
 import useTheme from '../../hooks/useTheme';
 import ListToggle from '../Toggle/ListToggle';
 import Card from 'components/Card';
 import { CurrencyModalView } from './CurrencySearchModal';
+import { SearchInput } from 'components/SearchInput/SearchInput';
+import { Separator, SeparatorDark } from 'components/Separator/Separator';
 
 const Wrapper = styled(Column)`
   width: 100%;

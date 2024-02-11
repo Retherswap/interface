@@ -12,11 +12,11 @@ import Column from '../Column';
 import { RowFixed } from '../Row';
 import CurrencyLogo from '../CurrencyLogo';
 import { MouseoverTooltip } from '../Tooltip';
-import { MenuItem } from './styleds';
 import Loader from '../Loader';
 import { isTokenOnList } from '../../utils';
 import ImportRow from './ImportRow';
 import { wrappedCurrency } from 'utils/wrappedCurrency';
+import { MenuItem } from 'components/Menu/MenuItem';
 
 function currencyKey(currency: Currency): string {
   return currency instanceof Token ? currency.address : currency === ETHER ? 'ETHER' : '';

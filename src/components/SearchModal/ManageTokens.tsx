@@ -1,6 +1,6 @@
 import React, { useRef, RefObject, useCallback, useState, useMemo } from 'react';
 import Column from 'components/Column';
-import { PaddedColumn, Separator, SearchInput } from './styleds';
+import { PaddedColumn } from './styleds';
 import Row, { RowBetween, RowFixed } from 'components/Row';
 import { TYPE, ExternalLinkIcon, TrashIcon, ButtonText, ExternalLink } from 'theme';
 import { useToken } from 'hooks/Tokens';
@@ -15,6 +15,8 @@ import ImportRow from './ImportRow';
 import useTheme from '../../hooks/useTheme';
 
 import { CurrencyModalView } from './CurrencySearchModal';
+import { SearchInput } from 'components/SearchInput/SearchInput';
+import { Separator } from 'components/Separator/Separator';
 
 const Wrapper = styled.div`
   width: 100%;
