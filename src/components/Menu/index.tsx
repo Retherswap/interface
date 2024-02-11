@@ -49,7 +49,7 @@ const StyledMenu = styled.div`
 `;
 
 const MenuFlyout = styled.span`
-  min-width: 8.125rem;
+  min-width: 12rem;
   background-color: ${({ theme }) => theme.bg1};
   box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
     0px 24px 32px rgba(0, 0, 0, 0.01);
@@ -112,7 +112,7 @@ export default function Menu() {
             <Code size={14} />
             Code
           </MenuItem>
-          <MenuItem id="link" href="https://discord.gg/rethereum-1131328579947462676">
+          <MenuItem id="link" href="https://discord.gg/xCB4AJDEFb">
             <MessageCircle size={14} />
             Discord
           </MenuItem>
@@ -120,9 +120,9 @@ export default function Menu() {
             <PieChart size={14} />
             Analytics
           </MenuItem>
-          <MenuItem id="link" href="https://www.hypra.network/">
+          <MenuItem id="link" href="https://www.geckoterminal.com/hypra-network/pools">
             <PieChart size={14} />
-            Bridge
+            Geckoterminal
           </MenuItem>
         </MenuFlyout>
       )}
