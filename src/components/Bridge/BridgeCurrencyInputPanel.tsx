@@ -5,8 +5,7 @@ import { darken } from 'polished';
 import { useCurrencyBalance } from '../../state/wallet/hooks';
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal';
 import CurrencyLogo from '../CurrencyLogo';
-import DoubleCurrencyLogo from '../DoubleLogo';
-import Row, { RowBetween } from '../Row';
+import Row from '../Row';
 import { TYPE } from '../../theme';
 import { Input as NumericalInput } from '../NumericalInput';
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg';
@@ -16,8 +15,6 @@ import { useTranslation } from 'react-i18next';
 import useTheme from '../../hooks/useTheme';
 import Column from 'components/Column';
 import NetworkSelectorModal from 'components/NetworkSelectorModal/NetworkSelectorModal';
-import { Network } from '@ethersproject/networks';
-import { L1ChainInfo } from 'constants/chains';
 import NetworkLogo from 'components/NetworkLogo';
 import { useChainInfo } from 'hooks/useChainInfo';
 

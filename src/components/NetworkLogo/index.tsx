@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import useHttpLocations from '../../hooks/useHttpLocations';
 import Logo from '../Logo';
-import { CHAIN_INFO, L1ChainInfo } from 'constants/chains';
-import { ChainId } from '@retherswap/sdk';
+import { CHAIN_INFO } from 'constants/chains';
 
 const StyledLogo = styled(Logo)<{ size: string }>`
   width: ${({ size }) => size};
