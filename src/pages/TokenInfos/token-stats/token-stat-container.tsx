@@ -14,9 +14,12 @@ import { Chart } from 'react-google-charts';
 import TokenVolumeChart from './charts/token-volume-chart/token-volume-chart';
 import TokenPriceChart from './charts/token-price-chart/token-price-chart';
 import TokenTVLChart from './charts/token-tvl-chart/token-tvl-chart';
-import { register } from 'swiper/element/bundle';
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper.min.css';
+import 'swiper/swiper-bundle.min.css';
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
-register();
 const TokenStatsContainer = styled.div`
   display: grid;
   grid-template-columns: 250px 1fr;
@@ -84,10 +87,15 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
   const [activeTab, setActiveTab] = useState(1);
   return (
     <TokenStatsContainer>
-      <TokenInfosCard>
-        <Column style={{ gap: '1.5em' }}>
-          <swiper-container slides-per-view="3" navigation="true" pagination="true">
-            <swiper-slide>
+      <TokenInfosCard style={{ display: 'block', padding: 0 }}>
+        <Swiper
+          spaceBetween={50}
+          slidesPerView={1}
+          pagination={{ clickable: true }}
+          style={{ width: '100%', height: '360px', padding: '1.5em' }}
+        >
+          <SwiperSlide>
+            <Column style={{ gap: '1.5em' }}>
               <TokenStat
                 title="TVL"
                 value={`$${formatNumber(token.lastTvl?.reserveUsd)}`}
@@ -95,12 +103,18 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
               ></TokenStat>
               <TokenStat title="Volume 24H" value={`$${formatNumber(volume24h)}`} percentChange={-25}></TokenStat>
               <TokenStat title="Volume 7D" value={`$${formatNumber(volume7d)}`}></TokenStat>
-              <TokenStat title="Transactions 24H" value="135.40K"></TokenStat>
-            </swiper-slide>
-            <swiper-slide>Slide 2</swiper-slide>
-            <swiper-slide>Slide 3</swiper-slide>
-          </swiper-container>
-        </Column>
+              <TokenStat title="Holders" value="-"></TokenStat>
+            </Column>
+          </SwiperSlide>
+          <SwiperSlide>
+            <Column style={{ gap: '1.5em' }}>
+              <TokenStat title="Total supply" value={formatNumber(token.totalSupply)}></TokenStat>
+              <TokenStat title="Decimals" value={`${token.decimals}`}></TokenStat>
+              <TokenStat title="Transactions 24H" value="-"></TokenStat>
+              <TokenStat title="Total transactions" value="-"></TokenStat>
+            </Column>
+          </SwiperSlide>
+        </Swiper>
       </TokenInfosCard>
       <ChartContainer>
         <TokenChartTabContainer>
