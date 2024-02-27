@@ -25,6 +25,9 @@ import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redir
 import Swap from './Swap';
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects';
 import Bridge from './Bridge';
+import USDRVault from './USDRVault';
+import TokenList from './Tokenlist';
+import TokenInfos from './TokenInfos/token-infos';
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -73,6 +76,9 @@ export default function App() {
               <Route exact strict path="/find" component={PoolFinder} />
               <Route exact strict path="/pool" component={Pool} />
               <Route exact strict path="/bridge" component={Bridge} />
+              <Route exact strict path="/usdr" component={USDRVault} />
+              <Route exact strict path="/tokens" component={TokenList} />
+              <Route exact strict path="/token/:address" component={TokenInfos} />
               <Route exact strict path="/farm" component={Earn} />
               <Route exact strict path="/vote" component={Vote} />
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />

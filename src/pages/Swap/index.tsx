@@ -43,7 +43,8 @@ import Loader from '../../components/Loader';
 
 export default function Swap() {
   const loadedUrlParams = useDefaultsFromURLSearch();
-
+  // dismiss warning if all imported tokens are in active lists
+  const defaultTokens = useAllTokens();
   // token warning stuff
   const [loadedInputCurrency, loadedOutputCurrency] = [
     useCurrency(loadedUrlParams?.inputCurrencyId),
@@ -58,8 +59,6 @@ export default function Swap() {
     setDismissTokenWarning(true);
   }, []);
 
-  // dismiss warning if all imported tokens are in active lists
-  const defaultTokens = useAllTokens();
   const importTokensNotInDefault =
     urlLoadedTokens &&
     urlLoadedTokens.filter((token: Token) => {
@@ -82,11 +81,11 @@ export default function Swap() {
   // swap state
   const { independentField, typedValue, recipient } = useSwapState();
   const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo();
-  const {
-    wrapType,
-    execute: onWrap,
-    inputError: wrapInputError,
-  } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue);
+  const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
+    currencies[Field.INPUT],
+    currencies[Field.OUTPUT],
+    typedValue
+  );
 
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE;
   const trade = showWrap ? undefined : v2Trade;
@@ -231,10 +230,9 @@ export default function Swap() {
     maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact());
   }, [maxAmountInput, onUserInput]);
 
-  const handleOutputSelect = useCallback(
-    (outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency),
-    [onCurrencySelection]
-  );
+  const handleOutputSelect = useCallback((outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency), [
+    onCurrencySelection,
+  ]);
 
   return (
     <>

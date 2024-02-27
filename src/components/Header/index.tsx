@@ -16,6 +16,7 @@ import Row, { RowFixed } from '../Row';
 import Web3Status from '../Web3Status';
 import { ETH_NAME_AND_SYMBOL } from '../../constants';
 import NetworkSelector from './NetworkSelector';
+import HeaderNavigationMenu from './HeaderNavigationMenu';
 
 const HeaderFrame = styled.div`
   width: 100vw;
@@ -80,8 +81,10 @@ const HeaderRow = styled(RowFixed)`
 const HeaderLinks = styled(Row)`
   width: auto;
   margin: 0 auto;
-  padding: 0.5rem;
+  padding: 0.75rem 1rem;
   justify-content: center;
+  align-items: center;
+  gap: 1.1rem;
   border-radius: 0.8rem;
   box-shadow: 0 0 10px skyblue; /* Use skyblue color for the glow */
   background-color: ${({ theme }) => theme.bg1};
@@ -162,7 +165,7 @@ const StyledNavLink = styled(NavLink).attrs({
   text-decoration: none;
   color: ${({ theme }) => theme.text2};
   font-size: 0.8rem;
-  width: fit-content;
+  width: 100%;
   padding: 0.3rem 0.6rem;
   font-weight: 500;
   transition: 0.2s;
@@ -245,31 +248,29 @@ export default function Header() {
         </Title>
       </HeaderRow>
       <HeaderLinks>
-        <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
-          {t('Swap')}
-        </StyledNavLink>
-        <StyledNavLink
-          id={`pool-nav-link`}
-          to={'/pool'}
-          isActive={(match, { pathname }) =>
-            Boolean(match) ||
-            pathname.startsWith('/add') ||
-            pathname.startsWith('/remove') ||
-            pathname.startsWith('/create') ||
-            pathname.startsWith('/find')
-          }
-        >
-          {t('Liquidity')}
-        </StyledNavLink>
-        <StyledNavLink id={`stake-nav-link`} to={'/farm'}>
-          {t('Farm')}
-        </StyledNavLink>
-        <StyledNavLink id={`stake-nav-link`} to={'/bridge'}>
-          {t('Bridge')}
-        </StyledNavLink>
-        <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
-          {t('Vote')}
-        </StyledNavLink>
+        <HeaderNavigationMenu
+          title={'Trade'}
+          defaultLink={'/swap'}
+          content={[
+            { title: 'Swap', link: '/swap' },
+            { title: 'Tokens', link: '/tokens' },
+            { title: 'Bridge', link: '/bridge' },
+            { title: 'USDR Vault', link: '/usdr' },
+          ]}
+        ></HeaderNavigationMenu>
+        <HeaderNavigationMenu
+          title={'Earn'}
+          defaultLink={'/pool'}
+          content={[
+            { title: 'Liquidity', link: '/pool' },
+            { title: 'Farm', link: '/farm' },
+          ]}
+        ></HeaderNavigationMenu>
+        <HeaderNavigationMenu
+          title={'Governance'}
+          defaultLink={'/vote'}
+          content={[{ title: 'Vote', link: '/vote' }]}
+        ></HeaderNavigationMenu>
       </HeaderLinks>
       <HeaderControls>
         <HeaderElement>

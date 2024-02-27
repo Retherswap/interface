@@ -6,7 +6,7 @@ import { RowBetween } from '../Row';
 import { ChevronDown } from 'react-feather';
 import { Button as RebassButton, ButtonProps } from 'rebass/styled-components';
 
-const Base = styled(RebassButton)<{
+export const BaseButton = styled(RebassButton)<{
   padding?: string;
   width?: string;
   borderRadius?: string;
@@ -40,7 +40,7 @@ const Base = styled(RebassButton)<{
   }
 `;
 
-export const ButtonPrimary = styled(Base)`
+export const ButtonPrimary = styled(BaseButton)`
   background-color: ${({ theme }) => theme.primary1};
   color: white;
   &:focus {
@@ -67,7 +67,7 @@ export const ButtonPrimary = styled(Base)`
   }
 `;
 
-export const ButtonSecondary = styled(Base)`
+export const ButtonSecondary = styled(BaseButton)`
   border: 1px solid ${({ theme }) => theme.primary4};
   color: ${({ theme }) => theme.primary1};
   background-color: transparent;
@@ -95,7 +95,7 @@ export const ButtonSecondary = styled(Base)`
   }
 `;
 
-export const ButtonOutlined = styled(Base)`
+export const ButtonOutlined = styled(BaseButton)`
   border: 1px solid ${({ theme }) => theme.bg2};
   background-color: transparent;
   color: ${({ theme }) => theme.text1};
@@ -115,7 +115,7 @@ export const ButtonOutlined = styled(Base)`
   }
 `;
 
-export const ButtonEmpty = styled(Base)`
+export const ButtonEmpty = styled(BaseButton)`
   background-color: transparent;
   color: ${({ theme }) => theme.text1};
   display: flex;
@@ -134,7 +134,7 @@ export const ButtonEmpty = styled(Base)`
   }
 `;
 
-const ButtonConfirmedStyle = styled(Base)`
+const ButtonConfirmedStyle = styled(BaseButton)`
   background-color: ${({ theme }) => lighten(0.5, theme.green1)};
   color: ${({ theme }) => theme.green1};
   border: 1px solid ${({ theme }) => theme.green1};
@@ -145,7 +145,7 @@ const ButtonConfirmedStyle = styled(Base)`
   }
 `;
 
-const ButtonErrorStyle = styled(Base)`
+const ButtonErrorStyle = styled(BaseButton)`
   background-color: ${({ theme }) => theme.red1};
   border: 1px solid ${({ theme }) => theme.red1};
 

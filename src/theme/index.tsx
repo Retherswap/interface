@@ -17,7 +17,7 @@ export const MEDIA_WIDTHS = {
   upToSmall: 720,
   upToMedium: 960,
   upToLarge: 1280,
-}
+};
 
 const mediaWidthTemplates: { [width in keyof typeof MEDIA_WIDTHS]: typeof css } = Object.keys(MEDIA_WIDTHS).reduce(
   (accumulator, size) => {
@@ -156,8 +156,17 @@ export const TYPE = {
   blue(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'blue1'} {...props} />;
   },
+  blue2(props: TextProps) {
+    return <TextWrapper fontWeight={500} color={'blue2'} {...props} />;
+  },
   yellow(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'yellow1'} {...props} />;
+  },
+  green(props: TextProps) {
+    return <TextWrapper fontWeight={500} color={'green1'} {...props} />;
+  },
+  red(props: TextProps) {
+    return <TextWrapper fontWeight={500} color={'red1'} {...props} />;
   },
   darkGray(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'text3'} {...props} />;

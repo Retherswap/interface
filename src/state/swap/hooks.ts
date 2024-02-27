@@ -109,7 +109,6 @@ export function useDerivedSwapInfo(): {
   inputError?: string;
 } {
   const { account } = useActiveWeb3React();
-
   const {
     independentField,
     typedValue,
@@ -186,7 +185,6 @@ export function useDerivedSwapInfo(): {
   if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
     inputError = 'Insufficient ' + amountIn.currency.symbol + ' balance';
   }
-
   return {
     currencies,
     currencyBalances,
@@ -203,7 +201,7 @@ function parseCurrencyFromURLParameter(urlParam: any): string {
     if (urlParam.toUpperCase() === 'ETH') return 'ETH';
     if (valid === false) return 'ETH';
   }
-  return 'ETH' ?? '';
+  return 'ETH' ?? undefined;
 }
 
 function parseTokenAmountURLParameter(urlParam: any): string {
@@ -226,13 +224,13 @@ function validatedRecipient(recipient: any): string | null {
 }
 
 export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
-  let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency);
-  let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency);
+  let inputCurrency: string | undefined = parseCurrencyFromURLParameter(parsedQs.inputCurrency);
+  let outputCurrency: string | undefined = parseCurrencyFromURLParameter(parsedQs.outputCurrency);
   if (inputCurrency === outputCurrency) {
     if (typeof parsedQs.outputCurrency === 'string') {
-      inputCurrency = '';
+      inputCurrency = undefined;
     } else {
-      outputCurrency = '';
+      outputCurrency = undefined;
     }
   }
 
@@ -261,7 +259,7 @@ export function useDefaultsFromURLSearch():
   const [result, setResult] = useState<
     { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
   >();
-
+  const state = useSwapState();
   useEffect(() => {
     if (!chainId) return;
     const parsed = queryParametersToSwapState(parsedQs);
