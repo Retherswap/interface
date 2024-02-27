@@ -7,7 +7,7 @@ import { useIsDarkMode } from 'state/user/hooks';
 
 export default function TokenPriceChart({ token }: { token: TokenModel }) {
   const isDarkMode = useIsDarkMode();
-  const prices = [];
+  const prices: { x: Date; y: [number, number, number, number] }[] = [];
   for (let i = 0; i < token.price.length; ++i) {
     const open = token.price[i].usdPrice;
     const close = i > 0 ? token.price[i - 1].usdPrice : open;
