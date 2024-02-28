@@ -7,7 +7,4 @@ export interface PairTVLModel {
   reserve1Usd: number;
   reserveUsd: number;
   date: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
 }

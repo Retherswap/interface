@@ -6,8 +6,5 @@ export interface TokenPriceModel {
   usdPrice: number;
   nativeQuote: number;
   date: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
   token: TokenModel;
 }

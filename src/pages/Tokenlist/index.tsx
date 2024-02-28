@@ -9,6 +9,9 @@ import { TokenListGrid } from './TokenListGrid';
 import { TYPE } from 'theme';
 import Column from 'components/Column';
 import Paginator from 'components/Paginator/Paginator';
+import { HideMedium } from 'components/Hide/hide-medium';
+import { HideSmall } from 'components/Hide/hide-small';
+import { HideExtraSmall } from 'components/Hide/hide-extra-small';
 
 export const Wrapper = styled.div`
   display: grid;
@@ -49,12 +52,20 @@ export default function TokenList() {
       <SwapPoolTabs active={'swap'} />
       <Wrapper id="token-list-page">
         <TokenListGrid>
-          <TYPE.blue fontWeight={600}>#</TYPE.blue>
+          <HideExtraSmall>
+            <TYPE.blue fontWeight={600}>#</TYPE.blue>
+          </HideExtraSmall>
           <TYPE.blue fontWeight={600}>Token</TYPE.blue>
           <TYPE.blue fontWeight={600}>Price</TYPE.blue>
-          <TYPE.blue fontWeight={600}>Price change</TYPE.blue>
-          <TYPE.blue fontWeight={600}>Volume 24H</TYPE.blue>
-          <TYPE.blue fontWeight={600}>TVL</TYPE.blue>
+          <HideMedium>
+            <TYPE.blue fontWeight={600}>Price change</TYPE.blue>
+          </HideMedium>
+          <HideMedium>
+            <TYPE.blue fontWeight={600}>Volume 24H</TYPE.blue>
+          </HideMedium>
+          <HideSmall>
+            <TYPE.blue fontWeight={600}>TVL</TYPE.blue>
+          </HideSmall>
         </TokenListGrid>
         <Divider />
         {tokens &&

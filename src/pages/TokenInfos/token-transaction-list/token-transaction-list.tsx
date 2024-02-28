@@ -5,10 +5,11 @@ import { TokenInfosCard } from '../token-infos-card';
 import Column from 'components/Column';
 import { PairTransactionModel } from 'models/PairTransactionModel';
 import TokenTransactionRow from './token-transaction-row/token-transaction-row';
-import { TYPE } from 'theme';
+import { HideSmall, TYPE } from 'theme';
 import { TokenTransactionListGrid } from './token-transaction-list-grid';
 import styled from 'styled-components';
 import Paginator from 'components/Paginator/Paginator';
+import { HideMedium } from 'components/Hide/hide-medium';
 export const Divider = styled.div`
   width: 100%;
   height: 2px;
@@ -36,16 +37,24 @@ export default function TokenTransactionList({ token }: { token: TokenModel }) {
       <TokenInfosCard>
         <TokenTransactionListGrid>
           <TYPE.blue fontWeight={500}></TYPE.blue>
-          <TYPE.blue fontWeight={500}>Total value</TYPE.blue>
-          <TYPE.blue fontWeight={500}>Buy</TYPE.blue>
-          <TYPE.blue fontWeight={500}>Sell</TYPE.blue>
-          <TYPE.blue fontWeight={500}>Account</TYPE.blue>
+          <HideSmall>
+            <TYPE.blue fontWeight={500}>Total value</TYPE.blue>
+          </HideSmall>
+          <HideMedium>
+            <TYPE.blue fontWeight={500}>Buy</TYPE.blue>
+          </HideMedium>
+          <HideMedium>
+            <TYPE.blue fontWeight={500}>Sell</TYPE.blue>
+          </HideMedium>
+          <HideSmall>
+            <TYPE.blue fontWeight={500}>Account</TYPE.blue>
+          </HideSmall>
           <TYPE.blue fontWeight={500}>Time</TYPE.blue>
         </TokenTransactionListGrid>
         <Divider></Divider>
         {transactions.slice((page - 1) * elementsPerPage, page * elementsPerPage).map((transaction) => (
           <Column key={`token-transaction-row-${transaction.id}`} style={{ gap: '1em' }}>
-            <TokenTransactionRow pairTransaction={transaction}></TokenTransactionRow>
+            <TokenTransactionRow token={token} pairTransaction={transaction}></TokenTransactionRow>
             <RowDivider></RowDivider>
           </Column>
         ))}

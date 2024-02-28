@@ -8,6 +8,20 @@ import { useIsDarkMode } from 'state/user/hooks';
 export default function TokenPriceChart({ token }: { token: TokenModel }) {
   const isDarkMode = useIsDarkMode();
   const prices: { x: Date; y: [number, number, number, number] }[] = [];
+  /*const hourPrices: { [date: number]: { min: number; max: number } } = {};
+  for (const price of token.price) {
+    const date = new Date(price.date);
+    date.setHours(0, 0, 0, 0);
+    if (!hourPrices[date.getTime()]) {
+      hourPrices[date.getTime()] = {
+        min: price.usdPrice,
+        max: price.usdPrice,
+      };
+    } else {
+      hourPrices[date.getTime()].min = Math.min(hourPrices[date.getTime()].min, price.usdPrice);
+      hourPrices[date.getTime()].max = Math.max(hourPrices[date.getTime()].max, price.usdPrice);
+    }
+  }*/
   for (let i = 0; i < token.price.length; ++i) {
     const open = token.price[i].usdPrice;
     const close = i > 0 ? token.price[i - 1].usdPrice : open;

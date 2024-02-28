@@ -1,22 +1,19 @@
-import {
-  CHAIN_INFO,
-  SupportedChainId,
-} from 'constants/chains'
-import { useOnClickOutside } from 'hooks/useOnClickOutside'
-import { useActiveWeb3React } from 'hooks/web3'
-import React, { useCallback, useRef } from 'react'
-import { ChevronDown } from 'react-feather'
-import { ApplicationModal } from 'state/application/actions'
-import { useModalOpen, useToggleModal } from 'state/application/hooks'
-import { useAppSelector } from 'state/hooks'
-import styled from 'styled-components/macro'
-import { MEDIA_WIDTHS } from 'theme'
-import { switchToNetwork } from 'utils/switchToNetwork'
+import { CHAIN_INFO, SupportedChainId } from 'constants/chains';
+import { useOnClickOutside } from 'hooks/useOnClickOutside';
+import { useActiveWeb3React } from 'hooks/web3';
+import React, { useCallback, useRef } from 'react';
+import { ChevronDown } from 'react-feather';
+import { ApplicationModal } from 'state/application/actions';
+import { useModalOpen, useToggleModal } from 'state/application/hooks';
+import { useAppSelector } from 'state/hooks';
+import styled from 'styled-components/macro';
+import { MEDIA_WIDTHS } from 'theme';
+import { switchToNetwork } from 'utils/switchToNetwork';
 
 const FlyoutHeader = styled.div`
   color: ${({ theme }) => theme.text2};
   font-weight: 400;
-`
+`;
 const FlyoutMenu = styled.div`
   position: relative;
   align-items: flex-start;
@@ -28,7 +25,8 @@ const FlyoutMenu = styled.div`
   overflow: auto;
   padding: 16px;
   position: absolute;
-  top: 64px;
+  top: 150px;
+  right: 20px;
   width: 272px;
   z-index: 99;
   & > *:not(:last-child) {
@@ -36,8 +34,9 @@ const FlyoutMenu = styled.div`
   }
   @media screen and (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
     top: 50px;
+    right: unset;
   }
-`
+`;
 const FlyoutRow = styled.div<{ active: boolean }>`
   position: relative;
   align-items: center;
@@ -50,14 +49,14 @@ const FlyoutRow = styled.div<{ active: boolean }>`
   padding: 6px 8px;
   text-align: left;
   width: 100%;
-`
+`;
 const FlyoutRowActiveIndicator = styled.div`
   background-color: ${({ theme }) => theme.green1};
   border-radius: 50%;
   height: 9px;
   width: 9px;
   box-shadow: 0 0 10px skyblue; /* Use skyblue color for the glow */
-`
+`;
 
 const FlyoutRowInactiveIndicator = styled.div`
   background-color: red; // You can customize the color here
@@ -70,17 +69,17 @@ const Logo = styled.img`
   height: 20px;
   width: 20px;
   margin-right: 8px;
-`
+`;
 const NetworkLabel = styled.div`
   flex: 1 1 auto;
-`
+`;
 const SelectorLabel = styled(NetworkLabel)`
   display: none;
   @media screen and (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
     display: block;
     margin-right: 8px;
   }
-`
+`;
 const SelectorControls = styled.div`
   align-items: center;
   background-color: ${({ theme }) => theme.bg1};
@@ -99,15 +98,15 @@ const SelectorLogo = styled(Logo)<{ interactive?: boolean }>`
   @media screen and (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
     margin-right: 8px;
   }
-`
+`;
 const SelectorWrapper = styled.div`
   @media screen and (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
     position: relative;
   }
-`
+`;
 const StyledChevronDown = styled(ChevronDown)`
   width: 12px;
-`
+`;
 
 export default function NetworkSelector() {
   const { chainId, library } = useActiveWeb3React();
@@ -136,35 +135,30 @@ export default function NetworkSelector() {
 
   function Row({ targetChain }: { targetChain: number }) {
     const { chainId, library } = useActiveWeb3React();
-  
+
     if (!library) {
       return null;
     }
-  
+
     const handleRowClick = () => {
       switchToNetwork({ library, chainId: targetChain });
       toggle();
     };
 
-  const active = chainId === targetChain;
-  const isEthereum = targetChain === SupportedChainId.ETHEREUM;
-  const isBNB = targetChain === SupportedChainId.BNB;
-  const isHypra = targetChain === SupportedChainId.HYPRA;
-  const isPolygon = targetChain === SupportedChainId.POLYGON;
+    const active = chainId === targetChain;
+    const isEthereum = targetChain === SupportedChainId.ETHEREUM;
+    const isBNB = targetChain === SupportedChainId.BNB;
+    const isHypra = targetChain === SupportedChainId.HYPRA;
+    const isPolygon = targetChain === SupportedChainId.POLYGON;
 
-  return (
-    <FlyoutRow onClick={handleRowClick} active={active}>
-      <Logo src={CHAIN_INFO[targetChain].logoUrl} />
-      <NetworkLabel>{CHAIN_INFO[targetChain].label}</NetworkLabel>
-      {!isHypra && (isEthereum || isBNB || isPolygon) ? (
-        <FlyoutRowInactiveIndicator />
-      ) : (
-        
-        <FlyoutRowActiveIndicator />
-      )}
-    </FlyoutRow>
-  );
-}
+    return (
+      <FlyoutRow onClick={handleRowClick} active={active}>
+        <Logo src={CHAIN_INFO[targetChain].logoUrl} />
+        <NetworkLabel>{CHAIN_INFO[targetChain].label}</NetworkLabel>
+        {!isHypra && (isEthereum || isBNB || isPolygon) ? <FlyoutRowInactiveIndicator /> : <FlyoutRowActiveIndicator />}
+      </FlyoutRow>
+    );
+  }
 
   return (
     <SelectorWrapper ref={node as any}>
@@ -177,11 +171,7 @@ export default function NetworkSelector() {
         <FlyoutMenu>
           <FlyoutHeader>Select a network</FlyoutHeader>
           {/* Display a message if on the Ethereum network */}
-          {isOnHypraNetwork && (
-            <div style={{ color: 'green', marginBottom: '12px' }}>
-              You're on the Hypra network.
-            </div>
-          )}
+          {isOnHypraNetwork && <div style={{ color: 'green', marginBottom: '12px' }}>You're on the Hypra network.</div>}
           {/* Display a message if on the Ethereum network */}
           {isOnEthereumNetwork && (
             <div style={{ color: 'red', marginBottom: '12px' }}>
@@ -194,8 +184,8 @@ export default function NetworkSelector() {
               You're on the Binance Smart Chain. Please switch to the Hypra Network.
             </div>
           )}
-            {/* Display a message if on the Polygon Mainnet */}
-            {isOnPolygonNetwork && (
+          {/* Display a message if on the Polygon Mainnet */}
+          {isOnPolygonNetwork && (
             <div style={{ color: 'red', marginBottom: '12px' }}>
               You're on the Polygon Mainnet. Please switch to the Hypra Network.
             </div>
@@ -204,7 +194,7 @@ export default function NetworkSelector() {
           <Row targetChain={SupportedChainId.HYPRA} />
           <Row targetChain={SupportedChainId.ETHEREUM} />
           <Row targetChain={SupportedChainId.BNB} />
-          <Row targetChain={SupportedChainId.POLYGON}  />
+          <Row targetChain={SupportedChainId.POLYGON} />
           {/* Add more rows for additional networks as needed */}
         </FlyoutMenu>
       )}

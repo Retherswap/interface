@@ -17,29 +17,24 @@ import Web3Status from '../Web3Status';
 import { ETH_NAME_AND_SYMBOL } from '../../constants';
 import NetworkSelector from './NetworkSelector';
 import HeaderNavigationMenu from './HeaderNavigationMenu';
+import { HideMedium } from 'components/Hide/hide-medium';
+import { HideLarge } from 'components/Hide/hide-large';
 
 const HeaderFrame = styled.div`
   width: 100vw;
   margin: 1rem auto;
   padding: 1rem 1.6rem;
   z-index: 2;
-  display: grid;
-  grid-template-columns: 120px 1fr 120px;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
 
   ${({ theme }) => theme.mediaWidth.upToLarge`
-    grid-template-columns: 60px 1fr 120px;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
   `};
-
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 60px 1fr;
-  `};
-
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    padding: 0.5rem 1rem;
-  `}
 `;
 
 const HeaderControls = styled.div`
@@ -47,10 +42,8 @@ const HeaderControls = styled.div`
   flex-direction: row;
   align-items: center;
   justify-self: flex-end;
-
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-  transform: translateY(50%) translateX(100%);
-`};
+  justify-content: flex-end;
+  flex: 1;
 `;
 
 const HeaderElement = styled.div`
@@ -72,35 +65,28 @@ const HeaderElementWrap = styled.div`
 const HeaderRow = styled(RowFixed)`
   display: flex;
   align-items: center;
+  flex: 1;
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
     width: 100%;
   `};
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+  justify-content: center;
+ `};
 `;
 
 const HeaderLinks = styled(Row)`
-  width: auto;
-  margin: 0 auto;
-  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  max-width: 350px;
+  padding: 0.6em 3em;
+  gap: 5px;
   justify-content: center;
   align-items: center;
-  gap: 1.1rem;
   border-radius: 0.8rem;
   box-shadow: 0 0 10px skyblue; /* Use skyblue color for the glow */
   background-color: ${({ theme }) => theme.bg1};
-
-  ${({ theme }) => theme.mediaWidth.upToLarge`
-    margin: 0;
-    margin-right: auto;
-  
-  `};
-
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    padding: .4rem;
-    width: 110%;
-    transform: translateY(0%) translateX(-15%);
-    border-radius: 4;
-  `};
 `;
 
 const AccountElement = styled.div<{ active: boolean }>`
@@ -241,37 +227,42 @@ export default function Header() {
       <HeaderRow>
         <Title href=".">
           <Icon>
-            <HideSmall>
-              <img width={'300px'} src={darkMode ? LogoDark : Logo} alt="logo" />
-            </HideSmall>
+            <img width={'300px'} src={darkMode ? LogoDark : Logo} alt="logo" />
           </Icon>
         </Title>
       </HeaderRow>
-      <HeaderLinks>
-        <HeaderNavigationMenu
-          title={'Trade'}
-          defaultLink={'/swap'}
-          content={[
-            { title: 'Swap', link: '/swap' },
-            { title: 'Tokens', link: '/tokens' },
-            { title: 'Bridge', link: '/bridge' },
-            { title: 'USDR Vault', link: '/usdr' },
-          ]}
-        ></HeaderNavigationMenu>
-        <HeaderNavigationMenu
-          title={'Earn'}
-          defaultLink={'/pool'}
-          content={[
-            { title: 'Liquidity', link: '/pool' },
-            { title: 'Farm', link: '/farm' },
-          ]}
-        ></HeaderNavigationMenu>
-        <HeaderNavigationMenu
-          title={'Governance'}
-          defaultLink={'/vote'}
-          content={[{ title: 'Vote', link: '/vote' }]}
-        ></HeaderNavigationMenu>
-      </HeaderLinks>
+      <Row style={{ justifyContent: 'center', flex: 1 }}>
+        <HeaderLinks>
+          <HeaderNavigationMenu
+            title={'Trade'}
+            defaultLink={'/swap'}
+            content={[
+              { title: 'Swap', link: '/swap' },
+              { title: 'Tokens', link: '/tokens' },
+              { title: 'Bridge', link: '/bridge' },
+              { title: 'USDR Vault', link: '/usdr' },
+            ]}
+          ></HeaderNavigationMenu>
+          <HeaderNavigationMenu
+            title={'Earn'}
+            defaultLink={'/pool'}
+            content={[
+              { title: 'Liquidity', link: '/pool' },
+              { title: 'Farm', link: '/farm' },
+            ]}
+          ></HeaderNavigationMenu>
+          <HeaderNavigationMenu
+            title={'Governance'}
+            defaultLink={'/vote'}
+            content={[{ title: 'Vote', link: '/vote' }]}
+          ></HeaderNavigationMenu>
+          <HeaderNavigationMenu
+            title={'Others'}
+            defaultLink={'/vote'}
+            content={[{ title: 'Vote', link: '/vote' }]}
+          ></HeaderNavigationMenu>
+        </HeaderLinks>
+      </Row>
       <HeaderControls>
         <HeaderElement>
           <NetworkSelector />
@@ -288,9 +279,6 @@ export default function Header() {
           <StyledMenuButton onClick={() => toggleDarkMode()}>
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
           </StyledMenuButton>
-          <HideSmall>
-            <Menu />
-          </HideSmall>
         </HeaderElementWrap>
       </HeaderControls>
     </HeaderFrame>

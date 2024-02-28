@@ -1,19 +1,15 @@
-import CurrencyLogo from 'components/CurrencyLogo';
-import Row from 'components/Row';
 import { TokenModel } from 'models/TokenModel';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import ThemeProvider, { TYPE, theme, colors } from 'theme';
-import { useDefaultTokens } from 'hooks/Tokens';
+import { TYPE } from 'theme';
 import { TokenInfosCard } from '../token-infos-card';
 import Column from 'components/Column';
 import { PairModel } from 'models/PairModel';
 import TokenPairRow from './token-pair-row/token-pair-row';
 import { TokenPairListGrid } from './token-pair-list-grid';
-import { ArrowLeft, ArrowRight } from 'react-feather';
-import { ButtonEmpty } from 'components/Button';
-import useTheme from 'hooks/useTheme';
 import Paginator from 'components/Paginator/Paginator';
+import { HideSmall } from 'components/Hide/hide-small';
+import { HideExtraSmall } from 'components/Hide/hide-extra-small';
 
 export const Divider = styled.div`
   width: 100%;
@@ -42,11 +38,17 @@ export default function TokenPairList({ token }: { token: TokenModel }) {
       <h1>Pairs</h1>
       <TokenInfosCard>
         <TokenPairListGrid>
-          <TYPE.blue fontWeight={600}>#</TYPE.blue>
+          <HideExtraSmall>
+            <TYPE.blue fontWeight={600}>#</TYPE.blue>
+          </HideExtraSmall>
           <TYPE.blue fontWeight={600}>Pair</TYPE.blue>
           <TYPE.blue fontWeight={600}>TVL</TYPE.blue>
-          <TYPE.blue fontWeight={600}>Volume 24H</TYPE.blue>
-          <TYPE.blue fontWeight={600}>Volume 7D</TYPE.blue>
+          <HideSmall>
+            <TYPE.blue fontWeight={600}>Volume 24H</TYPE.blue>
+          </HideSmall>
+          <HideSmall>
+            <TYPE.blue fontWeight={600}>Volume 7D</TYPE.blue>
+          </HideSmall>
         </TokenPairListGrid>
         <Divider></Divider>
         {pairs.slice((page - 1) * elementsPerPage, page * elementsPerPage).map((pair, index) => (

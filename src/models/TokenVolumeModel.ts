@@ -4,7 +4,4 @@ export interface TokenVolumeModel {
   volume: string;
   usdVolume: string;
   date: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
 }

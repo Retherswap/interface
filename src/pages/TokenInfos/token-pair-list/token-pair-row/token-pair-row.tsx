@@ -6,8 +6,9 @@ import { PairModel } from 'models/PairModel';
 import DoubleCurrencyLogo from 'components/DoubleLogo';
 import { TokenPairListGrid } from '../token-pair-list-grid';
 import Row from 'components/Row';
-import { TYPE } from 'theme';
+import { HideSmall, TYPE } from 'theme';
 import { formatNumber } from 'utils/formatNumber';
+import { HideExtraSmall } from 'components/Hide/hide-extra-small';
 
 export default function TokenPairRow({ index, token, pair }: { index: number; token: TokenModel; pair: PairModel }) {
   const defaultTokens = useDefaultTokens();
@@ -34,28 +35,34 @@ export default function TokenPairRow({ index, token, pair }: { index: number; to
   );
   return (
     <TokenPairListGrid>
-      <TYPE.black fontWeight={500} fontSize={15}>
-        {index}
-      </TYPE.black>
+      <HideExtraSmall>
+        <TYPE.black fontWeight={500} fontSize={15}>
+          {index}
+        </TYPE.black>
+      </HideExtraSmall>
       <Row style={{ gap: '10px' }}>
         <DoubleCurrencyLogo
-          size={25}
+          size={22}
           currency0={defaultTokens[pair.token0.address]}
           currency1={defaultTokens[pair.token1.address]}
         />
-        <TYPE.black fontWeight={500} fontSize={15}>
+        <TYPE.black fontWeight={500} fontSize={14}>
           {pair.token0.symbol}/{pair.token1.symbol}
         </TYPE.black>
       </Row>
-      <TYPE.black fontWeight={500} fontSize={15}>
+      <TYPE.black fontWeight={500} fontSize={14}>
         ${formatNumber(pair.lastTvl?.reserveUsd)}
       </TYPE.black>
-      <TYPE.black fontWeight={500} fontSize={15}>
-        ${formatNumber(volume24h)}
-      </TYPE.black>
-      <TYPE.black fontWeight={500} fontSize={15}>
-        ${formatNumber(volume7d)}
-      </TYPE.black>
+      <HideSmall>
+        <TYPE.black fontWeight={500} fontSize={14}>
+          ${formatNumber(volume24h)}
+        </TYPE.black>
+      </HideSmall>
+      <HideSmall>
+        <TYPE.black fontWeight={500} fontSize={14}>
+          ${formatNumber(volume7d)}
+        </TYPE.black>
+      </HideSmall>
     </TokenPairListGrid>
   );
 }

@@ -1,5 +1,6 @@
-import { Pair, Token } from '@retherswap/sdk';
+import { Pair } from '@retherswap/sdk';
 import { RetherswapTransaction } from './RetherswapTransactionModel';
+import { TokenModel } from './TokenModel';
 
 export interface PairTransactionModel {
   id: string;
@@ -10,11 +11,8 @@ export interface PairTransactionModel {
   inputTokenUsdQuote: string;
   outputTokenUsdQuote: string;
   idPair: number;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
-  inputToken: Token;
-  outputToken: Token;
+  inputToken: TokenModel;
+  outputToken: TokenModel;
   pair: Pair;
   type: 'SWAP' | 'ADD_LIQUIDITY' | 'REMOVE_LIQUIDITY';
   transaction: RetherswapTransaction;

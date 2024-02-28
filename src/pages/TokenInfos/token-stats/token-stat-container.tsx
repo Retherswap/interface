@@ -18,6 +18,7 @@ import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.min.css';
 import 'swiper/swiper-bundle.min.css';
+import { useNativeToken } from 'hooks/useNativeToken';
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 const TokenStatsContainer = styled.div`
@@ -25,6 +26,10 @@ const TokenStatsContainer = styled.div`
   grid-template-columns: 250px 1fr;
   column-gap: 1.5em;
   width: 100%;
+  ${({ theme }) => theme.mediaWidth.upToSmall` 
+  grid-template-columns: 100%;
+  row-gap: 3em;
+ `};
 `;
 
 const ChartContainer = styled(TokenInfosCard)`
@@ -84,6 +89,7 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
     );
     return acc + volume;
   }, 0);
+  const nativeToken = useNativeToken();
   const [activeTab, setActiveTab] = useState(1);
   return (
     <TokenStatsContainer>
@@ -96,14 +102,10 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
         >
           <SwiperSlide>
             <Column style={{ gap: '1.5em' }}>
-              <TokenStat
-                title="TVL"
-                value={`$${formatNumber(token.lastTvl?.reserveUsd)}`}
-                percentChange={0.25}
-              ></TokenStat>
-              <TokenStat title="Volume 24H" value={`$${formatNumber(volume24h)}`} percentChange={-25}></TokenStat>
+              <TokenStat title="TVL" value={`$${formatNumber(token.lastTvl?.reserveUsd)}`}></TokenStat>
+              <TokenStat title="Volume 24H" value={`$${formatNumber(volume24h)}`}></TokenStat>
               <TokenStat title="Volume 7D" value={`$${formatNumber(volume7d)}`}></TokenStat>
-              <TokenStat title="Holders" value="-"></TokenStat>
+              <TokenStat title="Holders" value="-" info="Users holding more than 1 token"></TokenStat>
             </Column>
           </SwiperSlide>
           <SwiperSlide>
@@ -111,7 +113,14 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
               <TokenStat title="Total supply" value={formatNumber(token.totalSupply)}></TokenStat>
               <TokenStat title="Decimals" value={`${token.decimals}`}></TokenStat>
               <TokenStat title="Transactions 24H" value="-"></TokenStat>
-              <TokenStat title="Total transactions" value="-"></TokenStat>
+              <TokenStat
+                title="Fully diluted market cap"
+                value={formatNumber(
+                  Number(token.totalSupply) *
+                    Number(token.nativeQuote) *
+                    Number(nativeToken?.nativeToken?.usdPrice ?? 0)
+                )}
+              ></TokenStat>
             </Column>
           </SwiperSlide>
         </Swiper>

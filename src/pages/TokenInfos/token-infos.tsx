@@ -26,7 +26,6 @@ export default function TokenInfos({
   useEffect(() => {
     fetchInfo();
   }, []);
-  const defaultTokens = useDefaultTokens();
   return (
     <Column style={{ gap: '4em', width: '100%', maxWidth: '1200px', alignItems: 'center', padding: '1em' }}>
       {token && (
