@@ -1,8 +1,11 @@
+import Row from 'components/Row';
 import { darken } from 'polished';
 import React, { useState } from 'react';
+import { ExternalLink } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { TYPE } from 'theme';
 const Menu = styled.div`
   position: relative;
   margin-bottom: 0rem;
@@ -18,7 +21,7 @@ const MenuContent = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 1.1rem;
-  margin-left: -0.7rem;
+  margin-left: -0.2rem;
   gap: 0.3em;
   padding: 0.5em;
   width: 140px;
@@ -28,7 +31,26 @@ const MenuContent = styled.div`
   box-shadow: 0px 5px 16px rgba(0, 0, 0, 0.1);
   color: ${({ theme }) => theme.text2};
 `;
-const MenuTitle = styled(NavLink)`
+const LinkMenuTitle = styled(NavLink)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 10px;
+  width: 100%;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: ${({ theme }) => theme.text2};
+  &.active {
+    color: ${({ theme }) => theme.text1};
+    background-color: ${({ theme }) => theme.bg3};
+  }
+`;
+const MenuTitle = styled('span')`
+  user-select: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,19 +112,61 @@ const StyledNavLink = styled(NavLink).attrs({
     `};
 `;
 
+const StyledLink = styled('a')`
+  ${({ theme }) => theme.flexRowNoWrap}
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  color: ${({ theme }) => theme.text2};
+  font-size: 0.8rem;
+  width: 100%;
+  padding: 0.3rem 0.6rem;
+  font-weight: 500;
+  transition: 0.2s;
+
+  &:not(:last-child) {
+    margin-right: 0.16rem;
+  }
+
+  &.${activeClassName} {
+    color: ${({ theme }) => theme.text1};
+    background-color: ${({ theme }) => theme.bg3};
+  }
+
+  :hover,
+  :focus {
+    color: ${({ theme }) => darken(0.1, theme.text1)};
+  }
+
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+      border-radius: 10px;
+      padding: 0.2rem 5%;
+      border: 0px solid ${({ theme }) => theme.bg3};
+  
+      &:not(:last-child) {
+        margin-right: 2%;
+      }
+    `};
+`;
+
 export default function HeaderNavigationMenu({
   title,
   defaultLink,
   content,
 }: {
   title: string;
-  defaultLink: string;
-  content: { title: string; link: string }[];
+  defaultLink?: string;
+  content?: { title: string; link?: string; external?: boolean }[];
 }) {
   const location = useLocation();
 
   let active = false;
-  if (content.some((item) => location.pathname.includes(item.link))) {
+  if (content && content.some((item) => location.pathname.includes(item.link))) {
     active = true;
   }
   const { t } = useTranslation();
@@ -114,24 +178,45 @@ export default function HeaderNavigationMenu({
       onClick={() => setIsOpen(true)}
       onTouchEnd={() => setIsOpen(false)}
     >
-      <MenuTitle to={defaultLink} className={active ? 'active' : ''}>
-        {title}
-      </MenuTitle>
-      {isOpen && (
+      {defaultLink ? (
+        <LinkMenuTitle to={defaultLink} className={active ? 'active' : ''}>
+          {title}
+        </LinkMenuTitle>
+      ) : (
+        <MenuTitle>{title}</MenuTitle>
+      )}
+      {isOpen && content && content.length > 0 && (
         <MenuWrapper onClick={(event) => event.stopPropagation()} onTouchEnd={(event) => event.stopPropagation()}>
           <MenuContent>
-            {content.map((item, index) => (
-              <StyledNavLink
-                onClick={() => {
-                  setIsOpen(false);
-                }}
-                key={item.link}
-                id={`swap-nav-link`}
-                to={item.link}
-              >
-                {t(item.title)}
-              </StyledNavLink>
-            ))}
+            {content.map((item, index) =>
+              item.link ? (
+                item.external ? (
+                  <StyledLink
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
+                    key={item.link}
+                    href={item.link}
+                    target="_blank"
+                  >
+                    {t(item.title)}
+                    <ExternalLink size={12}></ExternalLink>
+                  </StyledLink>
+                ) : (
+                  <StyledNavLink
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
+                    key={item.link}
+                    to={item.link}
+                  >
+                    {t(item.title)}
+                  </StyledNavLink>
+                )
+              ) : (
+                <StyledLink style={{ cursor: 'default' }}>{t(item.title)}</StyledLink>
+              )
+            )}
           </MenuContent>
         </MenuWrapper>
       )}

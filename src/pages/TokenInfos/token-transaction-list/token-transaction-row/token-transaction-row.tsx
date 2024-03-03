@@ -91,9 +91,12 @@ export default function TokenTransactionRow({
         </TYPE.black>
       </HideMedium>
       <HideSmall>
-        <StyledLink href={`https://explorer.hypra.network/address/${pairTransaction.transaction.from}`} target="_blank">
+        <StyledLink
+          href={`https://explorer.hypra.network/address/${pairTransaction.transaction.fromAddress.address}`}
+          target="_blank"
+        >
           <TYPE.blue2 fontSize={14} fontWeight={700}>
-            {formatAddress(pairTransaction.transaction.from)}
+            {formatAddress(pairTransaction.transaction.fromAddress.address)}
           </TYPE.blue2>
         </StyledLink>
       </HideSmall>

@@ -23,11 +23,18 @@ import RemoveLiquidity from './RemoveLiquidity';
 // import URLWarning from '../components/Header/URLWarning';
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects';
 import Swap from './Swap';
-import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects';
+import {
+  OpenClaimAddressModalAndRedirectToSwap,
+  RedirectPathToHomeOnly,
+  RedirectPathToSwapOnly,
+  RedirectToSwap,
+} from './Swap/redirects';
 import Bridge from './Bridge';
 import USDRVault from './USDRVault';
-import TokenList from './Tokenlist';
+import TokenList from './Tokenlist/token-list';
 import TokenInfos from './TokenInfos/token-infos';
+import AccountBalance from './Balance/account-balance';
+import Home from './Home/home';
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -71,6 +78,7 @@ export default function App() {
           <Web3ReactManager>
             <Switch>
               <Route exact strict path="/swap" component={Swap} />
+              <Route exact strict path="/home" component={Home} />
               <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/find" component={PoolFinder} />
@@ -79,6 +87,7 @@ export default function App() {
               <Route exact strict path="/usdr" component={USDRVault} />
               <Route exact strict path="/tokens" component={TokenList} />
               <Route exact strict path="/token/:address" component={TokenInfos} />
+              <Route exact strict path="/balance" component={AccountBalance} />
               <Route exact strict path="/farm" component={Earn} />
               <Route exact strict path="/vote" component={Vote} />
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />
@@ -92,7 +101,7 @@ export default function App() {
               <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
               <Route exact strict path="/farm/:currencyIdA/:currencyIdB" component={Manage} />
               <Route exact strict path="/vote/:id" component={VotePage} />
-              <Route component={RedirectPathToSwapOnly} />
+              <Route component={RedirectPathToHomeOnly} />
             </Switch>
           </Web3ReactManager>
         </BodyWrapper>

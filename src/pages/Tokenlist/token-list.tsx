@@ -39,7 +39,7 @@ export default function TokenList() {
   const elementsPerPage = 10;
   const [tokens, setTokens] = useState<TokenModel[]>([]);
   const fetchInfo = () => {
-    return fetch('http://162.0.211.141:4000/api/tokens')
+    return fetch('http://162.0.211.141:4000/api/v1/tokens')
       .then((res) => res.json())
       .then((d) => setTokens(d));
   };

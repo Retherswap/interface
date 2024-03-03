@@ -69,9 +69,10 @@ const PriceContainer = styled(Row)`
 
 export default function TokenInfosHeader({ token }: { token: TokenModel }) {
   const { nativeToken } = useNativeToken();
-  const lastPrice =
+  const lastPrice = Number(
     token.price.filter((price) => new Date(price.date).getTime() < new Date().getTime() - 24 * 60 * 60 * 1000)?.[0]
-      ?.usdPrice ?? 0;
+      ?.closeUsd ?? 0
+  );
   const price = Number(token.nativeQuote) * Number(nativeToken?.usdPrice);
   let formattedPrice = price.toString();
   let index = formattedPrice.indexOf('.') + 1;

@@ -14,7 +14,6 @@ export const BodyWrapper = styled.div`
     width: 100%;
     max-width: 500px;
     padding: 0rem;
-    border-radius: 0rem;
   `}
 `;
 

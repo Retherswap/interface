@@ -1,6 +1,5 @@
 import { TokenModel } from 'models/TokenModel';
 import React, { useEffect, useState } from 'react';
-import { useDefaultTokens } from 'hooks/Tokens';
 import { TokenInfosCard } from '../token-infos-card';
 import Column from 'components/Column';
 import { PairTransactionModel } from 'models/PairTransactionModel';
@@ -23,7 +22,7 @@ export default function TokenTransactionList({ token }: { token: TokenModel }) {
   const elementsPerPage = 10;
   const [transactions, setTransactions] = useState<PairTransactionModel[]>([]);
   const fetchInfo = () => {
-    return fetch('http://162.0.211.141:4000/api/pair_transactions/tokens/' + token.address)
+    return fetch('http://162.0.211.141:4000/api/v1/pair_transactions/tokens/' + token.address)
       .then((res) => res.json())
       .then((d) => setTransactions(d));
   };

@@ -1,5 +1,5 @@
 import { Pair } from '@retherswap/sdk';
-import { RetherswapTransaction } from './RetherswapTransactionModel';
+import { Transaction } from './TransactionModel';
 import { TokenModel } from './TokenModel';
 
 export interface PairTransactionModel {
@@ -15,5 +15,5 @@ export interface PairTransactionModel {
   outputToken: TokenModel;
   pair: Pair;
   type: 'SWAP' | 'ADD_LIQUIDITY' | 'REMOVE_LIQUIDITY';
-  transaction: RetherswapTransaction;
+  transaction: Transaction;
 }

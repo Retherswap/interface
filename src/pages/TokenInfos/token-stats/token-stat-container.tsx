@@ -1,16 +1,12 @@
-import CurrencyLogo from 'components/CurrencyLogo';
-import Row, { RowBetween } from 'components/Row';
 import { TokenModel } from 'models/TokenModel';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TYPE } from 'theme';
-import { useDefaultTokens } from 'hooks/Tokens';
 import { TokenInfosCard } from '../token-infos-card';
 import TokenStat from './token-stat';
 import Column from 'components/Column';
 import { PairModel } from 'models/PairModel';
 import { formatNumber } from 'utils/formatNumber';
-import { Chart } from 'react-google-charts';
 import TokenVolumeChart from './charts/token-volume-chart/token-volume-chart';
 import TokenPriceChart from './charts/token-price-chart/token-price-chart';
 import TokenTVLChart from './charts/token-tvl-chart/token-tvl-chart';
@@ -66,7 +62,7 @@ const TokenChartTab = styled.div<{ active?: boolean }>`
 export default function TokenStatContainer({ token }: { token: TokenModel }) {
   const [pairs, setPairs] = useState<PairModel[]>([]);
   const fetchInfo = () => {
-    return fetch('http://162.0.211.141:4000/api/pairs/tokens/' + token.address)
+    return fetch('http://162.0.211.141:4000/api/v1/pairs/tokens/' + token.address)
       .then((res) => res.json())
       .then((d) => setPairs(d));
   };
@@ -105,7 +101,7 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
               <TokenStat title="TVL" value={`$${formatNumber(token.lastTvl?.reserveUsd)}`}></TokenStat>
               <TokenStat title="Volume 24H" value={`$${formatNumber(volume24h)}`}></TokenStat>
               <TokenStat title="Volume 7D" value={`$${formatNumber(volume7d)}`}></TokenStat>
-              <TokenStat title="Holders" value="-" info="Users holding more than 1 token"></TokenStat>
+              <TokenStat title="Holders" value={token.holders} info="Users holding more than 1 token"></TokenStat>
             </Column>
           </SwiperSlide>
           <SwiperSlide>

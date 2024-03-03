@@ -17,8 +17,6 @@ import Web3Status from '../Web3Status';
 import { ETH_NAME_AND_SYMBOL } from '../../constants';
 import NetworkSelector from './NetworkSelector';
 import HeaderNavigationMenu from './HeaderNavigationMenu';
-import { HideMedium } from 'components/Hide/hide-medium';
-import { HideLarge } from 'components/Hide/hide-large';
 
 const HeaderFrame = styled.div`
   width: 100vw;
@@ -79,8 +77,8 @@ const HeaderLinks = styled(Row)`
   display: flex;
   justify-content: center;
   flex: 1;
-  max-width: 350px;
-  padding: 0.6em 3em;
+  max-width: 320px;
+  padding: 0.5em 0.6em;
   gap: 5px;
   justify-content: center;
   align-items: center;
@@ -117,9 +115,9 @@ const BalanceText = styled(Text)`
   `};
 `;
 
-const Title = styled.a`
+const Title = styled(NavLink)`
   display: flex;
-  align-items: center;
+  align-items: center;&
   pointer-events: auto;
   justify-self: flex-start;
   margin-right: 10px;
@@ -225,7 +223,7 @@ export default function Header() {
   return (
     <HeaderFrame>
       <HeaderRow>
-        <Title href=".">
+        <Title to="/">
           <Icon>
             <img width={'300px'} src={darkMode ? LogoDark : Logo} alt="logo" />
           </Icon>
@@ -239,8 +237,8 @@ export default function Header() {
             content={[
               { title: 'Swap', link: '/swap' },
               { title: 'Tokens', link: '/tokens' },
-              { title: 'Bridge', link: '/bridge' },
-              { title: 'USDR Vault', link: '/usdr' },
+              { title: '🚧Bridge' },
+              { title: '🚧USDR Vault' },
             ]}
           ></HeaderNavigationMenu>
           <HeaderNavigationMenu
@@ -249,17 +247,20 @@ export default function Header() {
             content={[
               { title: 'Liquidity', link: '/pool' },
               { title: 'Farm', link: '/farm' },
+              { title: '🚧USDR Yield' },
             ]}
           ></HeaderNavigationMenu>
-          <HeaderNavigationMenu
-            title={'Governance'}
-            defaultLink={'/vote'}
-            content={[{ title: 'Vote', link: '/vote' }]}
-          ></HeaderNavigationMenu>
+          <HeaderNavigationMenu title={'Vote'} defaultLink={'/vote'}></HeaderNavigationMenu>
           <HeaderNavigationMenu
             title={'Others'}
-            defaultLink={'/vote'}
-            content={[{ title: 'Vote', link: '/vote' }]}
+            content={[
+              { title: 'About', link: 'https://retherswap.org', external: true },
+              { title: 'Docs', link: 'https://docs.retherswap.org', external: true },
+              { title: 'Code', link: 'https://github.com/Retherswap', external: true },
+              { title: 'Discord', link: 'https://discord.gg/xCB4AJDEFb', external: true },
+              { title: 'Analytics', link: 'https://analytics.retherswap.org', external: true },
+              { title: 'Geckoterminal', link: 'https://www.geckoterminal.com/hypra-network/pools', external: true },
+            ]}
           ></HeaderNavigationMenu>
         </HeaderLinks>
       </Row>

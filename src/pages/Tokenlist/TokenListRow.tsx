@@ -45,7 +45,7 @@ export default function TokenListRow({ index, token }: { index: number; token: T
     ++priceIndex;
   }
   formattedPrice = formattedPrice.slice(0, priceIndex + 2);
-  const lastPrice = token.price?.[0]?.usdPrice ?? 0;
+  const lastPrice = Number(token.price?.[0]?.closeUsd ?? 0);
   const priceChange = lastPrice ? (price / lastPrice) * 100 - 100 : 0;
   return (
     <StyledLink to={`/token/${token.address}`}>

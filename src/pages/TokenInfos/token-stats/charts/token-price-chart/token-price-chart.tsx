@@ -7,7 +7,6 @@ import { useIsDarkMode } from 'state/user/hooks';
 
 export default function TokenPriceChart({ token }: { token: TokenModel }) {
   const isDarkMode = useIsDarkMode();
-  const prices: { x: Date; y: [number, number, number, number] }[] = [];
   /*const hourPrices: { [date: number]: { min: number; max: number } } = {};
   for (const price of token.price) {
     const date = new Date(price.date);
@@ -22,18 +21,15 @@ export default function TokenPriceChart({ token }: { token: TokenModel }) {
       hourPrices[date.getTime()].max = Math.max(hourPrices[date.getTime()].max, price.usdPrice);
     }
   }*/
-  for (let i = 0; i < token.price.length; ++i) {
-    const open = token.price[i].usdPrice;
-    const close = i > 0 ? token.price[i - 1].usdPrice : open;
-    const high = Math.max(open, close);
-    const low = Math.min(open, close);
-    prices.push({ x: new Date(token.price[i].date), y: [open, high, low, close] });
-  }
   const state = {
     series: [
       {
         name: 'Price',
-        data: prices.sort((a, b) => (a.x.getTime() > b.x.getTime() ? 1 : -1)),
+        data: token.price
+          .map((price) => {
+            return { x: new Date(price.date), y: [price.openUsd, price.highUsd, price.lowUsd, price.closeUsd] };
+          })
+          .sort((a, b) => (a.x.getTime() > b.x.getTime() ? 1 : -1)),
       },
     ],
   };

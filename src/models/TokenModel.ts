@@ -12,6 +12,7 @@ export interface TokenModel {
   idChain: number;
   usdPrice: string;
   nativeQuote: string;
+  holders: string;
   lastTvl?: TokenTVLModel;
   volume: TokenVolumeModel[];
   tvl: TokenTVLModel[];

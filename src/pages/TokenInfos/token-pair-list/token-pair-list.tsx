@@ -25,7 +25,7 @@ export default function TokenPairList({ token }: { token: TokenModel }) {
   const elementsPerPage = 10;
   const [pairs, setPairs] = useState<PairModel[]>([]);
   const fetchInfo = () => {
-    return fetch('http://162.0.211.141:4000/api/pairs/tokens/' + token.address)
+    return fetch('http://162.0.211.141:4000/api/v1/pairs/tokens/' + token.address)
       .then((res) => res.json())
       .then((d) => setPairs(d));
   };

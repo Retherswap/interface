@@ -12,7 +12,7 @@ export const useNativeToken = () => {
   const fetchNativeToken = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://162.0.211.141:4000/api/tokens/native/' + 1);
+      const response = await fetch('http://162.0.211.141:4000/api/v1/tokens/native/' + 1);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
