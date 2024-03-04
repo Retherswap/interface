@@ -205,7 +205,6 @@ export default function Header() {
               { title: 'Docs', link: 'https://docs.retherswap.org', external: true },
               { title: 'Code', link: 'https://github.com/Retherswap', external: true },
               { title: 'Discord', link: 'https://discord.gg/xCB4AJDEFb', external: true },
-              { title: 'Analytics', link: 'https://analytics.retherswap.org', external: true },
               { title: 'Geckoterminal', link: 'https://www.geckoterminal.com/hypra-network/pools', external: true },
             ]}
           ></HeaderNavigationMenu>
