@@ -1,11 +1,9 @@
-import Row from 'components/Row';
 import { darken } from 'polished';
 import React, { useState } from 'react';
 import { ExternalLink } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { TYPE } from 'theme';
 const Menu = styled.div`
   position: relative;
   margin-bottom: 0rem;

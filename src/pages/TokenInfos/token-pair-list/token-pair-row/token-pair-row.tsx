@@ -1,12 +1,11 @@
 import { TokenModel } from 'models/TokenModel';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDefaultTokens } from 'hooks/Tokens';
-import Column from 'components/Column';
 import { PairModel } from 'models/PairModel';
 import DoubleCurrencyLogo from 'components/DoubleLogo';
 import { TokenPairListGrid } from '../token-pair-list-grid';
 import Row from 'components/Row';
-import { HideSmall, TYPE } from 'theme';
+import { HideSmall, Fonts } from 'theme';
 import { formatNumber } from 'utils/formatNumber';
 import { HideExtraSmall } from 'components/Hide/hide-extra-small';
 
@@ -36,9 +35,9 @@ export default function TokenPairRow({ index, token, pair }: { index: number; to
   return (
     <TokenPairListGrid>
       <HideExtraSmall>
-        <TYPE.black fontWeight={500} fontSize={15}>
+        <Fonts.black fontWeight={500} fontSize={15}>
           {index}
-        </TYPE.black>
+        </Fonts.black>
       </HideExtraSmall>
       <Row style={{ gap: '10px' }}>
         <DoubleCurrencyLogo
@@ -46,22 +45,22 @@ export default function TokenPairRow({ index, token, pair }: { index: number; to
           currency0={defaultTokens[pair.token0.address]}
           currency1={defaultTokens[pair.token1.address]}
         />
-        <TYPE.black fontWeight={500} fontSize={14}>
+        <Fonts.black fontWeight={500} fontSize={14}>
           {pair.token0.symbol}/{pair.token1.symbol}
-        </TYPE.black>
+        </Fonts.black>
       </Row>
-      <TYPE.black fontWeight={500} fontSize={14}>
+      <Fonts.black fontWeight={500} fontSize={14}>
         ${formatNumber(pair.lastTvl?.reserveUsd)}
-      </TYPE.black>
+      </Fonts.black>
       <HideSmall>
-        <TYPE.black fontWeight={500} fontSize={14}>
+        <Fonts.black fontWeight={500} fontSize={14}>
           ${formatNumber(volume24h)}
-        </TYPE.black>
+        </Fonts.black>
       </HideSmall>
       <HideSmall>
-        <TYPE.black fontWeight={500} fontSize={14}>
+        <Fonts.black fontWeight={500} fontSize={14}>
           ${formatNumber(volume7d)}
-        </TYPE.black>
+        </Fonts.black>
       </HideSmall>
     </TokenPairListGrid>
   );

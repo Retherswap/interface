@@ -10,7 +10,7 @@ import Column, { AutoColumn } from '../../components/Column';
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal';
 import CurrencyInputPanel from '../../components/CurrencyInputPanel';
 import { SwapPoolTabs } from '../../components/NavigationTabs';
-import { AutoRow, RowBetween } from '../../components/Row';
+import { AutoRow, RowBetween, RowBetweenPrice } from '../../components/Row';
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee';
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds';
 import TradePrice from '../../components/swap/TradePrice';
@@ -32,12 +32,20 @@ import {
   useSwapState,
 } from '../../state/swap/hooks';
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks';
-import { LinkStyledButton, TYPE } from '../../theme';
+import { LinkStyledButton, Fonts } from '../../theme';
 import { maxAmountSpend } from '../../utils/maxAmountSpend';
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices';
 import AppBody from '../AppBody';
 import { ClickableText } from '../Pool/styleds';
 import Loader from '../../components/Loader';
+import { RetherPriceComponent } from 'components/FetchRetherPrice/FetchRetherprice';
+import { PriceComponent } from 'components/FetchHypPrice/FetchHypPrice';
+import { apiUrl } from 'configs/server';
+import { TokenModel } from 'models/TokenModel';
+import { formatNumber } from 'utils/formatNumber';
+import { useNativeToken } from 'hooks/useNativeToken';
+import { useChainInfo } from 'hooks/useChainInfo';
+import { cpuUsage } from 'process';
 //import { RetherPriceComponent } from '../../components/FetchRetherPrice/FetchRetherprice'
 //import { PriceComponent } from '../../components/FetchHypPrice/FetchHypPrice'
 
@@ -319,16 +327,18 @@ export default function Swap() {
               <Card padding={showWrap ? '.25rem 1rem 0 1rem' : '0px'} borderRadius={'20px'}>
                 <AutoColumn gap="8px" style={{ padding: '3px 4px' }}>
                   {Boolean(trade) && (
-                    <RowBetween align="center">
-                      <Text fontWeight={500} fontSize={14} color={theme.text2}>
-                        Price
-                      </Text>
-                      <TradePrice
-                        price={trade?.executionPrice}
-                        showInverted={showInverted}
-                        setShowInverted={setShowInverted}
-                      />
-                    </RowBetween>
+                    <>
+                      <RowBetween align="center">
+                        <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                          Price
+                        </Text>
+                        <TradePrice
+                          price={trade?.executionPrice}
+                          showInverted={showInverted}
+                          setShowInverted={setShowInverted}
+                        />
+                      </RowBetween>
+                    </>
                   )}
                   <RowBetween align="center">
                     <ClickableText fontWeight={500} fontSize={14} color={theme.text2} onClick={toggleSettings}>
@@ -353,8 +363,8 @@ export default function Swap() {
               </ButtonPrimary>
             ) : noRoute && userHasSpecifiedInputOutput ? (
               <GreyCard style={{ textAlign: 'center' }}>
-                <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
-                {singleHopOnly && <TYPE.main mb="4px">Try enabling multi-hop trades.</TYPE.main>}
+                <Fonts.main mb="4px">Insufficient liquidity for this trade.</Fonts.main>
+                {singleHopOnly && <Fonts.main mb="4px">Try enabling multi-hop trades.</Fonts.main>}
               </GreyCard>
             ) : showApproveFlow ? (
               <RowBetween>
@@ -441,6 +451,12 @@ export default function Swap() {
         </Wrapper>
 
         {trade && <AdvancedSwapDetailsDropdown trade={trade} />}
+        <RowBetween>
+          <RowBetweenPrice>
+            <RetherPriceComponent />
+            <PriceComponent />
+          </RowBetweenPrice>
+        </RowBetween>
       </AppBody>
     </>
   );

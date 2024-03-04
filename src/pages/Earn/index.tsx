@@ -2,7 +2,7 @@ import React from 'react';
 import { AutoColumn } from '../../components/Column';
 import styled from 'styled-components';
 import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/stake/hooks';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 import PoolCard from '../../components/earn/PoolCard';
 import { RowBetween } from '../../components/Row';
 import { CardSection, DataCard, CardNoise } from '../../components/earn/styled';
@@ -61,12 +61,12 @@ export default function Earn() {
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>Retherswap liquidity staking</TYPE.white>
+                <Fonts.white fontWeight={600}>Retherswap liquidity staking</Fonts.white>
               </RowBetween>
               <RowBetween>
-                <TYPE.white fontSize={14}>
+                <Fonts.white fontSize={14}>
                   Deposit your Liquidity Provider tokens to receive RETHER, Retherswap protocol governance token
-                </TYPE.white>
+                </Fonts.white>
               </RowBetween>{' '}
             </AutoColumn>
           </CardSection>
@@ -75,7 +75,7 @@ export default function Earn() {
       </TopSection>
       <AutoColumn gap="lg" style={{ width: '92.5%', maxWidth: '550px' }}>
         <DataRow style={{ alignItems: 'baseline' }}>
-          <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating pools</TYPE.mediumHeader>
+          <Fonts.mediumHeader style={{ marginTop: '0.5rem' }}>Participating pools</Fonts.mediumHeader>
           <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} />
         </DataRow>
 

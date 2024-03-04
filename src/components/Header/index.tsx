@@ -2,10 +2,7 @@ import { ChainId } from '@retherswap/sdk';
 import React from 'react';
 import { Text } from 'rebass';
 import { NavLink } from 'react-router-dom';
-import { darken } from 'polished';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
-import Menu from '../Menu';
 import Logo from '../../assets/svg/logo.svg';
 import LogoDark from '../../assets/svg/logo_white.svg';
 import { useActiveWeb3React } from '../../hooks';
@@ -87,11 +84,11 @@ const HeaderLinks = styled(Row)`
   background-color: ${({ theme }) => theme.bg1};
 `;
 
-const AccountElement = styled.div<{ active: boolean }>`
+const AccountElement = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: ${({ theme, active }) => (!active ? theme.bg1 : theme.bg1)};
+  background-color: ${({ theme }) => theme.bg1};
   border-radius: 0.8rem;
   white-space: nowrap;
   width: auto;
@@ -101,12 +98,6 @@ const AccountElement = styled.div<{ active: boolean }>`
   :focus {
     border: 1px solid blue;
   }
-`;
-
-const HideSmall = styled.span`
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    display: none;
-  `};
 `;
 
 const BalanceText = styled(Text)`
@@ -134,49 +125,6 @@ const Icon = styled.div`
   :hover {
     transform: scale(1.1);
   }
-`;
-
-const activeClassName = 'ACTIVE';
-
-const StyledNavLink = styled(NavLink).attrs({
-  activeClassName,
-})`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: left;
-  border-radius: 10px;
-  outline: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: ${({ theme }) => theme.text2};
-  font-size: 0.8rem;
-  width: 100%;
-  padding: 0.3rem 0.6rem;
-  font-weight: 500;
-  transition: 0.2s;
-
-  &:not(:last-child) {
-    margin-right: 0.16rem;
-  }
-
-  &.${activeClassName} {
-    color: ${({ theme }) => theme.text1};
-    background-color: ${({ theme }) => theme.bg3};
-  }
-
-  :hover,
-  :focus {
-    color: ${({ theme }) => darken(0.1, theme.text1)};
-  }
-
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    border-radius: 10px;
-    padding: 0.2rem 5%;
-    border: 0px solid ${({ theme }) => theme.bg3};
-
-    &:not(:last-child) {
-      margin-right: 2%;
-    }
-  `};
 `;
 
 export const StyledMenuButton = styled.button`
@@ -217,7 +165,6 @@ export const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
 
 export default function Header() {
   const { account, chainId } = useActiveWeb3React();
-  const { t } = useTranslation();
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? ''];
   const [darkMode, toggleDarkMode] = useDarkModeManager();
   return (
@@ -236,7 +183,7 @@ export default function Header() {
             defaultLink={'/swap'}
             content={[
               { title: 'Swap', link: '/swap' },
-              { title: 'Tokens', link: '/tokens' },
+              { title: '🚧Tokens' },
               { title: '🚧Bridge' },
               { title: '🚧USDR Vault' },
             ]}
@@ -267,7 +214,7 @@ export default function Header() {
       <HeaderControls>
         <HeaderElement>
           <NetworkSelector />
-          <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
+          <AccountElement style={{ pointerEvents: 'auto' }}>
             {account && userEthBalance ? (
               <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
                 {userEthBalance?.toSignificant(4)} {chainId ? ETH_NAME_AND_SYMBOL[chainId].symbol : 'Native Tokens'}

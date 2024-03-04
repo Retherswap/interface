@@ -2,7 +2,7 @@ import React from 'react';
 import { AutoColumn } from '../Column';
 import { RowBetween } from '../Row';
 import styled from 'styled-components';
-import { TYPE, StyledInternalLink } from '../../theme';
+import { Fonts, StyledInternalLink } from '../../theme';
 import DoubleCurrencyLogo from '../DoubleLogo';
 import { ETHER, JSBI, TokenAmount } from '@retherswap/sdk';
 import { ButtonPrimary } from '../Button';
@@ -109,9 +109,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
       <TopSection>
         <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
-        <TYPE.white fontWeight={600} fontSize={24} style={{ marginLeft: '10px' }}>
+        <Fonts.white fontWeight={600} fontSize={24} style={{ marginLeft: '10px' }}>
           {currency0.symbol}-{currency1.symbol}
-        </TYPE.white>
+        </Fonts.white>
 
         <StyledInternalLink to={`/farm/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
@@ -122,16 +122,16 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
       <StatContainer>
         <RowBetween>
-          <TYPE.white> Total deposited</TYPE.white>
-          <TYPE.white>
+          <Fonts.white> Total deposited</Fonts.white>
+          <Fonts.white>
             {valueOfTotalStakedAmountInUSDC
               ? `$${valueOfTotalStakedAmountInUSDC.toFixed(0, { groupSeparator: ',' })}`
               : `${valueOfTotalStakedAmountInWETH?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} HYP`}
-          </TYPE.white>
+          </Fonts.white>
         </RowBetween>
         <RowBetween>
-          <TYPE.white> Pool rate </TYPE.white>
-          <TYPE.white>
+          <Fonts.white> Pool rate </Fonts.white>
+          <Fonts.white>
             {stakingInfo
               ? stakingInfo.active
                 ? `${stakingInfo.totalRewardRate
@@ -139,7 +139,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                     ?.toFixed(0, { groupSeparator: ',' })} / week`
                 : '0 / week'
               : '-'}
-          </TYPE.white>
+          </Fonts.white>
         </RowBetween>
       </StatContainer>
 
@@ -147,25 +147,25 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
       <BottomSection showBackground={true}>
         <AutoColumn style={{ width: '100%' }}>
           <RowBetween style={{ width: '100%', justifyContent: 'space-between' }}>
-            <TYPE.black color={'white'} fontWeight={500}>
+            <Fonts.black color={'white'} fontWeight={500}>
               <span>APR</span>
-            </TYPE.black>
+            </Fonts.black>
 
-            <TYPE.black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
+            <Fonts.black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
               <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
                 🚀
               </span>
               {poolAPR}%
-            </TYPE.black>
+            </Fonts.black>
           </RowBetween>
           {isStaking && (
             <>
               <RowBetween style={{ width: '100%', justifyContent: 'space-between' }}>
-                <TYPE.black color={'white'} fontWeight={500}>
+                <Fonts.black color={'white'} fontWeight={500}>
                   <span>Your rate</span>
-                </TYPE.black>
+                </Fonts.black>
 
-                <TYPE.black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
+                <Fonts.black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
                     ⚡
                   </span>
@@ -176,7 +176,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                           ?.toSignificant(4, { groupSeparator: ',' })} RETHER / week`
                       : '0 RETHER / week'
                     : '-'}
-                </TYPE.black>
+                </Fonts.black>
               </RowBetween>
             </>
           )}

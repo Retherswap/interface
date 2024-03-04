@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { TYPE } from 'theme';
+import { Fonts } from 'theme';
 import Logo from '../../assets/svg/logo.svg';
 import LogoDark from '../../assets/svg/logo_white.svg';
 import { useIsDarkMode } from 'state/user/hooks';
@@ -74,12 +74,12 @@ export default function BannerInfo({
       <Column style={{ flex: 1, alignItems: 'stretch', justifyContent: 'space-between' }}>
         <img width={'200px'} src={isDarkMode ? LogoDark : Logo} alt="logo" />
         <Column style={{ gap: '10px' }}>
-          <TYPE.black fontWeight={800} fontSize={26}>
+          <Fonts.black fontWeight={800} fontSize={26}>
             {title}
-          </TYPE.black>
-          <TYPE.black fontWeight={800} fontSize={20}>
+          </Fonts.black>
+          <Fonts.black fontWeight={800} fontSize={20}>
             {subTitle}
-          </TYPE.black>
+          </Fonts.black>
         </Column>
         <CTAButtonsContainer>
           {ctaButtons.map((ctaButton) => (

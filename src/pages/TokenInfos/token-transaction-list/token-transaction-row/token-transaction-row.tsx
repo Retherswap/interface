@@ -1,7 +1,6 @@
 import React from 'react';
-import { useDefaultTokens } from 'hooks/Tokens';
 import { PairTransactionModel } from 'models/PairTransactionModel';
-import { HideSmall, TYPE } from 'theme';
+import { HideSmall, Fonts } from 'theme';
 import { TokenTransactionListGrid } from '../token-transaction-list-grid';
 import styled from 'styled-components';
 import { formatNumber } from 'utils/formatNumber';
@@ -50,7 +49,7 @@ export default function TokenTransactionRow({
       <StyledLink href={`https://explorer.hypra.network/tx/${pairTransaction.transaction.txHash}`} target="_blank">
         <Row style={{ gap: '5px' }}>
           <Circle fill={buy ? 'green' : 'red'} color="transparent" size={7} />
-          <TYPE.black fontSize={14} fontWeight={500}>
+          <Fonts.black fontSize={14} fontWeight={500}>
             {pairTransaction.type === 'SWAP' && (
               <>
                 {pairTransaction.inputToken.id === token.id ? 'Sell' : 'Buy'}{' '}
@@ -69,40 +68,40 @@ export default function TokenTransactionRow({
                 Remove {pairTransaction.inputToken.symbol} and {pairTransaction.outputToken.symbol}
               </>
             )}
-          </TYPE.black>
+          </Fonts.black>
         </Row>
       </StyledLink>
       <HideSmall>
-        <TYPE.black fontSize={14} fontWeight={500}>
+        <Fonts.black fontSize={14} fontWeight={500}>
           $
           {formatNumber(
             Number(inputToken) * Number(pairTransaction.inputTokenUsdQuote) * (pairTransaction.type !== 'SWAP' ? 2 : 1)
           )}
-        </TYPE.black>
+        </Fonts.black>
       </HideSmall>
       <HideMedium>
-        <TYPE.black fontSize={14} fontWeight={500}>
+        <Fonts.black fontSize={14} fontWeight={500}>
           {formatNumber(outputToken)} {pairTransaction.outputToken.symbol}
-        </TYPE.black>
+        </Fonts.black>
       </HideMedium>
       <HideMedium>
-        <TYPE.black fontSize={14} fontWeight={500}>
+        <Fonts.black fontSize={14} fontWeight={500}>
           {formatNumber(inputToken)} {pairTransaction.inputToken.symbol}
-        </TYPE.black>
+        </Fonts.black>
       </HideMedium>
       <HideSmall>
         <StyledLink
           href={`https://explorer.hypra.network/address/${pairTransaction.transaction.fromAddress.address}`}
           target="_blank"
         >
-          <TYPE.blue2 fontSize={14} fontWeight={700}>
+          <Fonts.blue2 fontSize={14} fontWeight={700}>
             {formatAddress(pairTransaction.transaction.fromAddress.address)}
-          </TYPE.blue2>
+          </Fonts.blue2>
         </StyledLink>
       </HideSmall>
-      <TYPE.black fontSize={14} fontWeight={500}>
+      <Fonts.black fontSize={14} fontWeight={500}>
         {timeAgo}
-      </TYPE.black>
+      </Fonts.black>
     </TokenTransactionListGrid>
   );
 }

@@ -11,7 +11,7 @@ import useToggle from '../../hooks/useToggle';
 import { AppDispatch, AppState } from '../../state';
 import { acceptListUpdate, removeList, disableList, enableList } from '../../state/lists/actions';
 import { useIsListActive, useAllLists, useActiveListUrls } from '../../state/lists/hooks';
-import { ExternalLink, LinkStyledButton, TYPE, IconWrapper } from '../../theme';
+import { ExternalLink, LinkStyledButton, Fonts, IconWrapper } from '../../theme';
 import listVersionLabel from '../../utils/listVersionLabel';
 import { parseENSAddress } from '../../utils/parseENSAddress';
 import uriToHttp from '../../utils/uriToHttp';
@@ -75,7 +75,7 @@ const StyledTitleText = styled.div<{ active: boolean }>`
   color: ${({ theme, active }) => (active ? theme.white : theme.text2)};
 `;
 
-const StyledListUrlText = styled(TYPE.main)<{ active: boolean }>`
+const StyledListUrlText = styled(Fonts.main)<{ active: boolean }>`
   font-size: 12px;
   color: ${({ theme, active }) => (active ? theme.white : theme.text2)};
 `;
@@ -302,9 +302,9 @@ export function ManageLists({
           />
         </Row>
         {addError ? (
-          <TYPE.error title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} error>
+          <Fonts.error title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} error>
             {addError}
-          </TYPE.error>
+          </Fonts.error>
         ) : null}
       </PaddedColumn>
       {tempList && (
@@ -314,8 +314,8 @@ export function ManageLists({
               <RowFixed>
                 {tempList.logoURI && <ListLogo logoURI={tempList.logoURI} size="40px" />}
                 <AutoColumn gap="4px" style={{ marginLeft: '20px' }}>
-                  <TYPE.body fontWeight={600}>{tempList.name}</TYPE.body>
-                  <TYPE.main fontSize={'12px'}>{tempList.tokens.length} tokens</TYPE.main>
+                  <Fonts.body fontWeight={600}>{tempList.name}</Fonts.body>
+                  <Fonts.main fontSize={'12px'}>{tempList.tokens.length} tokens</Fonts.main>
                 </AutoColumn>
               </RowFixed>
               {isImported ? (
@@ -323,7 +323,7 @@ export function ManageLists({
                   <IconWrapper stroke={theme.text2} size="16px" marginRight={'10px'}>
                     <CheckCircle />
                   </IconWrapper>
-                  <TYPE.body color={theme.text2}>Loaded</TYPE.body>
+                  <Fonts.body color={theme.text2}>Loaded</Fonts.body>
                 </RowFixed>
               ) : (
                 <ButtonPrimary

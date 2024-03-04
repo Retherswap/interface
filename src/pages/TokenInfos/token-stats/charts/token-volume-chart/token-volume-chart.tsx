@@ -1,6 +1,5 @@
 import { TokenModel } from 'models/TokenModel';
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatNumber } from 'utils/formatNumber';
 import { useIsDarkMode } from 'state/user/hooks';
@@ -72,10 +71,10 @@ export default function TokenVolumeChart({ token }: { token: TokenModel }) {
             enabled: false,
           },
           axisBorder: {
-            show: false, // Cacher la bordure de l'axe X
+            show: false,
           },
           axisTicks: {
-            show: false, // Cacher les ticks de l'axe X
+            show: false,
           },
         },
         dataLabels: {

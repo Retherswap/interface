@@ -6,7 +6,8 @@ import 'swiper/swiper.min.css';
 import 'swiper/swiper-bundle.min.css';
 import MainSection from './main-section/main-section';
 import DexStatsSection from './dex-stats-section/dex-stats-section';
-import RetherTokenSection from './rether-token-section/rether-token-section';
+import { useSocket } from 'hooks/useSocket';
+import { apiUrl } from 'configs/server';
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 const HomeContainer = styled.div`
@@ -20,21 +21,31 @@ const HomeContainer = styled.div`
 
 export default function Home() {
   const [appInfos, setAppInfos] = useState<AppInfo | undefined>(undefined);
-  const fetchInfo = () => {
-    return fetch('http://162.0.211.141:4000/api/v1/app_infos')
-      .then((res) => res.json())
-      .then((d) => setAppInfos(d));
-  };
+  const socket = useSocket();
   useEffect(() => {
+    if (!socket) {
+      return;
+    }
+    const onAppInfos = (data: AppInfo) => {
+      setAppInfos({ ...appInfos, ...data });
+    };
+    socket.on('appInfos', onAppInfos);
+    const fetchInfo = () => {
+      return fetch(`${apiUrl}/app_infos`)
+        .then((res) => res.json())
+        .then((d) => setAppInfos(d));
+    };
     fetchInfo();
-  }, []);
-
+    return () => {
+      socket.off('appInfos', onAppInfos);
+    };
+  }, [socket]);
   /*
-        <Swiper
+   <Swiper
         spaceBetween={50}
         slidesPerView={1}
         pagination={{ clickable: true }}
-        style={{ width: '100%', padding: '2em 0' }}
+        style={{ width: '100%', padding: '2em 0', maxWidth: '1200px' }}
       >
         <SwiperSlide>
           <BannerInfo
@@ -60,11 +71,14 @@ export default function Home() {
         </SwiperSlide>
       </Swiper>
       */
+  /*
+           <DexInfosSection></DexInfosSection>
+      <RetherTokenSection></RetherTokenSection>
+      */
   return (
     <HomeContainer>
       <MainSection></MainSection>
       <DexStatsSection appInfos={appInfos}></DexStatsSection>
-      <RetherTokenSection></RetherTokenSection>
     </HomeContainer>
   );
 }

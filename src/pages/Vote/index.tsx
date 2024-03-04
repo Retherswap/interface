@@ -1,7 +1,7 @@
 import React from 'react';
 import { AutoColumn } from '../../components/Column';
 import styled from 'styled-components';
-import { TYPE, ExternalLink } from '../../theme';
+import { Fonts, ExternalLink } from '../../theme';
 import { RowBetween, RowFixed } from '../../components/Row';
 import { Link } from 'react-router-dom';
 import { ProposalStatus } from './styled';
@@ -30,7 +30,7 @@ const PageWrapper = styled(AutoColumn)`
     width: 90%;
     max-width: 400px;
   `}
-`
+`;
 
 const TopSection = styled(AutoColumn)`
   max-width: 550px;
@@ -79,7 +79,7 @@ const WrapSmall = styled(RowBetween)`
   `};
 `;
 
-const TextButton = styled(TYPE.main)`
+const TextButton = styled(Fonts.main)`
   color: ${({ theme }) => theme.primary1};
   :hover {
     cursor: pointer;
@@ -148,16 +148,20 @@ export default function Vote() {
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>Retherswap Governance</TYPE.white>
+                <Fonts.white fontWeight={600}>Retherswap Governance</Fonts.white>
               </RowBetween>
               <RowBetween>
-                <TYPE.white fontSize={14}>
-                  RETHER tokens represent voting shares in Retherswap governance. You can vote on each proposal
-                  yourself or delegate your votes to a third party.
-                </TYPE.white>
+                <Fonts.white fontSize={14}>
+                  RETHER tokens represent voting shares in Retherswap governance. You can vote on each proposal yourself
+                  or delegate your votes to a third party.
+                </Fonts.white>
               </RowBetween>
-              <ExternalLink style={{ color: 'white', textDecoration: 'underline' }} href="https://retherswap.org/governance" target="_blank">
-                <TYPE.white fontSize={14}>Read more about Retherswap governance</TYPE.white>
+              <ExternalLink
+                style={{ color: 'white', textDecoration: 'underline' }}
+                href="https://retherswap.org/governance"
+                target="_blank"
+              >
+                <Fonts.white fontSize={14}>Read more about Retherswap governance</Fonts.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>
@@ -166,7 +170,7 @@ export default function Vote() {
       </TopSection>
       <TopSection gap="2px">
         <WrapSmall>
-          <TYPE.mediumHeader style={{ margin: '0.5rem 0.5rem 0.5rem 0', flexShrink: 0 }}>Proposals</TYPE.mediumHeader>
+          <Fonts.mediumHeader style={{ margin: '0.5rem 0.5rem 0.5rem 0', flexShrink: 0 }}>Proposals</Fonts.mediumHeader>
           {(!allProposals || allProposals.length === 0) && !availableVotes && <Loader />}
           {showUnlockVoting ? (
             <ButtonPrimary
@@ -178,16 +182,16 @@ export default function Vote() {
               Unlock Voting
             </ButtonPrimary>
           ) : availableVotes && JSBI.notEqual(JSBI.BigInt(0), availableVotes?.raw) ? (
-            <TYPE.body fontWeight={500} mr="6px">
+            <Fonts.body fontWeight={500} mr="6px">
               <FormattedCurrencyAmount currencyAmount={availableVotes} /> Votes
-            </TYPE.body>
+            </Fonts.body>
           ) : rethersBalance &&
             userDelegatee &&
             userDelegatee !== ZERO_ADDRESS &&
             JSBI.notEqual(JSBI.BigInt(0), rethersBalance?.raw) ? (
-            <TYPE.body fontWeight={500} mr="6px">
+            <Fonts.body fontWeight={500} mr="6px">
               <FormattedCurrencyAmount currencyAmount={rethersBalance} /> Votes
-            </TYPE.body>
+            </Fonts.body>
           ) : (
             ''
           )}
@@ -197,9 +201,9 @@ export default function Vote() {
             <div />
             {userDelegatee && userDelegatee !== ZERO_ADDRESS ? (
               <RowFixed>
-                <TYPE.body fontWeight={500} mr="4px">
+                <Fonts.body fontWeight={500} mr="4px">
                   Delegated to:
-                </TYPE.body>
+                </Fonts.body>
                 <AddressButton>
                   <StyledExternalLink
                     href={getEtherscanLink(ChainId.HYPRA, userDelegatee, 'address')}
@@ -219,10 +223,10 @@ export default function Vote() {
         )}
         {allProposals?.length === 0 && (
           <EmptyProposals>
-            <TYPE.body style={{ marginBottom: '8px' }}>No proposals found.</TYPE.body>
-            <TYPE.subHeader>
+            <Fonts.body style={{ marginBottom: '8px' }}>No proposals found.</Fonts.body>
+            <Fonts.subHeader>
               <i>Proposals submitted by community members will appear here.</i>
-            </TYPE.subHeader>
+            </Fonts.subHeader>
           </EmptyProposals>
         )}
         {allProposals?.map((p: ProposalData, i) => {
@@ -235,9 +239,9 @@ export default function Vote() {
           );
         })}
       </TopSection>
-      <TYPE.subHeader color="text6">
+      <Fonts.subHeader color="text6">
         A minimum threshhold of 1% of the total RETHER supply is required to submit proposals
-      </TYPE.subHeader>
+      </Fonts.subHeader>
     </PageWrapper>
   );
 }

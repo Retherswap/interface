@@ -1,5 +1,6 @@
+import { apiUrl } from 'configs/server';
 import { TokenModel } from 'models/TokenModel';
-import React, { useState, useEffect, createContext, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from 'state';
 import { setNativeToken } from 'state/application/actions';
@@ -12,7 +13,7 @@ export const useNativeToken = () => {
   const fetchNativeToken = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://162.0.211.141:4000/api/v1/tokens/native/' + 1);
+      const response = await fetch(`${apiUrl}/tokens/native/1`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -27,10 +28,11 @@ export const useNativeToken = () => {
   };
 
   useEffect(() => {
-    if (!nativeToken) {
+    if (!nativeToken && !loading) {
+      console.log('fetching native token');
       fetchNativeToken();
     }
-  }, []);
+  }, [loading]);
 
   const refetch = async () => {
     await fetchNativeToken();

@@ -24,7 +24,7 @@ import { useCurrency } from '../../hooks/Tokens';
 import { usePairContract } from '../../hooks/useContract';
 import useTransactionDeadline from '../../hooks/useTransactionDeadline';
 import { useTransactionAdder } from '../../state/transactions/hooks';
-import { StyledInternalLink, TYPE } from '../../theme';
+import { StyledInternalLink, Fonts } from '../../theme';
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils';
 import { currencyId } from '../../utils/currencyId';
 import useDebouncedChangeHandler from '../../utils/useDebouncedChangeHandler';
@@ -48,10 +48,11 @@ export default function RemoveLiquidity({
 }: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
   const [currencyA, currencyB] = [useCurrency(currencyIdA) ?? undefined, useCurrency(currencyIdB) ?? undefined];
   const { account, chainId, library } = useActiveWeb3React();
-  const [tokenA, tokenB] = useMemo(
-    () => [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)],
-    [currencyA, currencyB, chainId]
-  );
+  const [tokenA, tokenB] = useMemo(() => [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)], [
+    currencyA,
+    currencyB,
+    chainId,
+  ]);
 
   const theme = useContext(ThemeContext);
 
@@ -175,18 +176,15 @@ export default function RemoveLiquidity({
     [_onUserInput]
   );
 
-  const onLiquidityInput = useCallback(
-    (typedValue: string): void => onUserInput(Field.LIQUIDITY, typedValue),
-    [onUserInput]
-  );
-  const onCurrencyAInput = useCallback(
-    (typedValue: string): void => onUserInput(Field.CURRENCY_A, typedValue),
-    [onUserInput]
-  );
-  const onCurrencyBInput = useCallback(
-    (typedValue: string): void => onUserInput(Field.CURRENCY_B, typedValue),
-    [onUserInput]
-  );
+  const onLiquidityInput = useCallback((typedValue: string): void => onUserInput(Field.LIQUIDITY, typedValue), [
+    onUserInput,
+  ]);
+  const onCurrencyAInput = useCallback((typedValue: string): void => onUserInput(Field.CURRENCY_A, typedValue), [
+    onUserInput,
+  ]);
+  const onCurrencyBInput = useCallback((typedValue: string): void => onUserInput(Field.CURRENCY_B, typedValue), [
+    onUserInput,
+  ]);
 
   // tx sending
   const addTransaction = useTransactionAdder();
@@ -360,11 +358,11 @@ export default function RemoveLiquidity({
           </RowFixed>
         </RowBetween>
 
-        <TYPE.italic fontSize={12} color={theme.text2} textAlign="left" padding={'12px 0 0 0'}>
+        <Fonts.italic fontSize={12} color={theme.text2} textAlign="left" padding={'12px 0 0 0'}>
           {`Output is estimated. If the price changes by more than ${
             allowedSlippage / 100
           }% your transaction will revert.`}
-        </TYPE.italic>
+        </Fonts.italic>
       </AutoColumn>
     );
   }
@@ -487,10 +485,10 @@ export default function RemoveLiquidity({
           <AutoColumn gap="md">
             <GreyCard>
               <AutoColumn gap="10px">
-                <TYPE.link fontWeight={400} color={'primaryText1'}>
+                <Fonts.link fontWeight={400} color={'primaryText1'}>
                   <b>Tip:</b> Removing pool tokens converts your position back into underlying tokens at the current
                   rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.
-                </TYPE.link>
+                </Fonts.link>
               </AutoColumn>
             </GreyCard>
             <LightCard>

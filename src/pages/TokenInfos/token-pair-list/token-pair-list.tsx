@@ -1,7 +1,7 @@
 import { TokenModel } from 'models/TokenModel';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { TYPE } from 'theme';
+import { Fonts } from 'theme';
 import { TokenInfosCard } from '../token-infos-card';
 import Column from 'components/Column';
 import { PairModel } from 'models/PairModel';
@@ -10,6 +10,7 @@ import { TokenPairListGrid } from './token-pair-list-grid';
 import Paginator from 'components/Paginator/Paginator';
 import { HideSmall } from 'components/Hide/hide-small';
 import { HideExtraSmall } from 'components/Hide/hide-extra-small';
+import { apiUrl } from 'configs/server';
 
 export const Divider = styled.div`
   width: 100%;
@@ -24,14 +25,14 @@ export const RowDivider = styled(Divider)`
 export default function TokenPairList({ token }: { token: TokenModel }) {
   const elementsPerPage = 10;
   const [pairs, setPairs] = useState<PairModel[]>([]);
-  const fetchInfo = () => {
-    return fetch('http://162.0.211.141:4000/api/v1/pairs/tokens/' + token.address)
-      .then((res) => res.json())
-      .then((d) => setPairs(d));
-  };
   useEffect(() => {
+    const fetchInfo = () => {
+      return fetch(`${apiUrl}/pairs/tokens/${token.address}`)
+        .then((res) => res.json())
+        .then((d) => setPairs(d));
+    };
     fetchInfo();
-  }, []);
+  }, [token.address]);
   const [page, setPage] = useState(1);
   return (
     <Column style={{ width: '100%' }}>
@@ -39,15 +40,15 @@ export default function TokenPairList({ token }: { token: TokenModel }) {
       <TokenInfosCard>
         <TokenPairListGrid>
           <HideExtraSmall>
-            <TYPE.blue fontWeight={600}>#</TYPE.blue>
+            <Fonts.blue fontWeight={600}>#</Fonts.blue>
           </HideExtraSmall>
-          <TYPE.blue fontWeight={600}>Pair</TYPE.blue>
-          <TYPE.blue fontWeight={600}>TVL</TYPE.blue>
+          <Fonts.blue fontWeight={600}>Pair</Fonts.blue>
+          <Fonts.blue fontWeight={600}>TVL</Fonts.blue>
           <HideSmall>
-            <TYPE.blue fontWeight={600}>Volume 24H</TYPE.blue>
+            <Fonts.blue fontWeight={600}>Volume 24H</Fonts.blue>
           </HideSmall>
           <HideSmall>
-            <TYPE.blue fontWeight={600}>Volume 7D</TYPE.blue>
+            <Fonts.blue fontWeight={600}>Volume 7D</Fonts.blue>
           </HideSmall>
         </TokenPairListGrid>
         <Divider></Divider>

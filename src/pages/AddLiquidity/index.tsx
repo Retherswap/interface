@@ -27,7 +27,7 @@ import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../s
 
 import { useTransactionAdder } from '../../state/transactions/hooks';
 import { useIsExpertMode, useUserSlippageTolerance } from '../../state/user/hooks';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils';
 import { maxAmountSpend } from '../../utils/maxAmountSpend';
 import { wrappedCurrency } from '../../utils/wrappedCurrency';
@@ -227,11 +227,11 @@ export default function AddLiquidity({
             {currencies[Field.CURRENCY_A]?.symbol + '/' + currencies[Field.CURRENCY_B]?.symbol + ' Pool Tokens'}
           </Text>
         </Row>
-        <TYPE.italic fontSize={12} textAlign="left" padding={'8px 0 0 0 '}>
+        <Fonts.italic fontSize={12} textAlign="left" padding={'8px 0 0 0 '}>
           {`Output is estimated. If the price changes by more than ${
             allowedSlippage / 100
           }% your transaction will revert.`}
-        </TYPE.italic>
+        </Fonts.italic>
       </AutoColumn>
     );
   };
@@ -317,15 +317,15 @@ export default function AddLiquidity({
                 <ColumnCenter>
                   <LightCard>
                     <AutoColumn gap="10px">
-                      <TYPE.link fontWeight={600} color={'primaryText1'}>
+                      <Fonts.link fontWeight={600} color={'primaryText1'}>
                         You are the first liquidity provider.
-                      </TYPE.link>
-                      <TYPE.link fontWeight={400} color={'primaryText1'}>
+                      </Fonts.link>
+                      <Fonts.link fontWeight={400} color={'primaryText1'}>
                         The ratio of tokens you add will set the price of this pool.
-                      </TYPE.link>
-                      <TYPE.link fontWeight={400} color={'primaryText1'}>
+                      </Fonts.link>
+                      <Fonts.link fontWeight={400} color={'primaryText1'}>
                         Once you are happy with the rate click supply to review.
-                      </TYPE.link>
+                      </Fonts.link>
                     </AutoColumn>
                   </LightCard>
                 </ColumnCenter>
@@ -333,11 +333,11 @@ export default function AddLiquidity({
                 <ColumnCenter>
                   <LightCard>
                     <AutoColumn gap="10px">
-                      <TYPE.link fontWeight={400} color={'primaryText1'}>
+                      <Fonts.link fontWeight={400} color={'primaryText1'}>
                         <b>Tip:</b> When you add liquidity, you will receive pool tokens representing your position.
                         These tokens automatically earn fees proportional to your share of the pool, and can be redeemed
                         at any time.
-                      </TYPE.link>
+                      </Fonts.link>
                     </AutoColumn>
                   </LightCard>
                 </ColumnCenter>
@@ -373,9 +373,9 @@ export default function AddLiquidity({
               <>
                 <LightCard padding="0px" borderRadius={'20px'}>
                   <RowBetween padding="1rem">
-                    <TYPE.subHeader fontWeight={500} fontSize={14}>
+                    <Fonts.subHeader fontWeight={500} fontSize={14}>
                       {noLiquidity ? 'Initial prices' : 'Prices'} and pool share
-                    </TYPE.subHeader>
+                    </Fonts.subHeader>
                   </RowBetween>{' '}
                   <LightCard padding="1rem" borderRadius={'20px'}>
                     <PoolPriceBar

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Token, Currency } from '@retherswap/sdk';
 import styled from 'styled-components';
-import { TYPE, CloseIcon } from 'theme';
+import { Fonts, CloseIcon } from 'theme';
 import Card from 'components/Card';
 import { AutoColumn } from 'components/Column';
 import { RowBetween, RowFixed, AutoRow } from 'components/Row';
@@ -30,7 +30,7 @@ const WarningWrapper = styled(Card)<{ highWarning: boolean }>`
   width: fit-content;
 `;
 
-const AddressText = styled(TYPE.blue)`
+const AddressText = styled(Fonts.blue)`
   font-size: 12px;
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
@@ -67,7 +67,7 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
       <PaddedColumn gap="14px" style={{ width: '100%', flex: '1 1' }}>
         <RowBetween>
           {onBack ? <ArrowLeft style={{ cursor: 'pointer' }} onClick={onBack} /> : <div></div>}
-          <TYPE.mediumHeader>Import {tokens.length > 1 ? 'Tokens' : 'Token'}</TYPE.mediumHeader>
+          <Fonts.mediumHeader>Import {tokens.length > 1 ? 'Tokens' : 'Token'}</Fonts.mediumHeader>
           {onDismiss ? <CloseIcon onClick={onDismiss} /> : <div></div>}
         </RowBetween>
       </PaddedColumn>
@@ -80,10 +80,10 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
               <AutoColumn gap="10px">
                 <AutoRow align="center">
                   <CurrencyLogo currency={token} size={'24px'} />
-                  <TYPE.body ml="8px" mr="8px" fontWeight={500}>
+                  <Fonts.body ml="8px" mr="8px" fontWeight={500}>
                     {token.symbol}
-                  </TYPE.body>
-                  <TYPE.darkGray fontWeight={300}>{token.name}</TYPE.darkGray>
+                  </Fonts.body>
+                  <Fonts.darkGray fontWeight={300}>{token.name}</Fonts.darkGray>
                 </AutoRow>
                 {chainId && (
                   <ExternalLink href={getEtherscanLink(chainId, token.address, 'address')}>
@@ -93,17 +93,17 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
                 {list !== undefined ? (
                   <RowFixed>
                     {list.logoURI && <ListLogo logoURI={list.logoURI} size="12px" />}
-                    <TYPE.small ml="6px" color={theme.text3}>
+                    <Fonts.small ml="6px" color={theme.text3}>
                       via {list.name}
-                    </TYPE.small>
+                    </Fonts.small>
                   </RowFixed>
                 ) : (
                   <WarningWrapper borderRadius="4px" padding="4px" highWarning={true}>
                     <RowFixed>
                       <AlertTriangle stroke={theme.red1} size="10px" />
-                      <TYPE.body color={theme.red1} ml="4px" fontSize="10px" fontWeight={500}>
+                      <Fonts.body color={theme.red1} ml="4px" fontSize="10px" fontWeight={500}>
                         Unkown Source
-                      </TYPE.body>
+                      </Fonts.body>
                     </RowFixed>
                   </WarningWrapper>
                 )}
@@ -117,19 +117,19 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
         >
           <AutoColumn justify="center" style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
             <AlertTriangle stroke={fromLists ? theme.yellow2 : theme.red1} size={32} />
-            <TYPE.body fontWeight={600} fontSize={20} color={fromLists ? theme.yellow2 : theme.red1}>
+            <Fonts.body fontWeight={600} fontSize={20} color={fromLists ? theme.yellow2 : theme.red1}>
               Trade at your own risk!
-            </TYPE.body>
+            </Fonts.body>
           </AutoColumn>
 
           <AutoColumn style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
-            <TYPE.body fontWeight={400} color={fromLists ? theme.yellow2 : theme.red1}>
+            <Fonts.body fontWeight={400} color={fromLists ? theme.yellow2 : theme.red1}>
               Anyone can create a token, including creating fake versions of existing tokens that claim to represent
               projects.
-            </TYPE.body>
-            <TYPE.body fontWeight={600} color={fromLists ? theme.yellow2 : theme.red1}>
+            </Fonts.body>
+            <Fonts.body fontWeight={600} color={fromLists ? theme.yellow2 : theme.red1}>
               If you purchase this token, you may not be able to sell it back.
-            </TYPE.body>
+            </Fonts.body>
           </AutoColumn>
           <AutoRow justify="center" style={{ cursor: 'pointer' }} onClick={() => setConfirmed(!confirmed)}>
             <Checkbox
@@ -139,9 +139,9 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
               checked={confirmed}
               onChange={() => setConfirmed(!confirmed)}
             />
-            <TYPE.body ml="10px" fontSize="16px" color={fromLists ? theme.yellow2 : theme.red1} fontWeight={500}>
+            <Fonts.body ml="10px" fontSize="16px" color={fromLists ? theme.yellow2 : theme.red1} fontWeight={500}>
               I understand
-            </TYPE.body>
+            </Fonts.body>
           </AutoRow>
         </Card>
         <ButtonPrimary

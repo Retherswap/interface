@@ -1,5 +1,4 @@
-import Logo from 'components/Logo';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import HomeLogoIcon from './home-logo-icon/home-logo-icon';
 import UsdrLogo from '../../../assets/images/usdr.png';

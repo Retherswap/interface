@@ -1,10 +1,10 @@
 import CurrencyLogo from 'components/CurrencyLogo';
 import Row from 'components/Row';
 import { TokenModel } from 'models/TokenModel';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { TokenListGrid } from './TokenListGrid';
-import { HideSmall, TYPE } from 'theme';
+import { HideSmall, Fonts } from 'theme';
 import { useDefaultTokens } from 'hooks/Tokens';
 import { Link } from 'react-router-dom';
 import { formatNumber } from 'utils/formatNumber';
@@ -51,43 +51,43 @@ export default function TokenListRow({ index, token }: { index: number; token: T
     <StyledLink to={`/token/${token.address}`}>
       <TokenListGrid>
         <HideExtraSmall>
-          <TYPE.black fontWeight={500}>{index}</TYPE.black>
+          <Fonts.black fontWeight={500}>{index}</Fonts.black>
         </HideExtraSmall>
         <Row style={{ gap: '10px' }}>
           <CurrencyLogo currency={defaultTokens[token.address]} size="35px" />
           <Row style={{ gap: '5px' }}>
             <HideExtraSmall>
-              <TYPE.black fontWeight={500}>{token.name}</TYPE.black>
+              <Fonts.black fontWeight={500}>{token.name}</Fonts.black>
             </HideExtraSmall>
-            <TYPE.black fontWeight={500}>
+            <Fonts.black fontWeight={500}>
               <Row>
                 <HideExtraSmall>(</HideExtraSmall>
                 {token.symbol}
                 <HideExtraSmall>)</HideExtraSmall>
               </Row>
-            </TYPE.black>
+            </Fonts.black>
           </Row>
         </Row>
         <Row style={{ gap: '5px' }}>
-          <TYPE.black fontWeight={500}>${formattedPrice}</TYPE.black>
+          <Fonts.black fontWeight={500}>${formattedPrice}</Fonts.black>
         </Row>
         <HideMedium>
           <Row style={{ gap: '5px' }}>
             {priceChange > 0 ? (
-              <TYPE.green fontWeight={500}>{priceChange.toFixed(2)}%</TYPE.green>
+              <Fonts.green fontWeight={500}>{priceChange.toFixed(2)}%</Fonts.green>
             ) : (
-              <TYPE.red fontWeight={500}>{priceChange.toFixed(2)}%</TYPE.red>
+              <Fonts.red fontWeight={500}>{priceChange.toFixed(2)}%</Fonts.red>
             )}
           </Row>
         </HideMedium>
         <HideMedium>
           <Row style={{ gap: '5px' }}>
-            <TYPE.black fontWeight={500}>${formatNumber(volume)}</TYPE.black>
+            <Fonts.black fontWeight={500}>${formatNumber(volume)}</Fonts.black>
           </Row>
         </HideMedium>
         <HideSmall>
           <Row style={{ gap: '5px' }}>
-            <TYPE.black fontWeight={500}>${formatNumber(token.lastTvl?.reserveUsd)}</TYPE.black>
+            <Fonts.black fontWeight={500}>${formatNumber(token.lastTvl?.reserveUsd)}</Fonts.black>
           </Row>
         </HideSmall>
       </TokenListGrid>

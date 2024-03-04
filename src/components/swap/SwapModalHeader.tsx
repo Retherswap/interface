@@ -4,7 +4,7 @@ import { ArrowDown, AlertTriangle } from 'react-feather';
 import { Text } from 'rebass';
 import { ThemeContext } from 'styled-components';
 import { Field } from '../../state/swap/actions';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 import { ButtonPrimary } from '../Button';
 import { isAddress, shortenAddress } from '../../utils';
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../utils/prices';
@@ -26,10 +26,10 @@ export default function SwapModalHeader({
   showAcceptChanges: boolean;
   onAcceptChanges: () => void;
 }) {
-  const slippageAdjustedAmounts = useMemo(
-    () => computeSlippageAdjustedAmounts(trade, allowedSlippage),
-    [trade, allowedSlippage]
-  );
+  const slippageAdjustedAmounts = useMemo(() => computeSlippageAdjustedAmounts(trade, allowedSlippage), [
+    trade,
+    allowedSlippage,
+  ]);
   const { priceImpactWithoutFee } = useMemo(() => computeTradePriceBreakdown(trade), [trade]);
   const priceImpactSeverity = warningSeverity(priceImpactWithoutFee);
 
@@ -85,7 +85,7 @@ export default function SwapModalHeader({
           <RowBetween>
             <RowFixed>
               <AlertTriangle size={20} style={{ marginRight: '8px', minWidth: 24 }} />
-              <TYPE.main color={theme.primary1}> Price Updated</TYPE.main>
+              <Fonts.main color={theme.primary1}> Price Updated</Fonts.main>
             </RowFixed>
             <ButtonPrimary
               style={{ padding: '.5rem', width: 'fit-content', fontSize: '0.825rem', borderRadius: '12px' }}
@@ -98,29 +98,29 @@ export default function SwapModalHeader({
       ) : null}
       <AutoColumn justify="flex-start" gap="sm" style={{ padding: '12px 0 0 0px' }}>
         {trade.tradeType === TradeType.EXACT_INPUT ? (
-          <TYPE.italic textAlign="left" style={{ width: '100%' }}>
+          <Fonts.italic textAlign="left" style={{ width: '100%' }}>
             {`Output is estimated. You will receive at least `}
             <b>
               {slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(6)} {trade.outputAmount.currency.symbol}
             </b>
             {' or the transaction will revert.'}
-          </TYPE.italic>
+          </Fonts.italic>
         ) : (
-          <TYPE.italic textAlign="left" style={{ width: '100%' }}>
+          <Fonts.italic textAlign="left" style={{ width: '100%' }}>
             {`Input is estimated. You will sell at most `}
             <b>
               {slippageAdjustedAmounts[Field.INPUT]?.toSignificant(6)} {trade.inputAmount.currency.symbol}
             </b>
             {' or the transaction will revert.'}
-          </TYPE.italic>
+          </Fonts.italic>
         )}
       </AutoColumn>
       {recipient !== null ? (
         <AutoColumn justify="flex-start" gap="sm" style={{ padding: '12px 0 0 0px' }}>
-          <TYPE.main>
+          <Fonts.main>
             Output will be sent to{' '}
             <b title={recipient}>{isAddress(recipient) ? shortenAddress(recipient) : recipient}</b>
-          </TYPE.main>
+          </Fonts.main>
         </AutoColumn>
       ) : null}
     </AutoColumn>

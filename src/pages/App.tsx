@@ -35,6 +35,7 @@ import TokenList from './Tokenlist/token-list';
 import TokenInfos from './TokenInfos/token-infos';
 import AccountBalance from './Balance/account-balance';
 import Home from './Home/home';
+import { SocketProvider } from 'hooks/useSocket';
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -53,7 +54,6 @@ const HeaderWrapper = styled.div`
 
 const BodyWrapper = styled.div`
   width: 100%;
-  padding: 1rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,35 +75,37 @@ export default function App() {
         <BodyWrapper>
           <Popups />
           <Polling />
-          <Web3ReactManager>
-            <Switch>
-              <Route exact strict path="/swap" component={Swap} />
-              <Route exact strict path="/home" component={Home} />
-              <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
-              <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
-              <Route exact strict path="/find" component={PoolFinder} />
-              <Route exact strict path="/pool" component={Pool} />
-              <Route exact strict path="/bridge" component={Bridge} />
-              <Route exact strict path="/usdr" component={USDRVault} />
-              <Route exact strict path="/tokens" component={TokenList} />
-              <Route exact strict path="/token/:address" component={TokenInfos} />
-              <Route exact strict path="/balance" component={AccountBalance} />
-              <Route exact strict path="/farm" component={Earn} />
-              <Route exact strict path="/vote" component={Vote} />
-              <Route exact strict path="/create" component={RedirectToAddLiquidity} />
-              <Route exact path="/add" component={AddLiquidity} />
-              <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
-              <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
-              <Route exact path="/create" component={AddLiquidity} />
-              <Route exact path="/create/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
-              <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
-              <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
-              <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
-              <Route exact strict path="/farm/:currencyIdA/:currencyIdB" component={Manage} />
-              <Route exact strict path="/vote/:id" component={VotePage} />
-              <Route component={RedirectPathToHomeOnly} />
-            </Switch>
-          </Web3ReactManager>
+          <SocketProvider>
+            <Web3ReactManager>
+              <Switch>
+                <Route exact strict path="/swap" component={Swap} />
+                <Route exact strict path="/home" component={Home} />
+                <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
+                <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
+                <Route exact strict path="/find" component={PoolFinder} />
+                <Route exact strict path="/pool" component={Pool} />
+                <Route exact strict path="/bridge" component={Bridge} />
+                <Route exact strict path="/usdr" component={USDRVault} />
+                <Route exact strict path="/tokens" component={TokenList} />
+                <Route exact strict path="/token/:address" component={TokenInfos} />
+                <Route exact strict path="/balance" component={AccountBalance} />
+                <Route exact strict path="/farm" component={Earn} />
+                <Route exact strict path="/vote" component={Vote} />
+                <Route exact strict path="/create" component={RedirectToAddLiquidity} />
+                <Route exact path="/add" component={AddLiquidity} />
+                <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+                <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+                <Route exact path="/create" component={AddLiquidity} />
+                <Route exact path="/create/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+                <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+                <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
+                <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+                <Route exact strict path="/farm/:currencyIdA/:currencyIdB" component={Manage} />
+                <Route exact strict path="/vote/:id" component={VotePage} />
+                <Route component={RedirectPathToHomeOnly} />
+              </Switch>
+            </Web3ReactManager>
+          </SocketProvider>
         </BodyWrapper>
       </AppWrapper>
     </Suspense>

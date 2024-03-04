@@ -1,15 +1,13 @@
 import { Currency, Pair } from '@retherswap/sdk';
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { darken } from 'polished';
 import { useCurrencyBalance } from '../../state/wallet/hooks';
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal';
 import CurrencyLogo from '../CurrencyLogo';
 import Row from '../Row';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 import { Input as NumericalInput } from '../NumericalInput';
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg';
-
 import { useActiveWeb3React } from '../../hooks';
 import { useTranslation } from 'react-i18next';
 import useTheme from '../../hooks/useTheme';
@@ -63,19 +61,6 @@ const NetworkSelect = styled.button`
   :focus,
   :hover {
     background-color: ${({ theme }) => theme.bg4};
-  }
-`;
-
-const LabelRow = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: center;
-  color: ${({ theme }) => theme.text1};
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding: 0.75rem 1rem 0 1rem;
-  span:hover {
-    cursor: pointer;
-    color: ${({ theme }) => darken(0.2, theme.text2)};
   }
 `;
 
@@ -166,7 +151,7 @@ export default function BridgeCurrencyInputPanel({
   id,
   showCommonBases,
   customBalanceText,
-}: BridgeCurrencyInputPanelProps) {
+}: Readonly<BridgeCurrencyInputPanelProps>) {
   const { t } = useTranslation();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -212,16 +197,16 @@ export default function BridgeCurrencyInputPanel({
               <Row style={{ gap: '1rem' }}>
                 {currency && <CurrencyLogo currency={currency} size={'48px'} />}
                 <Column style={{ textAlign: 'start', gap: '5px' }}>
-                  <TYPE.black fontWeight={500} fontSize={11}>
+                  <Fonts.black fontWeight={500} fontSize={11}>
                     Token
-                  </TYPE.black>
-                  <TYPE.black fontWeight={500} fontSize={16}>
+                  </Fonts.black>
+                  <Fonts.black fontWeight={500} fontSize={16}>
                     {(currency && currency.symbol && currency.symbol.length > 20
                       ? currency.symbol.slice(0, 4) +
                         '...' +
                         currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)
-                      : currency?.symbol) || t('Token')}
-                  </TYPE.black>
+                      : currency?.symbol) ?? t('Token')}
+                  </Fonts.black>
                 </Column>
                 {!disableCurrencySelect && <StyledDropDown style={{ margin: '0' }} />}
               </Row>
@@ -234,12 +219,12 @@ export default function BridgeCurrencyInputPanel({
               <Row style={{ gap: '1rem' }}>
                 <NetworkLogo chainId={selectedNetwork} size="48px" />
                 <Column style={{ textAlign: 'start', gap: '5px' }}>
-                  <TYPE.black fontWeight={500} fontSize={11}>
+                  <Fonts.black fontWeight={500} fontSize={11}>
                     Network
-                  </TYPE.black>
-                  <TYPE.black fontWeight={500} fontSize={16}>
+                  </Fonts.black>
+                  <Fonts.black fontWeight={500} fontSize={16}>
                     {network?.label ?? 'BNB Chain'}
-                  </TYPE.black>
+                  </Fonts.black>
                 </Column>
                 {!disableCurrencySelect && <StyledDropDown style={{ margin: '0' }} />}
               </Row>
@@ -260,7 +245,7 @@ export default function BridgeCurrencyInputPanel({
                   }}
                 />
                 {account && (
-                  <TYPE.body
+                  <Fonts.body
                     onClick={onMax}
                     color={theme.text2}
                     fontWeight={500}
@@ -270,7 +255,7 @@ export default function BridgeCurrencyInputPanel({
                     {!hideBalance && !!currency && selectedCurrencyBalance
                       ? (customBalanceText ?? 'Balance: ') + selectedCurrencyBalance?.toSignificant(6)
                       : ' -'}
-                  </TYPE.body>
+                  </Fonts.body>
                 )}
               </>
             )}

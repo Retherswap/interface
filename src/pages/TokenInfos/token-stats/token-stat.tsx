@@ -1,12 +1,11 @@
 import Column from 'components/Column';
 import Row from 'components/Row';
-import useTheme from 'hooks/useTheme';
 import { rgba } from 'polished';
 import React, { useState } from 'react';
 import { ArrowDown, ArrowUp, Info } from 'react-feather';
 import { useIsDarkMode } from 'state/user/hooks';
 import styled from 'styled-components';
-import { TYPE } from 'theme';
+import { Fonts } from 'theme';
 const Stat = styled.div`
   display: flex;
   gap: 5px;
@@ -50,9 +49,9 @@ export default function TokenStat({
     <Stat>
       <Column style={{ gap: '5px', width: '100%' }}>
         <Row style={{ gap: '5px' }}>
-          <TYPE.blue fontWeight={800} fontSize={13}>
+          <Fonts.blue fontWeight={800} fontSize={13}>
             {title}
-          </TYPE.blue>
+          </Fonts.blue>
           {info && (
             <InfoContainer
               onTouchStart={() => {
@@ -68,42 +67,42 @@ export default function TokenStat({
                 setShowInfo(false);
               }}
             >
-              <TYPE.blue style={{ display: 'flex', alignItems: 'center' }} fontWeight={800} fontSize={13}>
+              <Fonts.blue style={{ display: 'flex', alignItems: 'center' }} fontWeight={800} fontSize={13}>
                 <Info size={13}></Info>
-              </TYPE.blue>
+              </Fonts.blue>
               {showInfo && (
                 <InfoTooltip darkMode={isDarkMode}>
-                  <TYPE.blue fontWeight={600} fontSize={12}>
+                  <Fonts.blue fontWeight={600} fontSize={12}>
                     {info}
-                  </TYPE.blue>
+                  </Fonts.blue>
                 </InfoTooltip>
               )}
             </InfoContainer>
           )}
         </Row>
         <Row style={{ width: '100%', justifyContent: 'space-between' }}>
-          <TYPE.black fontWeight={600} fontSize={25}>
+          <Fonts.black fontWeight={600} fontSize={25}>
             {value}
-          </TYPE.black>
+          </Fonts.black>
           {percentChange && (
             <div style={{ display: 'flex' }}>
               {percentChange > 0 ? (
                 <>
-                  <TYPE.green>
+                  <Fonts.green>
                     <ArrowUp size={'15px'}></ArrowUp>
-                  </TYPE.green>
-                  <TYPE.green fontWeight={500} fontSize={15}>
+                  </Fonts.green>
+                  <Fonts.green fontWeight={500} fontSize={15}>
                     {percentChange}%
-                  </TYPE.green>
+                  </Fonts.green>
                 </>
               ) : (
                 <>
-                  <TYPE.red>
+                  <Fonts.red>
                     <ArrowDown size={'15px'}></ArrowDown>
-                  </TYPE.red>
-                  <TYPE.red fontWeight={500} fontSize={15}>
+                  </Fonts.red>
+                  <Fonts.red fontWeight={500} fontSize={15}>
                     {Math.abs(percentChange)}%
-                  </TYPE.red>
+                  </Fonts.red>
                 </>
               )}
             </div>

@@ -6,7 +6,7 @@ import { SwapPoolTabs } from '../../components/NavigationTabs';
 import AppBody from '../AppBody';
 import FullPositionCard from '../../components/PositionCard';
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks';
-import { TYPE, HideSmall } from '../../theme';
+import { Fonts, HideSmall } from '../../theme';
 import { Text } from 'rebass';
 import Card from '../../components/Card';
 import { RowBetween, RowFixed } from '../../components/Row';
@@ -69,10 +69,9 @@ export default function Pool() {
     () => trackedTokenPairs.map((tokens) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens })),
     [trackedTokenPairs]
   );
-  const liquidityTokens = useMemo(
-    () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
-    [tokenPairsWithLiquidityTokens]
-  );
+  const liquidityTokens = useMemo(() => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken), [
+    tokenPairsWithLiquidityTokens,
+  ]);
   const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
     account ?? undefined,
     liquidityTokens
@@ -102,7 +101,7 @@ export default function Pool() {
           <AutoColumn gap="lg" style={{ width: '100%' }}>
             <TitleRow style={{ marginTop: '1rem' }} padding={'0'}>
               <HideSmall>
-                <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Your liquidity</TYPE.mediumHeader>
+                <Fonts.mediumHeader style={{ justifySelf: 'flex-start' }}>Your liquidity</Fonts.mediumHeader>
               </HideSmall>
               <ButtonRow>
                 <ResponsiveButtonPrimary as={Link} padding="6px 10px" to="/create/HYPRA">
@@ -118,15 +117,15 @@ export default function Pool() {
 
             {!account ? (
               <Card padding="40px">
-                <TYPE.body color={theme.text3} textAlign="center">
+                <Fonts.body color={theme.text3} textAlign="center">
                   Connect to a wallet to view your liquidity.
-                </TYPE.body>
+                </Fonts.body>
               </Card>
             ) : v2IsLoading ? (
               <EmptyProposals>
-                <TYPE.body color={theme.text3} textAlign="center">
+                <Fonts.body color={theme.text3} textAlign="center">
                   <Dots>Loading</Dots>
-                </TYPE.body>
+                </Fonts.body>
               </EmptyProposals>
             ) : allV2PairsWithLiquidity?.length > 0 ? (
               <>
@@ -136,9 +135,9 @@ export default function Pool() {
               </>
             ) : (
               <EmptyProposals>
-                <TYPE.body color={theme.text3} textAlign="center">
+                <Fonts.body color={theme.text3} textAlign="center">
                   No Liquidity found
-                </TYPE.body>
+                </Fonts.body>
               </EmptyProposals>
             )}
           </AutoColumn>

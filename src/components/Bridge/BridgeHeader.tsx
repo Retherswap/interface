@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Settings from '../Settings';
 import { RowBetween } from '../Row';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 const StyledBridgeHeader = styled.div`
   position: relative;
   padding: 12px 1rem 0px 1.5rem;
@@ -15,7 +15,7 @@ export default function BridgeHeader() {
   return (
     <StyledBridgeHeader>
       <RowBetween>
-        <TYPE.black fontWeight={500}>Bridge</TYPE.black>
+        <Fonts.black fontWeight={500}>Bridge</Fonts.black>
         <Settings />
       </RowBetween>
     </StyledBridgeHeader>

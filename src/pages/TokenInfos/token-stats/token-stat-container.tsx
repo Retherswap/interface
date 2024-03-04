@@ -1,7 +1,7 @@
 import { TokenModel } from 'models/TokenModel';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { TYPE } from 'theme';
+import { Fonts } from 'theme';
 import { TokenInfosCard } from '../token-infos-card';
 import TokenStat from './token-stat';
 import Column from 'components/Column';
@@ -15,6 +15,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.min.css';
 import 'swiper/swiper-bundle.min.css';
 import { useNativeToken } from 'hooks/useNativeToken';
+import { apiUrl } from 'configs/server';
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 const TokenStatsContainer = styled.div`
@@ -61,14 +62,15 @@ const TokenChartTab = styled.div<{ active?: boolean }>`
 
 export default function TokenStatContainer({ token }: { token: TokenModel }) {
   const [pairs, setPairs] = useState<PairModel[]>([]);
-  const fetchInfo = () => {
-    return fetch('http://162.0.211.141:4000/api/v1/pairs/tokens/' + token.address)
-      .then((res) => res.json())
-      .then((d) => setPairs(d));
-  };
+
   useEffect(() => {
+    const fetchInfo = () => {
+      return fetch(`${apiUrl}/pairs/tokens/${token.address}`)
+        .then((res) => res.json())
+        .then((d) => setPairs(d));
+    };
     fetchInfo();
-  }, []);
+  }, [token.address]);
   const volume24h = token.volume
     .filter((tokenVolume) => {
       return new Date(tokenVolume.date).getTime() > new Date().getTime() - 24 * 60 * 60 * 1000;
@@ -124,19 +126,19 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
       <ChartContainer>
         <TokenChartTabContainer>
           <TokenChartTab active={activeTab === 0} onClick={() => setActiveTab(0)}>
-            <TYPE.black fontWeight={540} fontSize={16}>
+            <Fonts.black fontWeight={540} fontSize={16}>
               Volume
-            </TYPE.black>
+            </Fonts.black>
           </TokenChartTab>
           <TokenChartTab active={activeTab === 1} onClick={() => setActiveTab(1)}>
-            <TYPE.black fontWeight={540} fontSize={16}>
+            <Fonts.black fontWeight={540} fontSize={16}>
               TVL
-            </TYPE.black>
+            </Fonts.black>
           </TokenChartTab>
           <TokenChartTab active={activeTab === 2} onClick={() => setActiveTab(2)}>
-            <TYPE.black fontWeight={540} fontSize={16}>
+            <Fonts.black fontWeight={540} fontSize={16}>
               Price
-            </TYPE.black>
+            </Fonts.black>
           </TokenChartTab>
         </TokenChartTabContainer>
         <ChartWrapper>

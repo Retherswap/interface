@@ -1,6 +1,5 @@
 import { TokenModel } from 'models/TokenModel';
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatNumber } from 'utils/formatNumber';
 import { useIsDarkMode } from 'state/user/hooks';

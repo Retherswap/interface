@@ -5,7 +5,7 @@ import { FixedSizeList } from 'react-window';
 import { Text } from 'rebass';
 import { useActiveWeb3React } from '../../hooks';
 import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } from '../../hooks/Tokens';
-import { CloseIcon, TYPE, ButtonText, IconWrapper } from '../../theme';
+import { CloseIcon, Fonts, ButtonText, IconWrapper } from '../../theme';
 import { isAddress } from '../../utils';
 import Column from '../Column';
 import Row, { RowBetween, RowFixed } from '../Row';
@@ -227,9 +227,9 @@ export function CurrencySearch({
         </div>
       ) : (
         <Column style={{ padding: '20px', height: '100%' }}>
-          <TYPE.main color={theme.text3} textAlign="center" mb="20px">
+          <Fonts.main color={theme.text3} textAlign="center" mb="20px">
             No results found in active lists.
-          </TYPE.main>
+          </Fonts.main>
           {inactiveTokens &&
             inactiveTokens.length > 0 &&
             !(searchToken && !searchTokenIsAdded) &&
@@ -278,7 +278,7 @@ export function CurrencySearch({
               <IconWrapper size="16px" marginRight="6px">
                 <Edit />
               </IconWrapper>
-              <TYPE.main color={theme.blue1}>Manage</TYPE.main>
+              <Fonts.main color={theme.blue1}>Manage</Fonts.main>
             </RowFixed>
           </ButtonText>
         </Row>

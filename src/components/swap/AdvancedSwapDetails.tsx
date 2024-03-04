@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
 import { Field } from '../../state/swap/actions';
 import { useUserSlippageTolerance } from '../../state/user/hooks';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from '../../utils/prices';
 import { AutoColumn } from '../Column';
 import QuestionHelper from '../QuestionHelper';
@@ -22,26 +22,26 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
       <AutoColumn style={{ padding: '0 16px' }}>
         <RowBetween>
           <RowFixed>
-            <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
+            <Fonts.black fontSize={14} fontWeight={400} color={theme.text2}>
               {isExactIn ? 'Minimum received' : 'Maximum sold'}
-            </TYPE.black>
+            </Fonts.black>
             <QuestionHelper text="Your transaction will revert if there is a large, unfavorable price movement before it is confirmed." />
           </RowFixed>
           <RowFixed>
-            <TYPE.black color={theme.text1} fontSize={14}>
+            <Fonts.black color={theme.text1} fontSize={14}>
               {isExactIn
                 ? `${slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4)} ${trade.outputAmount.currency.symbol}` ??
                   '-'
                 : `${slippageAdjustedAmounts[Field.INPUT]?.toSignificant(4)} ${trade.inputAmount.currency.symbol}` ??
                   '-'}
-            </TYPE.black>
+            </Fonts.black>
           </RowFixed>
         </RowBetween>
         <RowBetween>
           <RowFixed>
-            <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
+            <Fonts.black fontSize={14} fontWeight={400} color={theme.text2}>
               Price Impact
-            </TYPE.black>
+            </Fonts.black>
             <QuestionHelper text="The difference between the market price and estimated price due to trade size." />
           </RowFixed>
           <FormattedPriceImpact priceImpact={priceImpactWithoutFee} />
@@ -49,14 +49,14 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
 
         <RowBetween>
           <RowFixed>
-            <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
+            <Fonts.black fontSize={14} fontWeight={400} color={theme.text2}>
               Liquidity Provider Fee
-            </TYPE.black>
+            </Fonts.black>
             <QuestionHelper text="A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive." />
           </RowFixed>
-          <TYPE.black fontSize={14} color={theme.text1}>
+          <Fonts.black fontSize={14} color={theme.text1}>
             {realizedLPFee ? `${realizedLPFee.toSignificant(4)} ${trade.inputAmount.currency.symbol}` : '-'}
-          </TYPE.black>
+          </Fonts.black>
         </RowBetween>
       </AutoColumn>
     </>
@@ -83,9 +83,9 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
             <>
               <RowBetween style={{ padding: '0 16px' }}>
                 <span style={{ display: 'flex', alignItems: 'center' }}>
-                  <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
+                  <Fonts.black fontSize={14} fontWeight={400} color={theme.text2}>
                     Route
-                  </TYPE.black>
+                  </Fonts.black>
                   <QuestionHelper text="Routing through these tokens resulted in the best price for your trade." />
                 </span>
                 <SwapRoute trade={trade} />

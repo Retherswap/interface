@@ -2,7 +2,7 @@ import React, { useRef, RefObject, useCallback, useState, useMemo } from 'react'
 import Column from 'components/Column';
 import { PaddedColumn } from './styleds';
 import Row, { RowBetween, RowFixed } from 'components/Row';
-import { TYPE, ExternalLinkIcon, TrashIcon, ButtonText, ExternalLink } from 'theme';
+import { Fonts, ExternalLinkIcon, TrashIcon, ButtonText, ExternalLink } from 'theme';
 import { useToken } from 'hooks/Tokens';
 import styled from 'styled-components';
 import { useUserAddedTokens, useRemoveUserAddedToken } from 'state/user/hooks';
@@ -81,9 +81,9 @@ export default function ManageTokens({
           <RowFixed>
             <CurrencyLogo currency={token} size={'20px'} />
             <ExternalLink href={getEtherscanLink(chainId, token.address, 'address')}>
-              <TYPE.main ml={'10px'} fontWeight={600}>
+              <Fonts.main ml={'10px'} fontWeight={600}>
                 {token.symbol}
-              </TYPE.main>
+              </Fonts.main>
             </ExternalLink>
           </RowFixed>
           <RowFixed>
@@ -110,7 +110,7 @@ export default function ManageTokens({
               onChange={handleInput}
             />
           </Row>
-          {searchQuery !== '' && !isAddressSearch && <TYPE.error error={true}>Enter valid token address</TYPE.error>}
+          {searchQuery !== '' && !isAddressSearch && <Fonts.error error={true}>Enter valid token address</Fonts.error>}
           {searchToken && (
             <Card backgroundColor={theme.bg2} padding="10px 0">
               <ImportRow
@@ -125,12 +125,12 @@ export default function ManageTokens({
         <Separator />
         <PaddedColumn gap="lg">
           <RowBetween>
-            <TYPE.main fontWeight={600}>
+            <Fonts.main fontWeight={600}>
               {userAddedTokens?.length} Custom {userAddedTokens.length === 1 ? 'Token' : 'Tokens'}
-            </TYPE.main>
+            </Fonts.main>
             {userAddedTokens.length > 0 && (
               <ButtonText onClick={handleRemoveAll}>
-                <TYPE.blue>Clear all</TYPE.blue>
+                <Fonts.blue>Clear all</Fonts.blue>
               </ButtonText>
             )}
           </RowBetween>
@@ -138,7 +138,7 @@ export default function ManageTokens({
         </PaddedColumn>
       </Column>
       <Footer>
-        <TYPE.darkGray>Tip: Custom tokens are stored locally in your browser</TYPE.darkGray>
+        <Fonts.darkGray>Tip: Custom tokens are stored locally in your browser</Fonts.darkGray>
       </Footer>
     </Wrapper>
   );

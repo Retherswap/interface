@@ -1,30 +1,21 @@
-import { ChainId, CurrencyAmount, Token } from '@retherswap/sdk';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ChainId, CurrencyAmount } from '@retherswap/sdk';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { AutoColumn } from '../../components/Column';
 import { SwapPoolTabs } from '../../components/NavigationTabs';
-import { useActiveWeb3React } from '../../hooks';
-import { useCurrency, useAllTokens } from '../../hooks/Tokens';
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback';
 import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback';
-import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks';
 import { Field } from '../../state/swap/actions';
-import {
-  useDefaultsFromURLSearch,
-  useDerivedSwapInfo,
-  useSwapActionHandlers,
-  useSwapState,
-} from '../../state/swap/hooks';
+import { useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from '../../state/swap/hooks';
 import { useExpertModeManager, useUserSlippageTolerance } from '../../state/user/hooks';
 import { maxAmountSpend } from '../../utils/maxAmountSpend';
-import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices';
 import AppBody from '../AppBody';
 import BridgeCurrencyInputPanel from 'components/Bridge/BridgeCurrencyInputPanel';
 import BridgeHeader from 'components/Bridge/BridgeHeader';
 import { AutoRow, RowBetween } from 'components/Row';
 import { ArrowDown } from 'react-feather';
 import { ArrowWrapper } from 'components/swap/styleds';
-import { TYPE } from 'theme';
+import { Fonts } from 'theme';
 import { ButtonPrimary } from 'components/Button';
 export const Wrapper = styled.div`
   position: relative;
@@ -32,51 +23,17 @@ export const Wrapper = styled.div`
 `;
 
 export default function Bridge() {
-  const loadedUrlParams = useDefaultsFromURLSearch();
-
-  // token warning stuff
-  const [loadedInputCurrency, loadedOutputCurrency] = [
-    useCurrency(loadedUrlParams?.inputCurrencyId),
-    useCurrency(loadedUrlParams?.outputCurrencyId),
-  ];
-  const [dismissTokenWarning, setDismissTokenWarning] = useState<boolean>(false);
-  const urlLoadedTokens: Token[] = useMemo(
-    () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c instanceof Token) ?? [],
-    [loadedInputCurrency, loadedOutputCurrency]
-  );
-  const handleConfirmTokenWarning = useCallback(() => {
-    setDismissTokenWarning(true);
-  }, []);
-
-  // dismiss warning if all imported tokens are in active lists
-  const defaultTokens = useAllTokens();
-  const importTokensNotInDefault =
-    urlLoadedTokens &&
-    urlLoadedTokens.filter((token: Token) => {
-      return !Boolean(token.address in defaultTokens);
-    });
-
-  const { account } = useActiveWeb3React();
   const theme = useContext(ThemeContext);
 
-  // toggle wallet when disconnected
-  const toggleWalletModal = useWalletModalToggle();
-
-  // for expert mode
-  const toggleSettings = useToggleSettingsMenu();
   const [isExpertMode] = useExpertModeManager();
 
   // get custom setting values for user
   const [allowedSlippage] = useUserSlippageTolerance();
 
   // swap state
-  const { independentField, typedValue, recipient } = useSwapState();
-  const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo();
-  const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
-    currencies[Field.INPUT],
-    currencies[Field.OUTPUT],
-    typedValue
-  );
+  const { independentField, typedValue } = useSwapState();
+  const { v2Trade, currencyBalances, parsedAmount, currencies } = useDerivedSwapInfo();
+  const { wrapType } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue);
 
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE;
   const trade = showWrap ? undefined : v2Trade;
@@ -91,8 +48,7 @@ export default function Bridge() {
         [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount,
       };
 
-  const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers();
-  const isValid = !swapInputError;
+  const { onCurrencySelection, onUserInput } = useSwapActionHandlers();
   const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT;
 
   const handleTypeInput = useCallback(
@@ -122,10 +78,7 @@ export default function Bridge() {
   const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT]);
   const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput));
 
-  const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade);
-
   // warnings on slippage
-  const priceImpactSeverity = warningSeverity(priceImpactWithoutFee);
   const [inputNetwork, setInputNetwork] = useState<number>(ChainId.HYPRA);
   const [outputNetwork, setOutputNetwork] = useState<number>(ChainId.ETHEREUM);
 
@@ -201,36 +154,36 @@ export default function Bridge() {
             ></BridgeCurrencyInputPanel>
             <AutoColumn style={{ gap: '0.65rem' }}>
               <RowBetween>
-                <TYPE.black fontWeight={500} fontSize={13}>
+                <Fonts.black fontWeight={500} fontSize={13}>
                   Gas on destination
-                </TYPE.black>
-                <TYPE.black fontWeight={500} fontSize={13}>
+                </Fonts.black>
+                <Fonts.black fontWeight={500} fontSize={13}>
                   Add
-                </TYPE.black>
+                </Fonts.black>
               </RowBetween>
               <RowBetween>
-                <TYPE.black fontWeight={500} fontSize={13}>
+                <Fonts.black fontWeight={500} fontSize={13}>
                   You will receive
-                </TYPE.black>
-                <TYPE.black fontWeight={500} fontSize={13}>
+                </Fonts.black>
+                <Fonts.black fontWeight={500} fontSize={13}>
                   100 RETHER
-                </TYPE.black>
+                </Fonts.black>
               </RowBetween>
               <RowBetween>
-                <TYPE.black fontWeight={500} fontSize={13}>
+                <Fonts.black fontWeight={500} fontSize={13}>
                   Fee
-                </TYPE.black>
-                <TYPE.black fontWeight={500} fontSize={13}>
+                </Fonts.black>
+                <Fonts.black fontWeight={500} fontSize={13}>
                   15.00 USD
-                </TYPE.black>
+                </Fonts.black>
               </RowBetween>
               <RowBetween>
-                <TYPE.black fontWeight={500} fontSize={13}>
+                <Fonts.black fontWeight={500} fontSize={13}>
                   Slippage tolerance
-                </TYPE.black>
-                <TYPE.black fontWeight={500} fontSize={13}>
+                </Fonts.black>
+                <Fonts.black fontWeight={500} fontSize={13}>
                   2.5%
-                </TYPE.black>
+                </Fonts.black>
               </RowBetween>
             </AutoColumn>
             <ButtonPrimary>Bridge tokens</ButtonPrimary>

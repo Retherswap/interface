@@ -1,4 +1,4 @@
-import Logo, { LogoProps } from 'components/Logo';
+import Logo from 'components/Logo';
 import useTheme from 'hooks/useTheme';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -69,19 +69,19 @@ export default function HomeLogoIcon({
     const currentPosition = { left: 0, top: 0 };
     const lerp = (start, end, alpha) => start + (end - start) * alpha;
     const updateEndPosition = () => {
-      endPositionRef.current.left = Math.random() * 10 - 5;
-      endPositionRef.current.top = Math.random() * 10 - 5;
+      endPositionRef.current.left = Math.random() * 16 - 8;
+      endPositionRef.current.top = Math.random() * 16 - 8;
     };
     const moveElement = () => {
       const isCloseToTarget =
-        Math.abs(currentPosition.left - endPositionRef.current.left) < 0.5 &&
-        Math.abs(currentPosition.top - endPositionRef.current.top) < 0.5;
+        Math.abs(currentPosition.left - endPositionRef.current.left) < 2 &&
+        Math.abs(currentPosition.top - endPositionRef.current.top) < 2;
 
       if (isCloseToTarget) {
         updateEndPosition();
       }
-      currentPosition.left = lerp(currentPosition.left, endPositionRef.current.left, 0.006);
-      currentPosition.top = lerp(currentPosition.top, endPositionRef.current.top, 0.006);
+      currentPosition.left = lerp(currentPosition.left, endPositionRef.current.left, 0.005);
+      currentPosition.top = lerp(currentPosition.top, endPositionRef.current.top, 0.005);
 
       setFloatingPosition({ ...currentPosition });
       if (link && ref.current && mainRef && mainRef.current) {
@@ -111,20 +111,16 @@ export default function HomeLogoIcon({
       }
       frameId = requestAnimationFrame(moveElement);
     };
-    const intervalId = setInterval(() => {
-      updateEndPosition();
-    }, 1000);
     frameId = requestAnimationFrame(moveElement);
     return () => {
       cancelAnimationFrame(frameId);
-      clearInterval(intervalId);
     };
-  }, [ref, mainRef, parentRef]);
+  }, [ref, mainRef, parentRef, link]);
   useEffect(() => {
     if (ref.current) {
       setRef && setRef(ref);
     }
-  }, [ref.current]);
+  }, [ref, setRef]);
   return (
     <>
       <div

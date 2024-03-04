@@ -1,14 +1,14 @@
 import { TokenModel } from 'models/TokenModel';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDefaultTokens } from 'hooks/Tokens';
-import { Button, CustomLightSpinner, HideExtraSmall, TYPE } from 'theme';
+import { CustomLightSpinner, HideExtraSmall, Fonts } from 'theme';
 import Column from 'components/Column';
 import Row from 'components/Row';
 import CurrencyLogo from 'components/CurrencyLogo';
 import { BaseButton, ButtonPrimary } from 'components/Button';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ArrowDown, ArrowRight, ArrowUp, ChevronRight, Copy } from 'react-feather';
+import { ArrowDown, ArrowUp, ChevronRight, Copy } from 'react-feather';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { useTokenBalance } from 'state/wallet/hooks';
 import { Token } from '@retherswap/sdk';
@@ -93,31 +93,32 @@ export default function TokenInfosHeader({ token }: { token: TokenModel }) {
       <Row style={{ justifyContent: 'space-between' }}>
         <Row style={{ gap: '10px' }}>
           <Link to="/tokens" style={{ textDecoration: 'none' }}>
-            <TYPE.blue fontWeight={500} fontSize={14}>
+            <Fonts.blue fontWeight={500} fontSize={14}>
               Info
-            </TYPE.blue>
+            </Fonts.blue>
           </Link>
           <ChevronRight color="darkgray" size={15}></ChevronRight>
           <Link to="/tokens" style={{ textDecoration: 'none' }}>
-            <TYPE.blue fontWeight={500} fontSize={14}>
+            <Fonts.blue fontWeight={500} fontSize={14}>
               Tokens
-            </TYPE.blue>
+            </Fonts.blue>
           </Link>
           <ChevronRight color="darkgray" size={15}></ChevronRight>
-          <TYPE.black fontWeight={500} fontSize={14} style={{ textOverflow: 'ellipsis', textWrap: 'nowrap' }}>
+          <Fonts.black fontWeight={500} fontSize={14} style={{ textOverflow: 'ellipsis', textWrap: 'nowrap' }}>
             {token.symbol} <HideExtraSmall>({formatAddress(token.address, 4, 4)})</HideExtraSmall>
-          </TYPE.black>
+          </Fonts.black>
         </Row>
         <Row style={{ justifyContent: 'end', gap: '10px' }}>
           <HideExtraSmall>
             <a
               href={`https://explorer.hypra.network/address/${token.address}`}
               target="_blank"
+              rel="noreferrer noopener"
               style={{ textDecoration: 'none' }}
             >
-              <TYPE.blue fontWeight={800} fontSize={14}>
+              <Fonts.blue fontWeight={800} fontSize={14}>
                 View on hypra explorer
-              </TYPE.blue>
+              </Fonts.blue>
             </a>
           </HideExtraSmall>
           <Copy
@@ -135,35 +136,35 @@ export default function TokenInfosHeader({ token }: { token: TokenModel }) {
             <Row style={{ gap: '10px' }}>
               <CurrencyLogo currency={defaultTokens[token.address]} size="40px"></CurrencyLogo>
               <TitleContainer>
-                <TYPE.black fontWeight={800} fontSize={36}>
+                <Fonts.black fontWeight={800} fontSize={36}>
                   {token.name}
-                </TYPE.black>
-                <TYPE.darkGray fontWeight={500}>({token.symbol})</TYPE.darkGray>
+                </Fonts.black>
+                <Fonts.darkGray fontWeight={500}>({token.symbol})</Fonts.darkGray>
               </TitleContainer>
             </Row>
             <PriceContainer style={{ marginLeft: '50px', gap: '10px' }}>
               <Row>
-                <TYPE.black fontWeight={600} fontSize={25}>
+                <Fonts.black fontWeight={600} fontSize={25}>
                   ${formattedPrice}
-                </TYPE.black>
+                </Fonts.black>
               </Row>
               {priceChange > 0 ? (
                 <Row>
-                  <TYPE.green fontSize={25}>{priceChange.toFixed(2)}%</TYPE.green>
+                  <Fonts.green fontSize={25}>{priceChange.toFixed(2)}%</Fonts.green>
                   <ArrowUp color="green"></ArrowUp>
                 </Row>
               ) : (
                 <Row>
-                  <TYPE.red fontSize={25}>{priceChange.toFixed(2)}%</TYPE.red>
+                  <Fonts.red fontSize={25}>{priceChange.toFixed(2)}%</Fonts.red>
                   <ArrowDown color="red"></ArrowDown>
                 </Row>
               )}
             </PriceContainer>
             <Row style={{ marginLeft: '50px' }}>
               <Row style={{ gap: '10px' }}>
-                <TYPE.black>Balance :</TYPE.black>
+                <Fonts.black>Balance :</Fonts.black>
                 {tokenBalance ? (
-                  <TYPE.black>${formatNumber(Number(tokenBalance.toExact()) * price)}</TYPE.black>
+                  <Fonts.black>${formatNumber(Number(tokenBalance.toExact()) * price)}</Fonts.black>
                 ) : (
                   <CustomLightSpinner src={Circle} alt="loader" size={'18px'} />
                 )}

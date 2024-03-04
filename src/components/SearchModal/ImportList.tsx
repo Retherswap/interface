@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { TYPE, CloseIcon } from 'theme';
+import { Fonts, CloseIcon } from 'theme';
 import Card from 'components/Card';
 import { AutoColumn } from 'components/Column';
 import { RowBetween, RowFixed, AutoRow } from 'components/Row';
@@ -67,7 +67,7 @@ export function ImportList({ listURL, list, setModalView, onDismiss }: ImportPro
       <PaddedColumn gap="14px" style={{ width: '100%', flex: '1 1' }}>
         <RowBetween>
           <ArrowLeft style={{ cursor: 'pointer' }} onClick={() => setModalView(CurrencyModalView.manage)} />
-          <TYPE.mediumHeader>Import List</TYPE.mediumHeader>
+          <Fonts.mediumHeader>Import List</Fonts.mediumHeader>
           <CloseIcon onClick={onDismiss} />
         </RowBetween>
       </PaddedColumn>
@@ -80,18 +80,18 @@ export function ImportList({ listURL, list, setModalView, onDismiss }: ImportPro
                 {list.logoURI && <ListLogo logoURI={list.logoURI} size="40px" />}
                 <AutoColumn gap="sm" style={{ marginLeft: '20px' }}>
                   <RowFixed>
-                    <TYPE.body fontWeight={600} mr="6px">
+                    <Fonts.body fontWeight={600} mr="6px">
                       {list.name}
-                    </TYPE.body>
+                    </Fonts.body>
                     <TextDot />
-                    <TYPE.main fontSize={'16px'} ml="6px">
+                    <Fonts.main fontSize={'16px'} ml="6px">
                       {list.tokens.length} tokens
-                    </TYPE.main>
+                    </Fonts.main>
                   </RowFixed>
                   <ExternalLink href={`https://tokenlists.org/token-list?url=${listURL}`}>
-                    <TYPE.main fontSize={'12px'} color={theme.blue1}>
+                    <Fonts.main fontSize={'12px'} color={theme.blue1}>
                       {listURL}
-                    </TYPE.main>
+                    </Fonts.main>
                   </ExternalLink>
                 </AutoColumn>
               </RowFixed>
@@ -100,20 +100,20 @@ export function ImportList({ listURL, list, setModalView, onDismiss }: ImportPro
           <Card style={{ backgroundColor: transparentize(0.8, theme.red1) }}>
             <AutoColumn justify="center" style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
               <AlertTriangle stroke={theme.red1} size={32} />
-              <TYPE.body fontWeight={500} fontSize={20} color={theme.red1}>
+              <Fonts.body fontWeight={500} fontSize={20} color={theme.red1}>
                 Import at your own risk{' '}
-              </TYPE.body>
+              </Fonts.body>
             </AutoColumn>
 
             <AutoColumn style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
-              <TYPE.body fontWeight={500} color={theme.red1}>
+              <Fonts.body fontWeight={500} color={theme.red1}>
                 By adding this list you are implicitly trusting that the data is correct. Anyone can create a list,
                 including creating fake versions of existing lists and lists that claim to represent projects that do
                 not have one.
-              </TYPE.body>
-              <TYPE.body fontWeight={600} color={theme.red1}>
+              </Fonts.body>
+              <Fonts.body fontWeight={600} color={theme.red1}>
                 If you purchase a token from this list, you may not be able to sell it back.
-              </TYPE.body>
+              </Fonts.body>
             </AutoColumn>
             <AutoRow justify="center" style={{ cursor: 'pointer' }} onClick={() => setConfirmed(!confirmed)}>
               <Checkbox
@@ -122,9 +122,9 @@ export function ImportList({ listURL, list, setModalView, onDismiss }: ImportPro
                 checked={confirmed}
                 onChange={() => setConfirmed(!confirmed)}
               />
-              <TYPE.body ml="10px" fontSize="16px" color={theme.red1} fontWeight={500}>
+              <Fonts.body ml="10px" fontSize="16px" color={theme.red1} fontWeight={500}>
                 I understand
-              </TYPE.body>
+              </Fonts.body>
             </AutoRow>
           </Card>
 
@@ -138,9 +138,9 @@ export function ImportList({ listURL, list, setModalView, onDismiss }: ImportPro
             Import
           </ButtonPrimary>
           {addError ? (
-            <TYPE.error title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} error>
+            <Fonts.error title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} error>
               {addError}
-            </TYPE.error>
+            </Fonts.error>
           ) : null}
         </AutoColumn>
         {/* </Card> */}

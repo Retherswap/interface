@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SwapPoolTabs } from '../../components/NavigationTabs';
-import AppBody from '../AppBody';
-import BridgeHeader from 'components/Bridge/BridgeHeader';
 import TokenListRow from './TokenListRow';
 import { TokenModel } from 'models/TokenModel';
 import { TokenListGrid } from './TokenListGrid';
-import { TYPE } from 'theme';
+import { Fonts } from 'theme';
 import Column from 'components/Column';
 import Paginator from 'components/Paginator/Paginator';
 import { HideMedium } from 'components/Hide/hide-medium';
 import { HideSmall } from 'components/Hide/hide-small';
 import { HideExtraSmall } from 'components/Hide/hide-extra-small';
+import { apiUrl } from 'configs/server';
 
 export const Wrapper = styled.div`
   display: grid;
@@ -39,7 +38,7 @@ export default function TokenList() {
   const elementsPerPage = 10;
   const [tokens, setTokens] = useState<TokenModel[]>([]);
   const fetchInfo = () => {
-    return fetch('http://162.0.211.141:4000/api/v1/tokens')
+    return fetch(`${apiUrl}/tokens`)
       .then((res) => res.json())
       .then((d) => setTokens(d));
   };
@@ -53,18 +52,18 @@ export default function TokenList() {
       <Wrapper id="token-list-page">
         <TokenListGrid>
           <HideExtraSmall>
-            <TYPE.blue fontWeight={600}>#</TYPE.blue>
+            <Fonts.blue fontWeight={600}>#</Fonts.blue>
           </HideExtraSmall>
-          <TYPE.blue fontWeight={600}>Token</TYPE.blue>
-          <TYPE.blue fontWeight={600}>Price</TYPE.blue>
+          <Fonts.blue fontWeight={600}>Token</Fonts.blue>
+          <Fonts.blue fontWeight={600}>Price</Fonts.blue>
           <HideMedium>
-            <TYPE.blue fontWeight={600}>Price change</TYPE.blue>
+            <Fonts.blue fontWeight={600}>Price change</Fonts.blue>
           </HideMedium>
           <HideMedium>
-            <TYPE.blue fontWeight={600}>Volume 24H</TYPE.blue>
+            <Fonts.blue fontWeight={600}>Volume 24H</Fonts.blue>
           </HideMedium>
           <HideSmall>
-            <TYPE.blue fontWeight={600}>TVL</TYPE.blue>
+            <Fonts.blue fontWeight={600}>TVL</Fonts.blue>
           </HideSmall>
         </TokenListGrid>
         <Divider />

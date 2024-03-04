@@ -1,6 +1,5 @@
 import { TokenModel } from 'models/TokenModel';
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatNumber } from 'utils/formatNumber';
 import { useIsDarkMode } from 'state/user/hooks';
@@ -62,10 +61,10 @@ export default function TokenPriceChart({ token }: { token: TokenModel }) {
             },
           },
           axisBorder: {
-            show: false, // Cacher la bordure de l'axe X
+            show: false,
           },
           axisTicks: {
-            show: false, // Cacher les ticks de l'axe X
+            show: false,
           },
           tooltip: {
             enabled: false,
@@ -75,8 +74,6 @@ export default function TokenPriceChart({ token }: { token: TokenModel }) {
         tooltip: {
           custom: function ({ seriesIndex, dataPointIndex, w }) {
             const o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
-            const h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
-            const l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
             const c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
             const change = ((c - o) / o) * 100;
             const date = w.globals.categoryLabels[dataPointIndex];

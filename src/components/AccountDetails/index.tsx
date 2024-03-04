@@ -12,17 +12,13 @@ import Transaction from './Transaction';
 import { SUPPORTED_WALLETS } from '../../constants';
 import { ReactComponent as Close } from '../../assets/images/x.svg';
 import { getEtherscanLink } from '../../utils';
-import {
-  injected,
-  walletconnect,
-  walletlink
-} from '../../connectors';
+import { injected, walletconnect, walletlink } from '../../connectors';
 import CoinbaseWalletIcon from '../../assets/images/coinbaseWalletIcon.svg';
 import WalletConnectIcon from '../../assets/images/walletConnectIcon.svg';
 import Identicon from '../Identicon';
 import { ButtonSecondary } from '../Button';
 import { ExternalLink as LinkIcon } from 'react-feather';
-import { ExternalLink, LinkStyledButton, TYPE } from '../../theme';
+import { ExternalLink, LinkStyledButton, Fonts } from '../../theme';
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
@@ -376,7 +372,7 @@ export default function AccountDetails({
       {!!pendingTransactions.length || !!confirmedTransactions.length ? (
         <LowerSection>
           <AutoRow mb={'1rem'} style={{ justifyContent: 'space-between' }}>
-            <TYPE.body>Recent Transactions</TYPE.body>
+            <Fonts.body>Recent Transactions</Fonts.body>
             <LinkStyledButton onClick={clearAllTransactionsCallback}>(clear all)</LinkStyledButton>
           </AutoRow>
           {renderTransactions(pendingTransactions)}
@@ -384,7 +380,7 @@ export default function AccountDetails({
         </LowerSection>
       ) : (
         <LowerSection>
-          <TYPE.body color={theme.text1}>Your transactions will appear here...</TYPE.body>
+          <Fonts.body color={theme.text1}>Your transactions will appear here...</Fonts.body>
         </LowerSection>
       )}
     </>

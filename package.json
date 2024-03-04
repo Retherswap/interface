@@ -118,9 +118,11 @@
     "express": "4.18.2",
     "path": "0.12.7",
     "react-apexcharts": "^1.4.1",
+    "react-fast-marquee": "^1.6.4",
     "react-google-charts": "^4.0.1",
     "react-tooltip": "^4.5.1",
     "sass": "^1.71.1",
+    "socket.io-client": "^4.7.4",
     "swiper": "^6.8.4",
     "swr": "^2.2.5",
     "web3-utils": "1.5.3"

@@ -8,7 +8,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import DoubleCurrencyLogo from '../../components/DoubleLogo';
 import { useCurrency } from '../../hooks/Tokens';
 import { useWalletModalToggle } from '../../state/application/hooks';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 
 import CurrencyLogo from '../../components/CurrencyLogo';
 import { RowBetween } from '../../components/Row';
@@ -209,34 +209,34 @@ export default function Manage({
   return (
     <PageWrapper gap="lg" justify="center">
       <RowBetween style={{ gap: '24px' }}>
-        <TYPE.mediumHeader style={{ margin: 0 }}>
+        <Fonts.mediumHeader style={{ margin: 0 }}>
           {currencyA?.symbol}-{currencyB?.symbol} Liquidity Staking
-        </TYPE.mediumHeader>
+        </Fonts.mediumHeader>
         <DoubleCurrencyLogo currency0={currencyA ?? undefined} currency1={currencyB ?? undefined} size={24} />
       </RowBetween>
 
       <DataRow style={{ gap: '24px' }}>
         <PoolData>
           <AutoColumn gap="sm">
-            <TYPE.body style={{ margin: 0 }}>Total deposits</TYPE.body>
-            <TYPE.body fontSize={24} fontWeight={500}>
+            <Fonts.body style={{ margin: 0 }}>Total deposits</Fonts.body>
+            <Fonts.body fontSize={24} fontWeight={500}>
               {valueOfTotalStakedAmountInUSDC
                 ? `$${valueOfTotalStakedAmountInUSDC.toFixed(0, { groupSeparator: ',' })}`
                 : `${valueOfTotalStakedAmountInWETH?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} HYP`}
-            </TYPE.body>
+            </Fonts.body>
           </AutoColumn>
         </PoolData>
         <PoolData>
           <AutoColumn gap="sm">
-            <TYPE.body style={{ margin: 0 }}>Pool Rate</TYPE.body>
-            <TYPE.body fontSize={24} fontWeight={500}>
+            <Fonts.body style={{ margin: 0 }}>Pool Rate</Fonts.body>
+            <Fonts.body fontSize={24} fontWeight={500}>
               {stakingInfo?.active
                 ? stakingInfo?.totalRewardRate
                     ?.multiply(BIG_INT_SECONDS_IN_WEEK)
                     ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
                 : '0'}
               {' / week'}
-            </TYPE.body>
+            </Fonts.body>
           </AutoColumn>
         </PoolData>
       </DataRow>
@@ -247,12 +247,12 @@ export default function Manage({
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>Step 1. Get liquidity tokens</TYPE.white>
+                <Fonts.white fontWeight={600}>Step 1. Get liquidity tokens</Fonts.white>
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
-                <TYPE.white fontSize={14}>
+                <Fonts.white fontSize={14}>
                   {`RETHERS-LP tokens are required. Once you've added liquidity to the ${currencyA?.symbol}-${currencyB?.symbol} pool you can stake your liquidity tokens on this page.`}
-                </TYPE.white>
+                </Fonts.white>
               </RowBetween>
               <ButtonPrimary
                 padding="8px"
@@ -297,22 +297,22 @@ export default function Manage({
               <CardNoise />
               <AutoColumn gap="md">
                 <RowBetween>
-                  <TYPE.white fontWeight={600}>Your liquidity deposits</TYPE.white>
+                  <Fonts.white fontWeight={600}>Your liquidity deposits</Fonts.white>
                 </RowBetween>
                 <RowBetween style={{ alignItems: 'top' }}>
-                  <TYPE.white fontSize={36} fontWeight={600}>
+                  <Fonts.white fontSize={36} fontWeight={600}>
                     {stakingInfo?.stakedAmount?.toSignificant(6) ?? '-'}
-                  </TYPE.white>
+                  </Fonts.white>
                   <AutoColumn style={{ gap: '3px' }}>
-                    <TYPE.white fontSize={15}>
+                    <Fonts.white fontSize={15}>
                       LP: {currencyA?.symbol}-{currencyB?.symbol}
-                    </TYPE.white>
+                    </Fonts.white>
                     <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
-                      <TYPE.white fontSize={15}>{tokensCount[0]}</TYPE.white>
+                      <Fonts.white fontSize={15}>{tokensCount[0]}</Fonts.white>
                       <CurrencyLogo currency={currencyA ?? undefined} size={'24px'} />
                     </RowBetween>
                     <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
-                      <TYPE.white fontSize={15}>{tokensCount[1]}</TYPE.white>{' '}
+                      <Fonts.white fontSize={15}>{tokensCount[1]}</Fonts.white>{' '}
                       <CurrencyLogo currency={currencyB ?? undefined} size={'24px'} />
                     </RowBetween>
                   </AutoColumn>
@@ -325,7 +325,7 @@ export default function Manage({
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                  <TYPE.black>Your unclaimed RETHER</TYPE.black>
+                  <Fonts.black>Your unclaimed RETHER</Fonts.black>
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
                   <ButtonSecondary
@@ -339,7 +339,7 @@ export default function Manage({
                 )}
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>
-                <TYPE.largeHeader fontSize={36} fontWeight={600}>
+                <Fonts.largeHeader fontSize={36} fontWeight={600}>
                   <CountUp
                     key={countUpAmount}
                     isCounting
@@ -349,10 +349,10 @@ export default function Manage({
                     thousandsSeparator={','}
                     duration={1}
                   />
-                </TYPE.largeHeader>
+                </Fonts.largeHeader>
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>
-                <TYPE.black fontSize={16} fontWeight={500}>
+                <Fonts.black fontSize={16} fontWeight={500}>
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                     ⚡
                   </span>
@@ -362,23 +362,23 @@ export default function Manage({
                         ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
                     : '0'}
                   {' RETHER / week'}
-                </TYPE.black>
-                <TYPE.black fontSize={16} fontWeight={500}>
+                </Fonts.black>
+                <Fonts.black fontSize={16} fontWeight={500}>
                   {poolAPR}% APR
                   <span role="img" aria-label="rocket-icon" style={{ marginLeft: '8px ' }}>
                     🚀
                   </span>
-                </TYPE.black>
+                </Fonts.black>
               </RowBetween>
             </AutoColumn>
           </StyledBottomCard>
         </BottomSection>
-        <TYPE.main style={{ textAlign: 'center' }} fontSize={14}>
+        <Fonts.main style={{ textAlign: 'center' }} fontSize={14}>
           <span role="img" aria-label="star-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
           When you withdraw, the contract will automagically claim RETHER on your behalf!
-        </TYPE.main>
+        </Fonts.main>
 
         {!showAddLiquidityButton && (
           <DataRow style={{ marginBottom: '1rem' }}>
@@ -403,7 +403,7 @@ export default function Manage({
           </DataRow>
         )}
         {!userLiquidityUnstaked ? null : userLiquidityUnstaked.equalTo('0') ? null : !stakingInfo?.active ? null : (
-          <TYPE.main>{userLiquidityUnstaked.toSignificant(6)} RETHERS-LP tokens available</TYPE.main>
+          <Fonts.main>{userLiquidityUnstaked.toSignificant(6)} RETHERS-LP tokens available</Fonts.main>
         )}
       </PositionInfo>
     </PageWrapper>

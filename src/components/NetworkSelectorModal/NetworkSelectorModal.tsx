@@ -1,7 +1,6 @@
-import { CloseIcon, TYPE } from 'theme';
+import { CloseIcon, Fonts } from 'theme';
 import Modal from '../Modal';
-import React, { useCallback, useEffect } from 'react';
-import { Text } from 'rebass';
+import React, { useCallback } from 'react';
 import Row, { RowBetween } from 'components/Row';
 import Column from 'components/Column';
 import { SearchInput } from 'components/SearchInput/SearchInput';
@@ -55,9 +54,9 @@ export default function NetworkSelectorModal({
     <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={80}>
       <Column style={{ width: '100%', padding: '20px', gap: '16px' }}>
         <RowBetween style={{ alignItems: 'start' }}>
-          <TYPE.black fontWeight={500} fontSize={16}>
+          <Fonts.black fontWeight={500} fontSize={16}>
             Select a network
-          </TYPE.black>
+          </Fonts.black>
           <CloseIcon onClick={onDismiss} />
         </RowBetween>
         <Row>

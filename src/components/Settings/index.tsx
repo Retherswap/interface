@@ -11,7 +11,7 @@ import {
   useUserSlippageTolerance,
   useUserSingleHopOnly,
 } from '../../state/user/hooks';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 import { ButtonError } from '../Button';
 import { AutoColumn } from '../Column';
 import Modal from '../Modal';
@@ -206,9 +206,9 @@ export default function SettingsTab() {
             </Text>
             <RowBetween>
               <RowFixed>
-                <TYPE.black fontWeight={400} fontSize={14} color={theme.text2}>
+                <Fonts.black fontWeight={400} fontSize={14} color={theme.text2}>
                   Toggle Expert Mode
-                </TYPE.black>
+                </Fonts.black>
                 <QuestionHelper text="Bypasses confirmation modals and allows high slippage trades. Use at your own risk." />
               </RowFixed>
               <Toggle
@@ -229,9 +229,9 @@ export default function SettingsTab() {
             </RowBetween>
             <RowBetween>
               <RowFixed>
-                <TYPE.black fontWeight={400} fontSize={14} color={theme.text2}>
+                <Fonts.black fontWeight={400} fontSize={14} color={theme.text2}>
                   Disable Multihops
-                </TYPE.black>
+                </Fonts.black>
                 <QuestionHelper text="Restricts swaps to direct pairs only." />
               </RowFixed>
               <Toggle

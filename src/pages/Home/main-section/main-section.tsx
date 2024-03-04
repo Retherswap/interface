@@ -1,11 +1,12 @@
 import { ButtonOutlined, ButtonPrimary } from 'components/Button';
 import Row from 'components/Row';
 import useTheme from 'hooks/useTheme';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { TYPE } from 'theme';
+import { Fonts, StyledInternalLink } from 'theme';
 import HomeLogo from '../home-logo/home-logo';
 import Column from 'components/Column';
+import { Link, NavLink } from 'react-router-dom';
 
 const MainSectionComponent = styled.div`
   position: relative;
@@ -45,7 +46,7 @@ const MainSectionContainer = styled.div`
   `};
 `;
 
-const MainSectionTitle = styled(TYPE.black)`
+const MainSectionTitle = styled(Fonts.black)`
   font-size: 80px;
   font-weight: 800 !important;
   ${({ theme }) => theme.mediaWidth.upToMedium`
@@ -59,7 +60,7 @@ const MainSectionTitle = styled(TYPE.black)`
 `};
 `;
 
-const MainSectionSubTitle = styled(TYPE.darkGray)`
+const MainSectionSubTitle = styled(Fonts.darkGray)`
   line-height: 1.5em;
   text-align: start;
   font-size: 27px;
@@ -112,13 +113,22 @@ export default function MainSection() {
           <MainSectionTitle>
             Hypra's<br></br>
             <TitleRow style={{ gap: '10px' }}>
-              <TYPE.blue2 fontWeight={800}>Main</TYPE.blue2> DEX
+              <Fonts.blue2 fontWeight={800}>Main</Fonts.blue2> DEX
             </TitleRow>
           </MainSectionTitle>
           <MainSectionSubTitle>Trade, Swap, Farm, Stake and more inside HYPRA's ecosystem</MainSectionSubTitle>
           <Row style={{ gap: '10px', marginTop: '8px' }}>
-            <ButtonPrimary style={{ fontWeight: 800, fontSize: '14px' }}>Trade now</ButtonPrimary>
-            <ButtonOutlined style={{ fontWeight: 800, fontSize: '14px' }}> Learn more</ButtonOutlined>
+            <NavLink to="/swap" style={{ width: '100%', textDecoration: 'none' }}>
+              <ButtonPrimary style={{ fontWeight: 800, fontSize: '14px' }}>Trade now</ButtonPrimary>
+            </NavLink>
+            <a
+              href="https://retherswap.org/"
+              target="_blank"
+              style={{ width: '100%', textDecoration: 'none' }}
+              rel="noreferrer noopener"
+            >
+              <ButtonOutlined style={{ fontWeight: 800, fontSize: '14px' }}> Learn more</ButtonOutlined>
+            </a>
           </Row>
         </Column>
         <HomeLogo></HomeLogo>

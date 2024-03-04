@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 
 const Wrapper = styled.button<{ isActive?: boolean; activeElement?: boolean }>`
   border-radius: 20px;
@@ -24,7 +24,7 @@ const ToggleElement = styled.span<{ isActive?: boolean; bgColor?: string }>`
   }
 `;
 
-const StatusText = styled(TYPE.main)<{ isActive?: boolean }>`
+const StatusText = styled(Fonts.main)<{ isActive?: boolean }>`
   margin: 0 10px;
   width: 24px;
   color: ${({ theme, isActive }) => (isActive ? theme.text1 : theme.text3)};

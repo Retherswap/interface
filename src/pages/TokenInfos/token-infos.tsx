@@ -6,6 +6,7 @@ import TokenStatContainer from './token-stats/token-stat-container';
 import TokenTransactionList from './token-transaction-list/token-transaction-list';
 import Column from 'components/Column';
 import TokenInfosHeader from './token-infos-header/token-infos-header';
+import { apiUrl } from 'configs/server';
 
 export default function TokenInfos({
   match: {
@@ -13,14 +14,15 @@ export default function TokenInfos({
   },
 }: Readonly<RouteComponentProps<{ address: string }>>) {
   const [token, setToken] = useState<TokenModel | undefined>(undefined);
-  const fetchInfo = () => {
-    return fetch('http://162.0.211.141:4000/api/v1/tokens/address/' + address)
-      .then((res) => res.json())
-      .then((d) => setToken(d));
-  };
+
   useEffect(() => {
+    const fetchInfo = () => {
+      return fetch(`${apiUrl}/tokens/address/${address}`)
+        .then((res) => res.json())
+        .then((d) => setToken(d));
+    };
     fetchInfo();
-  }, []);
+  }, [address]);
   return (
     <Column style={{ gap: '4em', width: '100%', maxWidth: '1200px', alignItems: 'center', padding: '1em' }}>
       {token && (

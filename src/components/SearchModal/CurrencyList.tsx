@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useActiveWeb3React } from '../../hooks';
 import { useCombinedActiveList, WrappedTokenInfo } from '../../state/lists/hooks';
 import { useCurrencyBalance } from '../../state/wallet/hooks';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 import { useAllInactiveTokens, useIsUserAddedToken } from '../../hooks/Tokens';
 import Column from '../Column';
 import { RowFixed } from '../Row';
@@ -115,9 +115,9 @@ function CurrencyRow({
         <Text title={currency.name} fontWeight={500}>
           {currency.symbol}
         </Text>
-        <TYPE.darkGray ml="0px" fontSize={'12px'} fontWeight={300}>
+        <Fonts.darkGray ml="0px" fontSize={'12px'} fontWeight={300}>
           {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
-        </TYPE.darkGray>
+        </Fonts.darkGray>
       </Column>
       <TokenTags currency={currency} />
       <RowFixed style={{ justifySelf: 'flex-end' }}>
