@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WETH, Pair } from '@retherswap/sdk';
 import { useMemo } from 'react';
-import { STAKE, STAKE1, STAKE2 } from '../../constants';
+import { STAKE, STAKE1 } from '../../constants';
 import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards';
 import { useActiveWeb3React } from '../../hooks';
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks';
@@ -26,8 +26,8 @@ export const STAKING_REWARDS_INFO: {
   ],
   [ChainId.HYPRA]: [
     {
-      tokens: [WETH[ChainId.HYPRA], STAKE2],
-      stakingRewardAddress: '0xf4F4ced49a1D9b9C608EAC7d424546BD4b87b107',
+      tokens: [WETH[ChainId.HYPRA], STAKE1],
+      stakingRewardAddress: '0xe1a9de49CAc8648332735FEFE7D88C91EdEDfe91',
     },
   ],
 };
