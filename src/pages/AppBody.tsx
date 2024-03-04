@@ -1,6 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const Spacing = styled.div`
+  position: relative;
+  max-width: 550px;
+  padding: 0.4em;
+  width: 100%;
+`;
+
 export const BodyWrapper = styled.div`
   position: relative;
   max-width: 550px;
@@ -14,10 +21,13 @@ export const BodyWrapper = styled.div`
     width: 100%;
     max-width: 500px;
     padding: 0rem;
-    border-radius: 0rem;
   `}
 `;
 
 export default function AppBody({ children }: { children: React.ReactNode }) {
-  return <BodyWrapper>{children}</BodyWrapper>;
+  return (
+    <Spacing>
+      <BodyWrapper>{children}</BodyWrapper>
+    </Spacing>
+  );
 }

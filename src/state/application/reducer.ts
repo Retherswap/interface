@@ -1,6 +1,15 @@
 import { createReducer, nanoid } from '@reduxjs/toolkit';
-import { addPopup, PopupContent, removePopup, updateBlockNumber, ApplicationModal, setOpenModal, setImplements3085 } from './actions';
-
+import {
+  addPopup,
+  PopupContent,
+  removePopup,
+  updateBlockNumber,
+  ApplicationModal,
+  setOpenModal,
+  setImplements3085,
+  setNativeToken,
+} from './actions';
+import { TokenModel } from 'models/TokenModel';
 
 type PopupList = Array<{ key: string; show: boolean; content: PopupContent; removeAfterMs: number | null }>;
 
@@ -8,7 +17,8 @@ export interface ApplicationState {
   readonly blockNumber: { readonly [chainId: number]: number };
   readonly popupList: PopupList;
   readonly openModal: ApplicationModal | null;
-  readonly implements3085: boolean
+  readonly implements3085: boolean;
+  readonly nativeToken: TokenModel | undefined;
 }
 
 const initialState: ApplicationState = {
@@ -16,10 +26,14 @@ const initialState: ApplicationState = {
   popupList: [],
   openModal: null,
   implements3085: false,
+  nativeToken: undefined,
 };
 
 export default createReducer(initialState, (builder) =>
   builder
+    .addCase(setNativeToken, (state, { payload: token }) => {
+      state.nativeToken = token;
+    })
     .addCase(updateBlockNumber, (state, action) => {
       const { chainId, blockNumber } = action.payload;
       if (typeof state.blockNumber[chainId] !== 'number') {
@@ -32,7 +46,7 @@ export default createReducer(initialState, (builder) =>
       state.openModal = action.payload;
     })
     .addCase(setImplements3085, (state, { payload: { implements3085 } }) => {
-      state.implements3085 = implements3085
+      state.implements3085 = implements3085;
     })
     .addCase(addPopup, (state, { payload: { content, key, removeAfterMs = 15000 } }) => {
       state.popupList = (key ? state.popupList.filter((popup) => popup.key !== key) : state.popupList).concat([

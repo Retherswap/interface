@@ -3,7 +3,7 @@ import { Token } from '@retherswap/sdk';
 import { AutoRow, RowFixed } from 'components/Row';
 import { AutoColumn } from 'components/Column';
 import CurrencyLogo from 'components/CurrencyLogo';
-import { TYPE } from 'theme';
+import { Fonts } from 'theme';
 import ListLogo from 'components/ListLogo';
 import { useActiveWeb3React } from 'hooks';
 import { useCombinedInactiveList } from 'state/lists/hooks';
@@ -70,16 +70,16 @@ export default function ImportRow({
       <CurrencyLogo currency={token} size={'24px'} style={{ opacity: dim ? '0.6' : '1' }} />
       <AutoColumn gap="4px" style={{ opacity: dim ? '0.6' : '1' }}>
         <AutoRow>
-          <TYPE.body fontWeight={500}>{token.symbol}</TYPE.body>
-          <TYPE.darkGray ml="8px" fontWeight={300}>
+          <Fonts.body fontWeight={500}>{token.symbol}</Fonts.body>
+          <Fonts.darkGray ml="8px" fontWeight={300}>
             <NameOverflow title={token.name}>{token.name}</NameOverflow>
-          </TYPE.darkGray>
+          </Fonts.darkGray>
         </AutoRow>
         {list && list.logoURI && (
           <RowFixed>
-            <TYPE.small mr="4px" color={theme.text3}>
+            <Fonts.small mr="4px" color={theme.text3}>
               via {list.name}
-            </TYPE.small>
+            </Fonts.small>
             <ListLogo logoURI={list.logoURI} size="12px" />
           </RowFixed>
         )}
@@ -100,7 +100,7 @@ export default function ImportRow({
       ) : (
         <RowFixed style={{ minWidth: 'fit-content' }}>
           <CheckIcon />
-          <TYPE.main color={theme.green1}>Active</TYPE.main>
+          <Fonts.main color={theme.green1}>Active</Fonts.main>
         </RowFixed>
       )}
       {/* </RowBetween> */}

@@ -3,7 +3,7 @@ import { AutoColumn } from '../../components/Column';
 import styled from 'styled-components';
 
 import { RouteComponentProps } from 'react-router-dom';
-import { TYPE, StyledInternalLink, ExternalLink } from '../../theme';
+import { Fonts, StyledInternalLink, ExternalLink } from '../../theme';
 import { RowFixed, RowBetween } from '../../components/Row';
 import { CardSection, DataCard } from '../../components/earn/styled';
 import { ArrowLeft } from 'react-feather';
@@ -192,19 +192,19 @@ export default function VotePage({
           {proposalData && <ProposalStatus status={proposalData?.status ?? ''}>{proposalData?.status}</ProposalStatus>}
         </RowBetween>
         <AutoColumn gap="10px" style={{ width: '100%' }}>
-          <TYPE.largeHeader style={{ marginBottom: '.5rem' }}>{proposalData?.title}</TYPE.largeHeader>
+          <Fonts.largeHeader style={{ marginBottom: '.5rem' }}>{proposalData?.title}</Fonts.largeHeader>
           <RowBetween>
-            <TYPE.main>
+            <Fonts.main>
               {endDate && endDate < now
                 ? 'Voting ended ' + (endDate && endDate.toLocaleString(DateTime.DATETIME_FULL))
                 : proposalData
                 ? 'Voting ends approximately ' + (endDate && endDate.toLocaleString(DateTime.DATETIME_FULL))
                 : ''}
-            </TYPE.main>
+            </Fonts.main>
           </RowBetween>
           {proposalData && proposalData.status === 'active' && !showVotingButtons && (
             <GreyCard>
-              <TYPE.black>
+              <Fonts.black>
                 Only RETHER votes that were self delegated or delegated to another address before block{' '}
                 {proposalData.startBlock} are eligible for voting.{' '}
                 {showLinkForUnlock && (
@@ -212,7 +212,7 @@ export default function VotePage({
                     <StyledInternalLink to="/vote">Unlock voting</StyledInternalLink> to prepare for the next proposal.
                   </span>
                 )}
-              </TYPE.black>
+              </Fonts.black>
             </GreyCard>
           )}
         </AutoColumn>
@@ -247,11 +247,11 @@ export default function VotePage({
             <CardSection>
               <AutoColumn gap="md">
                 <WrapSmall>
-                  <TYPE.black fontWeight={600}>For</TYPE.black>
-                  <TYPE.black fontWeight={600}>
+                  <Fonts.black fontWeight={600}>For</Fonts.black>
+                  <Fonts.black fontWeight={600}>
                     {' '}
                     {proposalData?.forCount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                  </TYPE.black>
+                  </Fonts.black>
                 </WrapSmall>
               </AutoColumn>
               <ProgressWrapper>
@@ -263,10 +263,10 @@ export default function VotePage({
             <CardSection>
               <AutoColumn gap="md">
                 <WrapSmall>
-                  <TYPE.black fontWeight={600}>Against</TYPE.black>
-                  <TYPE.black fontWeight={600}>
+                  <Fonts.black fontWeight={600}>Against</Fonts.black>
+                  <Fonts.black fontWeight={600}>
                     {proposalData?.againstCount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                  </TYPE.black>
+                  </Fonts.black>
                 </WrapSmall>
               </AutoColumn>
               <ProgressWrapper>
@@ -276,7 +276,7 @@ export default function VotePage({
           </StyledDataCard>
         </CardWrapper>
         <AutoColumn gap="md">
-          <TYPE.mediumHeader fontWeight={600}>Details</TYPE.mediumHeader>
+          <Fonts.mediumHeader fontWeight={600}>Details</Fonts.mediumHeader>
           {proposalData?.details?.map((d, i) => {
             return (
               <DetailText key={i}>
@@ -295,13 +295,13 @@ export default function VotePage({
           })}
         </AutoColumn>
         <AutoColumn gap="md">
-          <TYPE.mediumHeader fontWeight={600}>Description</TYPE.mediumHeader>
+          <Fonts.mediumHeader fontWeight={600}>Description</Fonts.mediumHeader>
           <MarkDownWrapper>
             <ReactMarkdown source={proposalData?.description || ''} />
           </MarkDownWrapper>
         </AutoColumn>
         <AutoColumn gap="md">
-          <TYPE.mediumHeader fontWeight={600}>Proposer</TYPE.mediumHeader>
+          <Fonts.mediumHeader fontWeight={600}>Proposer</Fonts.mediumHeader>
           <ProposerAddressLink
             href={proposalData?.proposer && chainId ? getEtherscanLink(chainId, proposalData?.proposer, 'address') : ''}
           >

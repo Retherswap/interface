@@ -59,12 +59,12 @@ const MenuFlyout = styled.span`
   flex-direction: column;
   font-size: 1rem;
   position: absolute;
-  top: 4rem;
+  top: 50px;
   right: 0rem;
   z-index: 100;
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
-    top: -17.25rem;
+  top: 55px;
   `};
 `;
 
@@ -85,7 +85,6 @@ const MenuItem = styled(ExternalLink)`
 const CODE_LINK = 'https://github.com/Retherswap';
 
 export default function Menu() {
-
   const node = useRef<HTMLDivElement>();
   const open = useModalOpen(ApplicationModal.MENU);
   const toggle = useToggleModal(ApplicationModal.MENU);

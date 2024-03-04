@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import useENS from '../../hooks/useENS';
 import { useActiveWeb3React } from '../../hooks';
-import { ExternalLink, TYPE } from '../../theme';
+import { ExternalLink, Fonts } from '../../theme';
 import { AutoColumn } from '../Column';
 import { RowBetween } from '../Row';
 import { getEtherscanLink } from '../../utils';
@@ -98,9 +98,9 @@ export default function AddressInputPanel({
         <InputContainer>
           <AutoColumn gap="md">
             <RowBetween>
-              <TYPE.black color={theme.text2} fontWeight={500} fontSize={14}>
+              <Fonts.black color={theme.text2} fontWeight={500} fontSize={14}>
                 Recipient
-              </TYPE.black>
+              </Fonts.black>
               {address && chainId && (
                 <ExternalLink href={getEtherscanLink(chainId, name ?? address, 'address')} style={{ fontSize: '14px' }}>
                   (View on Explorer)

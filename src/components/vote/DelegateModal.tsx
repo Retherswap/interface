@@ -4,7 +4,7 @@ import Modal from '../Modal';
 import { AutoColumn } from '../Column';
 import styled from 'styled-components';
 import { RowBetween } from '../Row';
-import { TYPE } from '../../theme';
+import { Fonts } from '../../theme';
 import { X } from 'react-feather';
 import { ButtonPrimary } from '../Button';
 import { useActiveWeb3React } from '../../hooks';
@@ -93,21 +93,23 @@ export default function DelegateModal({ isOpen, onDismiss, title }: VoteModalPro
         <ContentWrapper gap="lg">
           <AutoColumn gap="lg" justify="center">
             <RowBetween>
-              <TYPE.mediumHeader fontWeight={500}>{title}</TYPE.mediumHeader>
+              <Fonts.mediumHeader fontWeight={500}>{title}</Fonts.mediumHeader>
               <StyledClosed stroke="black" onClick={wrappedOndismiss} />
             </RowBetween>
-            <TYPE.body>Earned RETHERS tokens represent voting shares in Retherswap governance.</TYPE.body>
-            <TYPE.body>
+            <Fonts.body>Earned RETHERS tokens represent voting shares in Retherswap governance.</Fonts.body>
+            <Fonts.body>
               You can either vote on each proposal yourself or delegate your votes to a third party.
-            </TYPE.body>
+            </Fonts.body>
             {usingDelegate && <AddressInputPanel value={typed} onChange={handleRecipientType} />}
             <ButtonPrimary disabled={!isAddress(parsedAddress ?? '')} onClick={onDelegate}>
-              <TYPE.mediumHeader color="white">{usingDelegate ? 'Delegate Votes' : 'Self Delegate'}</TYPE.mediumHeader>
+              <Fonts.mediumHeader color="white">
+                {usingDelegate ? 'Delegate Votes' : 'Self Delegate'}
+              </Fonts.mediumHeader>
             </ButtonPrimary>
             <TextButton onClick={() => setUsingDelegate(!usingDelegate)}>
-              <TYPE.blue>
+              <Fonts.blue>
                 {usingDelegate ? 'Remove' : 'Add'} Delegate {!usingDelegate && '+'}
-              </TYPE.blue>
+              </Fonts.blue>
             </TextButton>
           </AutoColumn>
         </ContentWrapper>
@@ -115,16 +117,16 @@ export default function DelegateModal({ isOpen, onDismiss, title }: VoteModalPro
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.largeHeader>{usingDelegate ? 'Delegating votes' : 'Unlocking Votes'}</TYPE.largeHeader>
-            <TYPE.main fontSize={36}>{rethersBalance?.toSignificant(4)}</TYPE.main>
+            <Fonts.largeHeader>{usingDelegate ? 'Delegating votes' : 'Unlocking Votes'}</Fonts.largeHeader>
+            <Fonts.main fontSize={36}>{rethersBalance?.toSignificant(4)}</Fonts.main>
           </AutoColumn>
         </LoadingView>
       )}
       {hash && (
         <SubmittedView onDismiss={wrappedOndismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-            <TYPE.main fontSize={36}>{rethersBalance?.toSignificant(4)}</TYPE.main>
+            <Fonts.largeHeader>Transaction Submitted</Fonts.largeHeader>
+            <Fonts.main fontSize={36}>{rethersBalance?.toSignificant(4)}</Fonts.main>
           </AutoColumn>
         </SubmittedView>
       )}

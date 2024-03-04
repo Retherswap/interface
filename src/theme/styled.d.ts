@@ -19,6 +19,7 @@ export interface Colors {
   bg3: Color;
   bg4: Color;
   bg5: Color;
+  bg6: Color;
 
   modalBG: Color;
   advancedBG: Color;
@@ -63,6 +64,7 @@ declare module 'styled-components' {
 
     // media queries
     mediaWidth: {
+      upToUltraSmall: ThemedCssFunction<DefaultTheme>;
       upToExtraSmall: ThemedCssFunction<DefaultTheme>;
       upToSmall: ThemedCssFunction<DefaultTheme>;
       upToMedium: ThemedCssFunction<DefaultTheme>;

@@ -5,7 +5,7 @@ import { FixedSizeList } from 'react-window';
 import { Text } from 'rebass';
 import { useActiveWeb3React } from '../../hooks';
 import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } from '../../hooks/Tokens';
-import { CloseIcon, TYPE, ButtonText, IconWrapper } from '../../theme';
+import { CloseIcon, Fonts, ButtonText, IconWrapper } from '../../theme';
 import { isAddress } from '../../utils';
 import Column from '../Column';
 import Row, { RowBetween, RowFixed } from '../Row';
@@ -13,7 +13,7 @@ import CommonBases from './CommonBases';
 import CurrencyList from './CurrencyList';
 import { filterTokens } from './filtering';
 import { useTokenComparator } from './sorting';
-import { PaddedColumn, SearchInput, Separator } from './styleds';
+import { PaddedColumn } from './styleds';
 import styled from 'styled-components';
 import useToggle from 'hooks/useToggle';
 import { useOnClickOutside } from 'hooks/useOnClickOutside';
@@ -21,6 +21,8 @@ import useTheme from 'hooks/useTheme';
 import ImportRow from './ImportRow';
 import { Edit } from 'react-feather';
 import { ButtonPrimary } from 'components/Button';
+import { SearchInput } from 'components/SearchInput/SearchInput';
+import { Separator } from 'components/Separator/Separator';
 
 const ContentWrapper = styled(Column)`
   width: 100%;
@@ -61,7 +63,7 @@ export function CurrencySearch({
   showImportView,
   setImportToken,
 }: CurrencySearchProps) {
-  const { t } = useTranslation();
+  const translation = useTranslation().t;
   const { chainId } = useActiveWeb3React();
   const theme = useTheme();
 
@@ -190,7 +192,7 @@ export function CurrencySearch({
           <SearchInput
             type="text"
             id="token-search-input"
-            placeholder={t('Search name or paste address')}
+            placeholder={translation('Search name or paste address')}
             autoComplete="off"
             value={searchQuery}
             ref={inputRef as RefObject<HTMLInputElement>}
@@ -225,9 +227,9 @@ export function CurrencySearch({
         </div>
       ) : (
         <Column style={{ padding: '20px', height: '100%' }}>
-          <TYPE.main color={theme.text3} textAlign="center" mb="20px">
+          <Fonts.main color={theme.text3} textAlign="center" mb="20px">
             No results found in active lists.
-          </TYPE.main>
+          </Fonts.main>
           {inactiveTokens &&
             inactiveTokens.length > 0 &&
             !(searchToken && !searchTokenIsAdded) &&
@@ -276,7 +278,7 @@ export function CurrencySearch({
               <IconWrapper size="16px" marginRight="6px">
                 <Edit />
               </IconWrapper>
-              <TYPE.main color={theme.blue1}>Manage</TYPE.main>
+              <Fonts.main color={theme.blue1}>Manage</Fonts.main>
             </RowFixed>
           </ButtonText>
         </Row>

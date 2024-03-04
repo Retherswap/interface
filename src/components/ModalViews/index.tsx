@@ -4,7 +4,7 @@ import { useActiveWeb3React } from '../../hooks';
 import { AutoColumn, ColumnCenter } from '../Column';
 import styled, { ThemeContext } from 'styled-components';
 import { RowBetween } from '../Row';
-import { TYPE, CloseIcon, CustomLightSpinner } from '../../theme';
+import { Fonts, CloseIcon, CustomLightSpinner } from '../../theme';
 import { ArrowUpCircle } from 'react-feather';
 
 import Circle from '../../assets/images/blue-loader.svg';
@@ -32,7 +32,7 @@ export function LoadingView({ children, onDismiss }: { children: any; onDismiss:
       </ConfirmedIcon>
       <AutoColumn gap="100px" justify={'center'}>
         {children}
-        <TYPE.subHeader>Confirm this transaction in your wallet</TYPE.subHeader>
+        <Fonts.subHeader>Confirm this transaction in your wallet</Fonts.subHeader>
       </AutoColumn>
     </ConfirmOrLoadingWrapper>
   );
@@ -63,7 +63,7 @@ export function SubmittedView({
         {children}
         {chainId && hash && (
           <ExternalLink href={getEtherscanLink(chainId, hash, 'transaction')} style={{ marginLeft: '4px' }}>
-            <TYPE.subHeader>View transaction on Block Explorer</TYPE.subHeader>
+            <Fonts.subHeader>View transaction on Block Explorer</Fonts.subHeader>
           </ExternalLink>
         )}
       </AutoColumn>

@@ -1,16 +1,18 @@
-
 import React, { useEffect, useState } from 'react';
-import { STAKE1 } from '../../constants';
-import { usePair, PairState } from '../../data/Reserves';
 import { Text } from 'rebass';
 import styled from 'styled-components';
-import { ChainId, WETH } from '@retherswap/sdk';
+import { apiUrl } from 'configs/server';
+import { Token } from 'models/schema';
+import { useNativeToken } from 'hooks/useNativeToken';
+import { formatNumber } from 'utils/formatNumber';
 
 export const RetherPrice = styled(Text)`
   width: 140px;
   margin: 0 auto;
   padding: 0.1rem;
-  justify-content: left
+  justify-content: left;
+  align-items: center;
+  gap: 5px;
   color: ${({ theme }) => theme.text1};
   flex-shrink: 0;
   display: flex;
@@ -25,59 +27,36 @@ export const RetherPrice = styled(Text)`
   }
 `;
 
-const TokenA = WETH[ChainId.HYPRA];
-const TokenB = STAKE1;
-
 export const RetherPriceComponent: React.FC = () => {
-  const [pairState, pair] = usePair(TokenA, TokenB);
-  const [price, setPrice] = useState<string | null>(null);
-  const [hypPriceValue, setHypPriceValue] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { nativeToken } = useNativeToken();
 
+  const [retherInfos, setRetherInfos] = useState<Token | undefined>(undefined);
   useEffect(() => {
-    const fetchHypPrice = async () => {
-      try {
-        const response = await fetch('https://explorer.hypra.network/api?module=stats&action=coinprice');
-        const data = await response.json();
-        const fetchedHypPrice = data.result.coin_usd;
-
-        // Assuming 'coin_usd' is a numeric value, you may need to adjust this depending on the actual response structure
-        setHypPriceValue(parseFloat(fetchedHypPrice));
-      } catch (error) {
-        console.error('Error fetching HYP price:', error);
-        setHypPriceValue(null);
-      }
+    const fetchRetherInfo = () => {
+      setLoading(true);
+      return fetch(`${apiUrl}/tokens/address/0xCf52025D37f68dEdA9ef8307Ba4474eCbf15C33c`)
+        .then((res) => res.json())
+        .then((d) => {
+          setRetherInfos(d);
+        })
+        .catch((e) => {
+          console.error(e);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     };
-
-    fetchHypPrice();
+    fetchRetherInfo();
   }, []);
-
-  useEffect(() => {
-    if (pairState === PairState.EXISTS && pair && hypPriceValue !== null) {
-      const token1Price = pair.token1Price.toSignificant(6);
-      const priceValue: number = parseFloat(token1Price) * hypPriceValue;
-      const formattedPrice = priceValue.toFixed(5);
-      setPrice(formattedPrice);
-    } else {
-      setPrice(null);
-    }
-  }, [pairState, pair, hypPriceValue]);
-  
-
-  if (pairState === PairState.LOADING || hypPriceValue === null) {
-    return <p>Loading...</p>;
-  }
-
-  if (pairState === PairState.INVALID) {
-    return <p>Invalid pair</p>;
-  }
-
-  if (pairState === PairState.NOT_EXISTS) {
-    return <p>Pair does not exist</p>;
-  }
-
   return (
     <RetherPrice>
-      <>RETHER ${price}</>
+      RETHER
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <p>${formatNumber(Number(retherInfos?.nativeQuote) * Number(nativeToken?.usdPrice))}</p>
+      )}
     </RetherPrice>
   );
 };

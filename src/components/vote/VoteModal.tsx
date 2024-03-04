@@ -5,7 +5,7 @@ import Modal from '../Modal';
 import { AutoColumn, ColumnCenter } from '../Column';
 import styled, { ThemeContext } from 'styled-components';
 import { RowBetween } from '../Row';
-import { TYPE, CustomLightSpinner } from '../../theme';
+import { Fonts, CustomLightSpinner } from '../../theme';
 import { X, ArrowUpCircle } from 'react-feather';
 import { ButtonPrimary } from '../Button';
 import Circle from '../../assets/images/blue-loader.svg';
@@ -87,16 +87,16 @@ export default function VoteModal({ isOpen, onDismiss, proposalId, support }: Vo
         <ContentWrapper gap="lg">
           <AutoColumn gap="lg" justify="center">
             <RowBetween>
-              <TYPE.mediumHeader fontWeight={500}>{`Vote ${
+              <Fonts.mediumHeader fontWeight={500}>{`Vote ${
                 support ? 'for ' : 'against'
-              } proposal ${proposalId}`}</TYPE.mediumHeader>
+              } proposal ${proposalId}`}</Fonts.mediumHeader>
               <StyledClosed stroke="black" onClick={wrappedOndismiss} />
             </RowBetween>
-            <TYPE.largeHeader>{availableVotes?.toSignificant(4)} Votes</TYPE.largeHeader>
+            <Fonts.largeHeader>{availableVotes?.toSignificant(4)} Votes</Fonts.largeHeader>
             <ButtonPrimary onClick={onVote}>
-              <TYPE.mediumHeader color="white">{`Vote ${
+              <Fonts.mediumHeader color="white">{`Vote ${
                 support ? 'for ' : 'against'
-              } proposal  ${proposalId}`}</TYPE.mediumHeader>
+              } proposal  ${proposalId}`}</Fonts.mediumHeader>
             </ButtonPrimary>
           </AutoColumn>
         </ContentWrapper>
@@ -112,9 +112,9 @@ export default function VoteModal({ isOpen, onDismiss, proposalId, support }: Vo
           </ConfirmedIcon>
           <AutoColumn gap="100px" justify={'center'}>
             <AutoColumn gap="12px" justify={'center'}>
-              <TYPE.largeHeader>Submitting Vote</TYPE.largeHeader>
+              <Fonts.largeHeader>Submitting Vote</Fonts.largeHeader>
             </AutoColumn>
-            <TYPE.subHeader>Confirm this transaction in your wallet</TYPE.subHeader>
+            <Fonts.subHeader>Confirm this transaction in your wallet</Fonts.subHeader>
           </AutoColumn>
         </ConfirmOrLoadingWrapper>
       )}
@@ -129,11 +129,11 @@ export default function VoteModal({ isOpen, onDismiss, proposalId, support }: Vo
           </ConfirmedIcon>
           <AutoColumn gap="100px" justify={'center'}>
             <AutoColumn gap="12px" justify={'center'}>
-              <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
+              <Fonts.largeHeader>Transaction Submitted</Fonts.largeHeader>
             </AutoColumn>
             {chainId && (
               <ExternalLink href={getEtherscanLink(chainId, hash, 'transaction')} style={{ marginLeft: '4px' }}>
-                <TYPE.subHeader>View transaction on Etherscan</TYPE.subHeader>
+                <Fonts.subHeader>View transaction on Etherscan</Fonts.subHeader>
               </ExternalLink>
             )}
           </AutoColumn>
