@@ -3,10 +3,10 @@ import Row from 'components/Row';
 import useTheme from 'hooks/useTheme';
 import React from 'react';
 import styled from 'styled-components';
-import { Fonts } from 'theme';
+import { Fonts, StyledInternalLink } from 'theme';
 import HomeLogo from '../home-logo/home-logo';
 import Column from 'components/Column';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const MainSectionComponent = styled.div`
   position: relative;
