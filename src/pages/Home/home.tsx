@@ -21,13 +21,18 @@ const HomeContainer = styled.div`
 
 export default function Home() {
   const [appInfos, setAppInfos] = useState<AppInfo | undefined>(undefined);
+  const updateAppInfos = (data: AppInfo) => {
+    setAppInfos((currentAppInfos) => {
+      return { ...currentAppInfos, ...data };
+    });
+  };
   const socket = useSocket();
   useEffect(() => {
     if (!socket) {
       return;
     }
     const onAppInfos = (data: AppInfo) => {
-      setAppInfos({ ...appInfos, ...data });
+      updateAppInfos(data);
     };
     socket.on('appInfos', onAppInfos);
     const fetchInfo = () => {

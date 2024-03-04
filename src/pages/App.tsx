@@ -23,12 +23,7 @@ import RemoveLiquidity from './RemoveLiquidity';
 // import URLWarning from '../components/Header/URLWarning';
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects';
 import Swap from './Swap';
-import {
-  OpenClaimAddressModalAndRedirectToSwap,
-  RedirectPathToHomeOnly,
-  RedirectPathToSwapOnly,
-  RedirectToSwap,
-} from './Swap/redirects';
+import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToHomeOnly, RedirectToSwap } from './Swap/redirects';
 import Bridge from './Bridge';
 import USDRVault from './USDRVault';
 import TokenList from './Tokenlist/token-list';

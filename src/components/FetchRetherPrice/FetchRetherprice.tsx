@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { STAKE1 } from '../../constants';
 import { Text } from 'rebass';
 import styled from 'styled-components';
-import { ChainId, WETH } from '@retherswap/sdk';
 import { apiUrl } from 'configs/server';
 import { Token } from 'models/schema';
 import { useNativeToken } from 'hooks/useNativeToken';

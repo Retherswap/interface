@@ -259,7 +259,6 @@ export function useDefaultsFromURLSearch():
   const [result, setResult] = useState<
     { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
   >();
-  const state = useSwapState();
   useEffect(() => {
     if (!chainId) return;
     const parsed = queryParametersToSwapState(parsedQs);

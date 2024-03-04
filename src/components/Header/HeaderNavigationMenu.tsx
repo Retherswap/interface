@@ -186,14 +186,14 @@ export default function HeaderNavigationMenu({
       {isOpen && content && content.length > 0 && (
         <MenuWrapper onClick={(event) => event.stopPropagation()} onTouchEnd={(event) => event.stopPropagation()}>
           <MenuContent>
-            {content.map((item, index) =>
+            {content.map((item) =>
               item.link ? (
                 item.external ? (
                   <StyledLink
                     onClick={() => {
                       setIsOpen(false);
                     }}
-                    key={item.link}
+                    key={item.title}
                     href={item.link}
                     target="_blank"
                   >
@@ -205,7 +205,7 @@ export default function HeaderNavigationMenu({
                     onClick={() => {
                       setIsOpen(false);
                     }}
-                    key={item.link}
+                    key={item.title}
                     to={item.link}
                   >
                     {t(item.title)}

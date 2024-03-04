@@ -1,17 +1,16 @@
 import { apiUrl } from 'configs/server';
 import { TokenModel } from 'models/TokenModel';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from 'state';
 import { setNativeToken } from 'state/application/actions';
-
+let isLoading = false;
 export const useNativeToken = () => {
   const dispatch = useDispatch();
   const nativeToken = useSelector((state: AppState) => state.application.nativeToken);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const fetchNativeToken = async () => {
-    setLoading(true);
+  const fetchNativeToken = useCallback(async () => {
+    isLoading = true;
     try {
       const response = await fetch(`${apiUrl}/tokens/native/1`);
       if (!response.ok) {
@@ -23,19 +22,18 @@ export const useNativeToken = () => {
       console.log('error', error);
       setError(error as any);
     } finally {
-      setLoading(false);
+      isLoading = false;
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
-    if (!nativeToken && !loading) {
-      console.log('fetching native token');
+    if (!nativeToken && !isLoading) {
       fetchNativeToken();
     }
-  }, [loading]);
+  }, [fetchNativeToken, nativeToken]);
 
   const refetch = async () => {
     await fetchNativeToken();
   };
-  return { nativeToken: nativeToken, loading: loading, error: error, refetch: refetch };
+  return { nativeToken: nativeToken, error: error, refetch: refetch };
 };

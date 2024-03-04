@@ -40,12 +40,6 @@ import { ClickableText } from '../Pool/styleds';
 import Loader from '../../components/Loader';
 import { RetherPriceComponent } from 'components/FetchRetherPrice/FetchRetherprice';
 import { PriceComponent } from 'components/FetchHypPrice/FetchHypPrice';
-import { apiUrl } from 'configs/server';
-import { TokenModel } from 'models/TokenModel';
-import { formatNumber } from 'utils/formatNumber';
-import { useNativeToken } from 'hooks/useNativeToken';
-import { useChainInfo } from 'hooks/useChainInfo';
-import { cpuUsage } from 'process';
 //import { RetherPriceComponent } from '../../components/FetchRetherPrice/FetchRetherprice'
 //import { PriceComponent } from '../../components/FetchHypPrice/FetchHypPrice'
 

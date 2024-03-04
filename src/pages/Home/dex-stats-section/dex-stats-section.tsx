@@ -1,12 +1,11 @@
 import Row from 'components/Row';
-import useTheme from 'hooks/useTheme';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
 import Column from 'components/Column';
 import { formatNumber } from 'utils/formatNumber';
 import { AppInfo, PairTransaction } from 'models/schema';
-import { darken, transparentize } from 'polished';
+import { transparentize } from 'polished';
 import Marquee from 'react-fast-marquee';
 import DoubleCurrencyLogo from 'components/DoubleLogo';
 import { useDefaultTokens } from 'hooks/Tokens';

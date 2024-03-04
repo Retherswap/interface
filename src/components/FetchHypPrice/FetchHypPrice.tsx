@@ -1,5 +1,5 @@
 import { useNativeToken } from 'hooks/useNativeToken';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Text } from 'rebass';
 import styled from 'styled-components';
 
@@ -22,13 +22,13 @@ export const HypPrice = styled(Text)`
 `;
 
 export const PriceComponent = () => {
-  const { nativeToken, loading, error } = useNativeToken();
+  const { nativeToken, error } = useNativeToken();
 
   return (
     <HypPrice>
-      {loading && <p>Loading...</p>}
-      {!loading && error && <p>{error}</p>}
-      {!loading && !error && <>HYP ${nativeToken?.usdPrice}</>}
+      {!nativeToken && <p>Loading...</p>}
+      {nativeToken && error && <p>{error}</p>}
+      {nativeToken && !error && <>HYP ${nativeToken?.usdPrice}</>}
     </HypPrice>
   );
 };
