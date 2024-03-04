@@ -76,7 +76,10 @@ export default function RetherTokenSection() {
     const fetchRetherInfo = () => {
       return fetch(`${apiUrl}/tokens/address/0xCf52025D37f68dEdA9ef8307Ba4474eCbf15C33c`)
         .then((res) => res.json())
-        .then((d) => setRetherInfos(d));
+        .then((d) => setRetherInfos(d))
+        .catch((e) => {
+          console.error(e);
+        });
     };
     fetchRetherInfo();
   }, []);

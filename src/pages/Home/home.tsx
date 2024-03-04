@@ -38,7 +38,10 @@ export default function Home() {
     const fetchInfo = () => {
       return fetch(`${apiUrl}/app_infos`)
         .then((res) => res.json())
-        .then((d) => setAppInfos(d));
+        .then((d) => setAppInfos(d))
+        .catch((e) => {
+          console.error(e);
+        });
     };
     fetchInfo();
     return () => {

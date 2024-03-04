@@ -48,7 +48,7 @@ export default function NetworkSelectorModal({
         </MenuItem>
       );
     },
-    [selectedNetwork, otherNetwork]
+    [selectedNetwork, otherNetwork, onNetworkSelect]
   );
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={80}>

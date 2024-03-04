@@ -29,7 +29,10 @@ export default function TokenPairList({ token }: { token: TokenModel }) {
     const fetchInfo = () => {
       return fetch(`${apiUrl}/pairs/tokens/${token.address}`)
         .then((res) => res.json())
-        .then((d) => setPairs(d));
+        .then((d) => setPairs(d))
+        .catch((e) => {
+          console.error(e);
+        });
     };
     fetchInfo();
   }, [token.address]);

@@ -179,6 +179,11 @@ export default function CurrencyInputPanel({
         .then((res) => res.json())
         .then((d) => {
           setOutputToken(d);
+        })
+        .catch((e) => {
+          console.error(e);
+        })
+        .finally(() => {
           setOutputTokenPriceLoading(false);
         });
     };

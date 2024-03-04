@@ -159,16 +159,16 @@ export default function BridgeCurrencyInputPanel({
   const { account } = useActiveWeb3React();
   const theme = useTheme();
 
+  const handleDismiss = useCallback(() => {
+    setNetworkModalOpen(false);
+  }, [setNetworkModalOpen]);
   const handleNetworkSelect = useCallback(
     (network: number) => {
       onNetworkSelect(network);
       handleDismiss();
     },
-    [setModalOpen]
+    [onNetworkSelect, handleDismiss]
   );
-  const handleDismiss = useCallback(() => {
-    setNetworkModalOpen(false);
-  }, [setNetworkModalOpen]);
   const handleDismissSearch = useCallback(() => {
     setModalOpen(false);
   }, [setModalOpen]);

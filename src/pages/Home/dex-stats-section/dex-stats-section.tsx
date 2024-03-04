@@ -81,7 +81,10 @@ export default function DexStatsSection({ appInfos }: { appInfos?: AppInfo }) {
     const fetchRetherInfo = () => {
       return fetch(`${apiUrl}/pair_transactions/latest`)
         .then((res) => res.json())
-        .then((d) => setTransactions(d));
+        .then((d) => setTransactions(d))
+        .catch((e) => {
+          console.error(e);
+        });
     };
     fetchRetherInfo();
   }, []);

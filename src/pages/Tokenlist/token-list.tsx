@@ -40,7 +40,10 @@ export default function TokenList() {
   const fetchInfo = () => {
     return fetch(`${apiUrl}/tokens`)
       .then((res) => res.json())
-      .then((d) => setTokens(d));
+      .then((d) => setTokens(d))
+      .catch((e) => {
+        console.error(e);
+      });
   };
   useEffect(() => {
     fetchInfo();

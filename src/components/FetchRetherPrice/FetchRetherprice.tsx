@@ -39,6 +39,11 @@ export const RetherPriceComponent: React.FC = () => {
         .then((res) => res.json())
         .then((d) => {
           setRetherInfos(d);
+        })
+        .catch((e) => {
+          console.error(e);
+        })
+        .finally(() => {
           setLoading(false);
         });
     };

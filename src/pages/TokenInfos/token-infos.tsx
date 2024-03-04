@@ -19,7 +19,10 @@ export default function TokenInfos({
     const fetchInfo = () => {
       return fetch(`${apiUrl}/tokens/address/${address}`)
         .then((res) => res.json())
-        .then((d) => setToken(d));
+        .then((d) => setToken(d))
+        .catch((e) => {
+          console.error(e);
+        });
     };
     fetchInfo();
   }, [address]);

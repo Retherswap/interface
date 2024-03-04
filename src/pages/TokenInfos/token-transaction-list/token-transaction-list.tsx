@@ -26,7 +26,10 @@ export default function TokenTransactionList({ token }: { token: TokenModel }) {
     const fetchInfo = () => {
       return fetch(`${apiUrl}/pair_transactions/tokens/${token.address}`)
         .then((res) => res.json())
-        .then((d) => setTransactions(d));
+        .then((d) => setTransactions(d))
+        .catch((e) => {
+          console.error(e);
+        });
     };
     fetchInfo();
   }, [token.address]);

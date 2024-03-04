@@ -14,7 +14,10 @@ export default function AccountBalance() {
     const fetchInfo = () => {
       return fetch(`${apiUrl}/balances/address/${web3.account}`)
         .then((res) => res.json())
-        .then((d) => setBalances(d));
+        .then((d) => setBalances(d))
+        .catch((e) => {
+          console.error(e);
+        });
     };
     fetchInfo();
   }, [web3.account]);
