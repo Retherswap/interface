@@ -12,6 +12,7 @@ export const BodyWrapper = styled.div`
   position: relative;
   max-width: 550px;
   width: 100%;
+  margin-top: 2em;
   padding: 0.5rem;
   border-radius: 2rem;
   box-shadow: 0 0 10px skyblue; /* Use skyblue color for the glow */
