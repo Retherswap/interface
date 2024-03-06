@@ -8,13 +8,12 @@ import { Balance, BalanceChange, TokenPrice } from 'models/schema';
 import { useNativeToken } from 'hooks/useNativeToken';
 import areaChartSkeletonData from 'components/Skeleton/area-chart-skeleton-data';
 
-const AccountBalanceChartWrapper = styled.div<{ loading: boolean }>`
-  cursor: pointer;
+const AccountBalanceChartWrapper = styled.div<{ isLoading: boolean }>`
   width: calc(100% + 10px);
   margin-left: -8px;
   transition: filter 0.25s;
   &:hover {
-    filter: drop-shadow(0 0 10px ${({ theme, loading }) => (loading ? 'gray' : theme.primary1)});
+    filter: drop-shadow(0 0 10px ${({ theme, isLoading }) => (isLoading ? 'gray' : theme.primary1)});
   }
 `;
 
@@ -98,7 +97,7 @@ export default function AccountBalanceChart({ balances }: { balances?: Balance[]
   const isDarkMode = useIsDarkMode();
   const theme = useTheme();
   return (
-    <AccountBalanceChartWrapper loading={loading}>
+    <AccountBalanceChartWrapper isLoading={loading}>
       <ReactApexChart
         type="area"
         options={{
@@ -155,6 +154,9 @@ export default function AccountBalanceChart({ balances }: { balances?: Balance[]
           },
           tooltip: {
             enabled: !loading,
+            style: {
+              fontFamily: 'Roboto, sans-serif !important',
+            },
           },
           fill: {
             type: 'gradient',

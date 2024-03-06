@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Column from 'components/Column';
 import { useActiveWeb3React } from 'hooks/web3';
 import { useNativeToken } from 'hooks/useNativeToken';
 import TokenBalanceRow from './token-balance-row';
 import { apiUrl } from 'configs/server';
-import { Fonts } from 'theme';
-import { formatNumber } from 'utils/formatNumber';
 import AccountBalanceHeader from './account-balance-header';
 import styled from 'styled-components';
 import Balance from '../balance';
-import Skeleton from 'react-loading-skeleton';
-import { count } from 'console';
 import { Balance as BalanceModel } from 'models/schema';
 
 const TokenBalanceRowList = styled.div`
@@ -25,7 +20,6 @@ const TokenBalanceRowList = styled.div`
 export default function AccountBalance() {
   const web3 = useActiveWeb3React();
   const [balances, setBalances] = useState<BalanceModel[]>([]);
-
   useEffect(() => {
     const fetchInfo = () => {
       return fetch(`${apiUrl}/balances/address/${web3.account}`)
@@ -51,9 +45,11 @@ export default function AccountBalance() {
                 );
               })
               .map((balance) => (
-                <TokenBalanceRow key={`token-balance-${balance.id}`} balance={balance}></TokenBalanceRow>
+                <TokenBalanceRow key={`token-balance-row-${balance.id}`} balance={balance}></TokenBalanceRow>
               ))
-          : Array.from({ length: 5 }).map((_, i) => <TokenBalanceRow key={`skeleton-${i}`}></TokenBalanceRow>)}
+          : Array.from({ length: 5 }).map((_, i) => (
+              <TokenBalanceRow key={`token-balance-row-skeleton-${i}`}></TokenBalanceRow>
+            ))}
       </TokenBalanceRowList>
     </Balance>
   );

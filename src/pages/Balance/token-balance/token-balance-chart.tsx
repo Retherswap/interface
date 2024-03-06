@@ -1,12 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { formatNumber } from 'utils/formatNumber';
 import ReactApexChart from 'react-apexcharts';
 import { useIsDarkMode } from 'state/user/hooks';
 import useTheme from 'hooks/useTheme';
 import styled from 'styled-components';
-import { Balance, TokenPrice } from 'models/schema';
+import { Balance } from 'models/schema';
 import { useNativeToken } from 'hooks/useNativeToken';
-import { apiUrl } from 'configs/server';
 import areaChartSkeletonData from 'components/Skeleton/area-chart-skeleton-data';
 
 const AccountBalanceChartWrapper = styled.div`
@@ -65,7 +64,7 @@ export default function TokenBalanceChart({ balance }: { balance?: Balance }) {
         })
     );
     setLoading(false);
-  }, [balance?.token.price, nativeToken, balance?.balanceChanges]);
+  }, [balance, nativeToken]);
   const isDarkMode = useIsDarkMode();
   const theme = useTheme();
   return (

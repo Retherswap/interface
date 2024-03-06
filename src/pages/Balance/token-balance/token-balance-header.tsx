@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import Column from 'components/Column';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { Fonts } from 'theme';
 import { formatNumber } from 'utils/formatNumber';
-import AccountBalanceChart from '../account-balance/account-balance-chart';
 import Row from 'components/Row';
 import styled from 'styled-components';
-import { ArrowDown, Download, Repeat, Shuffle } from 'react-feather';
+import { ArrowDown, Repeat, Shuffle } from 'react-feather';
 import { transparentize } from 'polished';
 import useTheme from 'hooks/useTheme';
 import CurrencyLogo from 'components/CurrencyLogo';
@@ -15,6 +14,7 @@ import { Balance } from 'models/schema';
 import TokenBalanceChart from './token-balance-chart';
 import NoStyleLink from 'components/Link/no-style-link';
 import Skeleton from 'react-loading-skeleton';
+import DepositModal from '../deposit-modal/deposit-modal';
 
 const Title = styled(Fonts.darkGray)`
   font-size: 20px;
@@ -61,51 +61,64 @@ const BalanceHeaderButton = styled.button`
   }
 `;
 export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
-  const nativeToken = useNativeToken();
-  const usdBalance = balance
-    ? balance.balance * Number(balance.token.nativeQuote) * Number(nativeToken.nativeToken?.usdPrice)
-    : 0;
+  const [depositModalOpen, setDepositModalOpen] = useState(false);
+  const { nativeToken } = useNativeToken();
+  const [usdBalance, setUsdBalance] = useState<number | undefined>(undefined);
+  useMemo(() => {
+    if (!balance || !nativeToken) {
+      return;
+    }
+    setUsdBalance(Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
+  }, [nativeToken, setUsdBalance, balance]);
   const theme = useTheme();
   const defaultTokens = useDefaultTokens();
   return (
     <Column style={{ gap: '0.5em', width: '100%', alignItems: 'center' }}>
-      <>
-        <CurrencyLogo currency={defaultTokens[balance?.token?.address ?? '']} size="50px"></CurrencyLogo>
-        <Title>{balance ? `${balance.token.name} Balance` : <Skeleton width="200px"></Skeleton>}</Title>
-        <BalanceTitle>
-          {balance ? `$ ${formatNumber(usdBalance, { reduce: false })} USD` : <Skeleton width="200px"></Skeleton>}
-        </BalanceTitle>
-        <Fonts.darkGray fontSize={12}>
-          {balance ? (
-            `${formatNumber(balance.balance, { reduce: false })} ${balance?.token.symbol}`
-          ) : (
-            <Skeleton width="100px"></Skeleton>
-          )}
-        </Fonts.darkGray>
-        <TokenBalanceChart balance={balance}></TokenBalanceChart>{' '}
-        <Row style={{ gap: '0.5em', marginTop: '-2em', justifyContent: 'space-evenly' }}>
+      <DepositModal
+        isOpen={depositModalOpen}
+        onDismiss={() => {
+          setDepositModalOpen(false);
+        }}
+      ></DepositModal>
+      <CurrencyLogo currency={defaultTokens[balance?.token?.address ?? '']} size="50px"></CurrencyLogo>
+      <Title>{balance ? `${balance.token.name} Balance` : <Skeleton width="200px"></Skeleton>}</Title>
+      <BalanceTitle>
+        {balance ? `$ ${formatNumber(usdBalance, { reduce: false })} USD` : <Skeleton width="200px"></Skeleton>}
+      </BalanceTitle>
+      <Fonts.darkGray fontSize={12}>
+        {balance ? (
+          `${formatNumber(balance.balance, { reduce: false })} ${balance?.token.symbol}`
+        ) : (
+          <Skeleton width="100px"></Skeleton>
+        )}
+      </Fonts.darkGray>
+      <TokenBalanceChart balance={balance}></TokenBalanceChart>{' '}
+      <Row style={{ gap: '0.5em', zIndex: '1000', marginTop: '-2em', justifyContent: 'space-evenly' }}>
+        <BalanceHeaderButtonContainer
+          onClick={() => {
+            setDepositModalOpen(true);
+          }}
+        >
+          <BalanceHeaderButton>
+            <ArrowDown color={theme.primary1}></ArrowDown>
+          </BalanceHeaderButton>
+          <Fonts.blue fontSize={12}>Deposit</Fonts.blue>
+        </BalanceHeaderButtonContainer>
+        <NoStyleLink to={'/swap/' + balance?.token.address}>
           <BalanceHeaderButtonContainer>
             <BalanceHeaderButton>
-              <ArrowDown color={theme.primary1}></ArrowDown>
+              <Repeat color={theme.primary1}></Repeat>
             </BalanceHeaderButton>
-            <Fonts.blue fontSize={12}>Deposit</Fonts.blue>
+            <Fonts.blue fontSize={12}>Swap</Fonts.blue>
           </BalanceHeaderButtonContainer>
-          <NoStyleLink to={'/swap/' + balance?.token.address}>
-            <BalanceHeaderButtonContainer>
-              <BalanceHeaderButton>
-                <Repeat color={theme.primary1}></Repeat>
-              </BalanceHeaderButton>
-              <Fonts.blue fontSize={12}>Swap</Fonts.blue>
-            </BalanceHeaderButtonContainer>
-          </NoStyleLink>
-          <BalanceHeaderButtonContainer>
-            <BalanceHeaderButton>
-              <Shuffle color={theme.primary1}></Shuffle>
-            </BalanceHeaderButton>
-            <Fonts.blue fontSize={12}>Bridge</Fonts.blue>
-          </BalanceHeaderButtonContainer>
-        </Row>
-      </>
+        </NoStyleLink>
+        <BalanceHeaderButtonContainer>
+          <BalanceHeaderButton>
+            <Shuffle color={theme.primary1}></Shuffle>
+          </BalanceHeaderButton>
+          <Fonts.blue fontSize={12}>Bridge</Fonts.blue>
+        </BalanceHeaderButtonContainer>
+      </Row>
     </Column>
   );
 }

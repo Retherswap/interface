@@ -206,6 +206,7 @@ export interface BalanceChange {
   id: number;
   idBalance: number;
   amount: number;
+  usdAmount: number;
   date: Date;
   balance: Balance;
 }

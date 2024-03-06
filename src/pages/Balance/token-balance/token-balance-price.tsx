@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import Column from 'components/Column';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNativeToken } from 'hooks/useNativeToken';
-import { Fonts, HideExtraSmall } from 'theme';
+import { Fonts } from 'theme';
 import { formatNumber } from 'utils/formatNumber';
-import AccountBalanceChart from '../account-balance/account-balance-chart';
 import Row from 'components/Row';
 import styled from 'styled-components';
-import { ArrowDown, ArrowUp, Download, Repeat, Shuffle } from 'react-feather';
+import { ArrowDown, ArrowUp } from 'react-feather';
 import { transparentize } from 'polished';
 import useTheme from 'hooks/useTheme';
 import CurrencyLogo from 'components/CurrencyLogo';
@@ -71,10 +69,27 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
         });
     };
     fetchInfo();
-  }, [balance?.token.address]);
-  const tokenPrice = Number(balance?.token?.nativeQuote ?? 0) * Number(nativeToken?.usdPrice ?? 0);
-  const change = price ? (tokenPrice / Number(price?.closeUsd ?? 0)) * 100 - 100 : undefined;
-  const avgChange = (tokenPrice / Number(balance?.averagePrice?.usdQuote ?? 0)) * 100 - 100;
+  }, [balance]);
+  const [tokenPrice, setTokenPrice] = useState<number | undefined>(undefined);
+  useMemo(() => {
+    if (balance?.token.nativeQuote && nativeToken?.usdPrice) {
+      setTokenPrice(Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
+    }
+  }, [balance, nativeToken]);
+  const [change, setChange] = useState<number | undefined>(undefined);
+  useMemo(() => {
+    if (!tokenPrice || !price) {
+      return;
+    }
+    setChange((tokenPrice / Number(price.closeUsd ?? 0)) * 100 - 100);
+  }, [price, tokenPrice]);
+  const [avgChange, setAvgChange] = useState<number | undefined>(undefined);
+  useMemo(() => {
+    if (!balance || !tokenPrice) {
+      return;
+    }
+    setAvgChange((tokenPrice / Number(balance.averagePrice?.usdQuote ?? 0)) * 100 - 100);
+  }, [balance, tokenPrice]);
   const theme = useTheme();
   const isDarkMode = useIsDarkMode();
   const defaultTokens = useDefaultTokens();
@@ -126,6 +141,7 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
           <Row style={{ gap: '5px' }}>
             <HideUltraSmall style={{ height: '25px' }}>
               <img
+                alt="average-chart-icon"
                 src={isDarkMode ? AverageChartIconWhite : AverageChartIcon}
                 style={{ width: '25px', height: '25px' }}
               ></img>
@@ -146,7 +162,7 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
               <Skeleton width="200px"></Skeleton>
             )}
           </Row>
-          {balance ? (
+          {balance && avgChange ? (
             <PriceChangeContainer>
               {avgChange > 0 ? (
                 <>

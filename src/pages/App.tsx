@@ -35,7 +35,7 @@ import TokenBalance from './Balance/token-balance/token-balance';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import useTheme from 'hooks/useTheme';
-import { darken, lighten, transparentize } from 'polished';
+import { lighten } from 'polished';
 
 const AppWrapper = styled.div`
   min-height: 100vh;

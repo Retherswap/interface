@@ -1,6 +1,6 @@
 import CurrencyLogo from 'components/CurrencyLogo';
 import Row from 'components/Row';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
 import Column from 'components/Column';
@@ -10,10 +10,6 @@ import { useDefaultTokens } from 'hooks/Tokens';
 import { useWindowSize } from 'hooks/useWindowSize';
 import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
-import { HideSmall } from 'components/Hide/hide-small';
-import { HideMedium } from 'components/Hide/hide-medium';
-import { ShowMedium } from 'components/Hide/show-medium';
-import { ShowSmall } from 'components/Hide/show-small';
 import { ShowUltraSmall } from 'components/Hide/show-ultra-small';
 import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
 import { Balance } from 'models/schema';
@@ -69,10 +65,15 @@ const TokenCount = styled(Fonts.darkGray)`
 `;
 
 export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
-  const nativeToken = useNativeToken();
+  const { nativeToken } = useNativeToken();
   const defaultTokens = useDefaultTokens();
-  const usdBalance =
-    Number(balance?.balance ?? 0) * Number(balance?.token.nativeQuote) * Number(nativeToken.nativeToken?.usdPrice);
+  const [usdBalance, setUsdBalance] = useState<number | undefined>(undefined);
+  useMemo(() => {
+    if (!balance || !nativeToken) {
+      return;
+    }
+    setUsdBalance(Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
+  }, [nativeToken, setUsdBalance, balance]);
   const size = useWindowSize();
   return (
     <Link to={`/balance/${balance?.token.address}`} style={{ textDecoration: 'none', width: '100%' }}>
@@ -100,7 +101,7 @@ export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
         </Row>
         <Column style={{ alignItems: 'end', textAlign: 'end', gap: '5px' }}>
           <USDAmount>
-            {balance ? (
+            {balance && usdBalance ? (
               `$ ${formatNumber(usdBalance, { reduce: (size?.width ?? 0) < 500 })}`
             ) : (
               <>

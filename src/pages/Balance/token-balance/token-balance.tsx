@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNativeToken } from 'hooks/useNativeToken';
-import { useDefaultTokens } from 'hooks/Tokens';
 import Balance from '../balance';
 import { apiUrl } from 'configs/server';
 import { useActiveWeb3React } from 'hooks';
@@ -10,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft } from 'react-feather';
 import styled, { useTheme } from 'styled-components';
 import TokenBalancePrice from './token-balance-price';
-import { ButtonPrimary } from 'components/Button';
 import { Balance as BalanceModel } from 'models/schema';
 import TokenBalanceProfit from './token-balance-profit';
 
@@ -55,7 +52,7 @@ export default function TokenBalance({
         });
     };
     fetchInfo();
-  }, [web3.account]);
+  }, [web3.account, tokenAddress]);
   return (
     <Balance>
       <BackLink to="/balance">
