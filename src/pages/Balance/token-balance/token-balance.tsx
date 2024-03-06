@@ -12,6 +12,7 @@ import styled, { useTheme } from 'styled-components';
 import TokenBalancePrice from './token-balance-price';
 import { ButtonPrimary } from 'components/Button';
 import { Balance as BalanceModel } from 'models/schema';
+import TokenBalanceProfit from './token-balance-profit';
 
 const BackLink = styled(Link)`
   position: absolute;
@@ -20,6 +21,9 @@ const BackLink = styled(Link)`
 `;
 
 const TokenBalanceContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
   padding: 0 1em;
   width: 100%;
 `;
@@ -60,7 +64,8 @@ export default function TokenBalance({
       <TokenBalanceContainer>
         <TokenBalanceHeader balance={balance}></TokenBalanceHeader>
         <TokenBalanceContent>
-          <TokenBalancePrice balance={balance}></TokenBalancePrice>
+          <TokenBalancePrice balance={balance}></TokenBalancePrice>{' '}
+          <TokenBalanceProfit balance={balance}></TokenBalanceProfit>
         </TokenBalanceContent>
       </TokenBalanceContainer>
     </Balance>

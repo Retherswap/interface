@@ -22,6 +22,9 @@ const BalanceContainer = styled.div`
   height: 100%;
   background: ${({ theme }) => theme.bg1};
   overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
 `;
 
 export default function Balance(children: { children: React.ReactNode }) {

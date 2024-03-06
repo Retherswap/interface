@@ -1,7 +1,7 @@
 import React from 'react';
 import Column from 'components/Column';
 import { useNativeToken } from 'hooks/useNativeToken';
-import { BalanceModel } from 'models/BalanceModel';
+import { Balance } from 'models/schema';
 import { Fonts } from 'theme';
 import { formatNumber } from 'utils/formatNumber';
 import AccountBalanceChart from './account-balance-chart';
@@ -47,7 +47,7 @@ const Title = styled(Fonts.darkGray)`
     `};
 `;
 
-const Balance = styled(Fonts.black)`
+const BalanceTitle = styled(Fonts.black)`
   font-size: 30px;
   font-weight: 800 !important;
   ${({ theme }) => theme.mediaWidth.upToMedium`
@@ -58,7 +58,7 @@ const Balance = styled(Fonts.black)`
         `};
 `;
 
-export default function AccountBalanceHeader({ balances }: { balances: BalanceModel[] }) {
+export default function AccountBalanceHeader({ balances }: { balances: Balance[] }) {
   const nativeToken = useNativeToken();
   const totalBalance = balances.reduce((acc, balance) => {
     return acc + balance.balance * Number(balance.token.nativeQuote) * Number(nativeToken.nativeToken?.usdPrice);
@@ -68,19 +68,19 @@ export default function AccountBalanceHeader({ balances }: { balances: BalanceMo
   return (
     <Column style={{ gap: '0.5em', width: '100%', alignItems: 'center' }}>
       <Title>{balances.length > 0 ? 'Your Balance' : <Skeleton width="150px"></Skeleton>}</Title>
-      <Balance>
+      <BalanceTitle>
         {balances.length > 0 ? (
           `$ ${formatNumber(totalBalance, { reduce: false })} USD`
         ) : (
           <Skeleton width="200px"></Skeleton>
         )}
-      </Balance>
+      </BalanceTitle>
       {change > 0 ? (
         <Fonts.green fontSize={12}>+ $ {formatNumber(change, { reduce: false })} (24h)</Fonts.green>
       ) : (
         <Fonts.red fontSize={12}>- $ {formatNumber(change, { reduce: false })} (24h)</Fonts.red>
       )}
-      <AccountBalanceChart></AccountBalanceChart>
+      <AccountBalanceChart balances={balances}></AccountBalanceChart>
       <Row style={{ gap: '0.5em', marginTop: '-2em', justifyContent: 'space-evenly' }}>
         <BalanceHeaderButtonContainer>
           <BalanceHeaderButton>

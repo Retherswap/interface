@@ -18,23 +18,10 @@ export default function TokenBalanceChart({ balance }: { balance?: Balance }) {
   const [data, setData] = useState<any[]>(areaChartSkeletonData);
   const [loading, setLoading] = useState(true);
   const { nativeToken } = useNativeToken();
-  const [prices, setPrices] = useState<TokenPrice[]>([]);
-  useEffect(() => {
-    if (!balance?.token.address) return;
-    const fetchInfo = () => {
-      return fetch(`${apiUrl}/tokens/${balance?.token.address}/prices`)
-        .then((res) => res.json())
-        .then((d) => setPrices(d))
-        .catch((e) => {
-          console.error(e);
-        });
-    };
-    fetchInfo();
-  }, [balance?.token.address]);
   useMemo(() => {
     if (!nativeToken) return;
-    if (prices.length === 0) return;
     if (!balance || !balance.balanceChanges || balance.balanceChanges.length === 0) return;
+    if (!balance.token.price || balance.token.price.length === 0) return;
     const balanceChanges = balance.balanceChanges.map((balanceChange) => {
       return { time: new Date(balanceChange.date).getTime(), balanceChange: balanceChange };
     });
@@ -63,7 +50,7 @@ export default function TokenBalanceChart({ balance }: { balance?: Balance }) {
       return distStart < distEnd ? balanceChanges[start] : balanceChanges[end];
     };
     setData(
-      prices
+      balance.token.price
         .map((price) => {
           const balanceChange = findNearestBalanceChange(new Date(price.date));
           return {
@@ -78,7 +65,7 @@ export default function TokenBalanceChart({ balance }: { balance?: Balance }) {
         })
     );
     setLoading(false);
-  }, [prices, nativeToken, balance?.balanceChanges]);
+  }, [balance?.token.price, nativeToken, balance?.balanceChanges]);
   const isDarkMode = useIsDarkMode();
   const theme = useTheme();
   return (
@@ -123,6 +110,7 @@ export default function TokenBalanceChart({ balance }: { balance?: Balance }) {
             },
           },
           tooltip: {
+            enabled: !loading,
             style: {
               fontFamily: 'Roboto, sans-serif !important',
             },

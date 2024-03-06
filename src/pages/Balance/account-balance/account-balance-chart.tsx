@@ -1,25 +1,104 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { formatNumber } from 'utils/formatNumber';
 import ReactApexChart from 'react-apexcharts';
 import { useIsDarkMode } from 'state/user/hooks';
 import useTheme from 'hooks/useTheme';
 import styled from 'styled-components';
+import { Balance, BalanceChange, TokenPrice } from 'models/schema';
+import { useNativeToken } from 'hooks/useNativeToken';
+import areaChartSkeletonData from 'components/Skeleton/area-chart-skeleton-data';
 
-const AccountBalanceChartWrapper = styled.div`
+const AccountBalanceChartWrapper = styled.div<{ loading: boolean }>`
   cursor: pointer;
   width: calc(100% + 10px);
   margin-left: -8px;
   transition: filter 0.25s;
   &:hover {
-    filter: drop-shadow(0 0 10px ${({ theme }) => theme.primary1});
+    filter: drop-shadow(0 0 10px ${({ theme, loading }) => (loading ? 'gray' : theme.primary1)});
   }
 `;
 
-export default function AccountBalanceChart() {
+export default function AccountBalanceChart({ balances }: { balances?: Balance[] }) {
+  const [data, setData] = useState<any[]>(areaChartSkeletonData);
+  const [loading, setLoading] = useState(true);
+  const { nativeToken } = useNativeToken();
+  const findNearestPrice = (prices: TokenPrice[], date: Date) => {
+    let start = 0;
+    let end = prices.length - 1;
+    let max = 0;
+    while (start <= end && max < 10) {
+      let mid = Math.floor((start + end) / 2);
+      if (new Date(prices[mid].date).getTime() === date.getTime()) {
+        return prices[mid];
+      } else if (new Date(prices[mid].date).getTime() < date.getTime()) {
+        start = mid + 1;
+      } else {
+        end = mid - 1;
+      }
+      ++max;
+    }
+    if (start >= prices.length) return prices[prices.length - 1];
+    if (end < 0) return prices[0];
+    const distStart = Math.abs(new Date(prices[start].date).getTime() - date.getTime());
+    const distEnd = Math.abs(date.getTime() - new Date(prices[end].date).getTime());
+    return distStart < distEnd ? prices[start] : prices[end];
+  };
+  const findNearestBalanceChange = (balanceChanges: BalanceChange[], date: Date) => {
+    let start = 0;
+    let end = balanceChanges.length - 1;
+    let max = 0;
+    while (start <= end && max < 10) {
+      let mid = Math.floor((start + end) / 2);
+      if (new Date(balanceChanges[mid].date).getTime() === date.getTime()) {
+        return balanceChanges[mid];
+      } else if (new Date(balanceChanges[mid].date).getTime() < date.getTime()) {
+        start = mid + 1;
+      } else {
+        end = mid - 1;
+      }
+      ++max;
+    }
+    if (start >= balanceChanges.length) return balanceChanges[balanceChanges.length - 1];
+    if (end < 0) return balanceChanges[0];
+    const distStart = Math.abs(new Date(balanceChanges[start].date).getTime() - date.getTime());
+    const distEnd = Math.abs(date.getTime() - new Date(balanceChanges[end].date).getTime());
+    return distStart < distEnd ? balanceChanges[start] : balanceChanges[end];
+  };
+  useMemo(() => {
+    if (!balances || balances.length === 0) {
+      return;
+    }
+    if (!nativeToken) return;
+    const data: any[] = [];
+    const now = new Date();
+    for (let i = 0; i < 24 * 7; ++i) {
+      let time: any = now.getTime() - i * 60 * 60 * 1000;
+      time = new Date(time);
+      time.setMinutes(0, 0, 0);
+      let price = 0;
+      for (const balance of balances) {
+        if (!balance.token.price || !balance.balanceChanges) {
+          continue;
+        }
+        const balanceAmount = findNearestBalanceChange(balance.balanceChanges, time);
+        const nearestPrice = findNearestPrice(balance.token.price, time);
+        if (!nearestPrice || !balanceAmount) {
+          continue;
+        }
+        price += Number(nearestPrice.closeUsd) * Number(balanceAmount.amount);
+      }
+      data.push({
+        x: time.getTime(),
+        y: price.toFixed(),
+      });
+    }
+    setData(data);
+    setLoading(false);
+  }, [balances, nativeToken]);
   const isDarkMode = useIsDarkMode();
   const theme = useTheme();
   return (
-    <AccountBalanceChartWrapper>
+    <AccountBalanceChartWrapper loading={loading}>
       <ReactApexChart
         type="area"
         options={{
@@ -38,9 +117,6 @@ export default function AccountBalanceChart() {
                 return '$' + formatNumber(value, { reduce: false });
               },
             },
-            min: function (min) {
-              return min - 10;
-            },
           },
           dataLabels: {
             enabled: false,
@@ -49,7 +125,7 @@ export default function AccountBalanceChart() {
             labels: {
               show: false,
               formatter: (value) => {
-                return new Date(value).toLocaleDateString() + ' ' + new Date(value).toLocaleTimeString();
+                return new Date(value).toLocaleString();
               },
             },
             axisBorder: {
@@ -74,11 +150,11 @@ export default function AccountBalanceChart() {
           stroke: {
             curve: 'straight',
             lineCap: 'square',
-            colors: [theme.primary1],
+            colors: [loading ? 'gray' : theme.primary1],
             width: 2,
           },
           tooltip: {
-            enabled: false,
+            enabled: !loading,
           },
           fill: {
             type: 'gradient',
@@ -90,12 +166,12 @@ export default function AccountBalanceChart() {
               colorStops: [
                 {
                   offset: 0,
-                  color: theme.primary1,
+                  color: loading ? 'gray' : theme.primary1,
                   opacity: 0.7,
                 },
                 {
                   offset: 100,
-                  color: theme.primary1,
+                  color: loading ? 'gray' : theme.primary1,
                   opacity: 0,
                 },
               ],
@@ -106,26 +182,7 @@ export default function AccountBalanceChart() {
         series={[
           {
             name: 'Balance',
-            data: [
-              { x: new Date(1538778600000), y: 6633.33 },
-              { x: new Date(1538782200000), y: 6623.45 },
-              { x: new Date(1538785800000), y: 6623.48 },
-              { x: new Date(1538789400000), y: 6615.17 },
-              { x: new Date(1538793000000), y: 6620.02 },
-              { x: new Date(1538796600000), y: 6618.43 },
-              { x: new Date(1538800200000), y: 6615.97 },
-              { x: new Date(1538803800000), y: 6615.43 },
-              { x: new Date(1538807400000), y: 6611.41 },
-              { x: new Date(1538811000000), y: 6610.32 },
-              { x: new Date(1538814600000), y: 6625.5 },
-              { x: new Date(1538818200000), y: 6623.91 },
-              { x: new Date(1538821800000), y: 6628.69 },
-              { x: new Date(1538825400000), y: 6628.92 },
-              {
-                x: new Date(1538829000000),
-                y: 6635.21,
-              },
-            ],
+            data: data,
           },
         ]}
       ></ReactApexChart>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Column from 'components/Column';
 import { useActiveWeb3React } from 'hooks/web3';
 import { useNativeToken } from 'hooks/useNativeToken';
-import { BalanceModel } from 'models/BalanceModel';
 import TokenBalanceRow from './token-balance-row';
 import { apiUrl } from 'configs/server';
 import { Fonts } from 'theme';
@@ -12,6 +11,7 @@ import styled from 'styled-components';
 import Balance from '../balance';
 import Skeleton from 'react-loading-skeleton';
 import { count } from 'console';
+import { Balance as BalanceModel } from 'models/schema';
 
 const TokenBalanceRowList = styled.div`
   display: flex;

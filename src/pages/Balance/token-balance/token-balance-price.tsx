@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Column from 'components/Column';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { Fonts, HideExtraSmall } from 'theme';
@@ -15,14 +15,15 @@ import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
 import { ShowUltraSmall } from 'components/Hide/show-ultra-small';
 import AverageChartIcon from '../../../assets/svg/average-chart-icon.svg';
 import AverageChartIconWhite from '../../../assets/svg/average-chart-icon-white.svg';
-import { Balance } from 'models/schema';
+import { Balance, TokenPrice } from 'models/schema';
 import { useIsDarkMode } from 'state/user/hooks';
 import Skeleton from 'react-loading-skeleton';
+import { apiUrl } from 'configs/server';
 
 const TokenBalancePriceContainer = styled.div`
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: ${({ theme }) => theme.boxShadow};
   border-radius: 10px;
   width: 100%;
   text-wrap: nowrap;
@@ -54,8 +55,25 @@ const Border = styled.div`
 
 export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
   const { nativeToken } = useNativeToken();
-  const change = 20.78;
+  const [price, setPrice] = useState<TokenPrice | undefined>(undefined);
+  useEffect(() => {
+    if (!balance?.token.address) return;
+    const fetchInfo = () => {
+      return fetch(
+        `${apiUrl}/tokens/${balance.token.address}/price_at/${new Date(
+          new Date().getTime() - 1000 * 60 * 60 * 24
+        ).toISOString()}`
+      )
+        .then((res) => res.json())
+        .then((d) => setPrice(d))
+        .catch((e) => {
+          console.error(e);
+        });
+    };
+    fetchInfo();
+  }, [balance?.token.address]);
   const tokenPrice = Number(balance?.token?.nativeQuote ?? 0) * Number(nativeToken?.usdPrice ?? 0);
+  const change = price ? (tokenPrice / Number(price?.closeUsd ?? 0)) * 100 - 100 : undefined;
   const avgChange = (tokenPrice / Number(balance?.averagePrice?.usdQuote ?? 0)) * 100 - 100;
   const theme = useTheme();
   const isDarkMode = useIsDarkMode();
@@ -81,20 +99,20 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
               <Skeleton width="200px"></Skeleton>
             )}
           </Row>
-          {balance ? (
+          {balance && change !== undefined ? (
             <PriceChangeContainer>
               {change > 0 ? (
                 <>
                   <ArrowUp color={theme.green1} size={13} strokeWidth={3}></ArrowUp>
                   <Fonts.green fontSize={13} fontWeight={600}>
-                    {change}%
+                    {formatNumber(change)}%
                   </Fonts.green>
                 </>
               ) : (
                 <>
                   <ArrowDown color={theme.red1} size={13} strokeWidth={3}></ArrowDown>
                   <Fonts.red fontSize={13} fontWeight={600}>
-                    {Math.abs(change)}%
+                    {formatNumber(Math.abs(change))}%
                   </Fonts.red>
                 </>
               )}

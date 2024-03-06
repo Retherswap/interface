@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Fonts } from 'theme';
 import Column from 'components/Column';
 import { useNativeToken } from 'hooks/useNativeToken';
-import { BalanceModel } from 'models/BalanceModel';
 import { formatNumber } from 'utils/formatNumber';
 import { useDefaultTokens } from 'hooks/Tokens';
 import { useWindowSize } from 'hooks/useWindowSize';
@@ -17,13 +16,14 @@ import { ShowMedium } from 'components/Hide/show-medium';
 import { ShowSmall } from 'components/Hide/show-small';
 import { ShowUltraSmall } from 'components/Hide/show-ultra-small';
 import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
+import { Balance } from 'models/schema';
 
 const TokenBalanceRowContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: ${({ theme }) => theme.boxShadow};
   border-radius: 15px;
   background: ${({ theme }) => theme.bg1};
   padding: 1em;
@@ -68,7 +68,7 @@ const TokenCount = styled(Fonts.darkGray)`
   `};
 `;
 
-export default function TokenBalanceRow({ balance }: { balance?: BalanceModel }) {
+export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
   const nativeToken = useNativeToken();
   const defaultTokens = useDefaultTokens();
   const usdBalance =
