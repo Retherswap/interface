@@ -101,7 +101,7 @@ export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
         </Row>
         <Column style={{ alignItems: 'end', textAlign: 'end', gap: '5px' }}>
           <USDAmount>
-            {balance && usdBalance ? (
+            {balance && usdBalance !== undefined ? (
               `$ ${formatNumber(usdBalance, { reduce: (size?.width ?? 0) < 500 })}`
             ) : (
               <>
