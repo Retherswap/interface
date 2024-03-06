@@ -184,6 +184,7 @@ export default function Header() {
             defaultLink={'/swap'}
             content={[
               { title: 'Swap', link: '/swap' },
+              { title: 'Balance', link: '/balance' },
               { title: '🚧Tokens' },
               { title: '🚧Bridge' },
               { title: '🚧USDR Vault' },
