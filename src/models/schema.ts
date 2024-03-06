@@ -185,6 +185,8 @@ export interface Address {
   transactions: Transaction[] | null;
   balance: Balance[] | null;
   addressAveragePrice: AddressAveragePrice[] | null;
+  spent: AddressSpent | null;
+  profit: AddressProfit | null;
 }
 
 export interface Balance {
@@ -196,12 +198,15 @@ export interface Balance {
   address: Address;
   averagePrice: BalanceAveragePrice | null;
   balanceChanges: BalanceChange[] | null;
+  spent: BalanceSpent | null;
+  profit: BalanceProfit | null;
 }
 
 export interface BalanceChange {
   id: number;
   idBalance: number;
   amount: number;
+  usdAmount: number;
   date: Date;
   balance: Balance;
 }
@@ -222,6 +227,34 @@ export interface AddressAveragePrice {
   usdQuote: number;
   amount: number;
   address: Address;
+}
+
+export interface AddressSpent {
+  id: number;
+  idAddress: number;
+  usdAmount: number;
+  address: Address;
+}
+
+export interface AddressProfit {
+  id: number;
+  idAddress: number;
+  usdAmount: number;
+  address: Address;
+}
+
+export interface BalanceSpent {
+  id: number;
+  idBalance: number;
+  usdAmount: number;
+  balance: Balance;
+}
+
+export interface BalanceProfit {
+  id: number;
+  idBalance: number;
+  usdAmount: number;
+  balance: Balance;
 }
 
 export enum PairTransactionType {

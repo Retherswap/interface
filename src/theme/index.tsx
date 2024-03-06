@@ -77,6 +77,8 @@ export function colors(darkMode: boolean): Colors {
     secondary2: darkMode ? '#17000b26' : '#F6DDE8',
     secondary3: darkMode ? '#17000b26' : '#FDEAF1',
 
+    boxShadow: darkMode ? '0 0 10px rgba(0, 0, 0, 0.6)' : '0 0 10px rgba(0, 0, 0, 0.2)',
+
     // other
     red1: '#FD4040',
     red2: '#F82D3A',

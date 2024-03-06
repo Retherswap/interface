@@ -33,6 +33,7 @@ export interface Colors {
 
   primaryText1: Color;
 
+  boxShadow: Color;
   // pinks
   secondary1: Color;
   secondary2: Color;

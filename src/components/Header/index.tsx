@@ -1,7 +1,7 @@
 import { ChainId } from '@retherswap/sdk';
 import React from 'react';
 import { Text } from 'rebass';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from '../../assets/svg/logo.svg';
 import LogoDark from '../../assets/svg/logo_white.svg';
@@ -19,6 +19,7 @@ const HeaderFrame = styled.div`
   width: 100vw;
   margin: 1rem auto;
   padding: 1rem 1.6rem;
+  padding-bottom: 0;
   z-index: 2;
   display: flex;
   justify-content: space-between;
@@ -183,6 +184,7 @@ export default function Header() {
             defaultLink={'/swap'}
             content={[
               { title: 'Swap', link: '/swap' },
+              { title: 'Balance', link: '/balance' },
               { title: '🚧Tokens' },
               { title: '🚧Bridge' },
               { title: '🚧USDR Vault' },
@@ -213,14 +215,16 @@ export default function Header() {
       <HeaderControls>
         <HeaderElement>
           <NetworkSelector />
-          <AccountElement style={{ pointerEvents: 'auto' }}>
-            {account && userEthBalance ? (
-              <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
-                {userEthBalance?.toSignificant(4)} {chainId ? ETH_NAME_AND_SYMBOL[chainId].symbol : 'Native Tokens'}
-              </BalanceText>
-            ) : null}
-            <Web3Status />
-          </AccountElement>
+          <Link to="/balance" style={{ textDecoration: 'none', color: 'unset' }}>
+            <AccountElement style={{ pointerEvents: 'auto' }}>
+              {account && userEthBalance ? (
+                <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
+                  {userEthBalance?.toSignificant(4)} {chainId ? ETH_NAME_AND_SYMBOL[chainId].symbol : 'Native Tokens'}
+                </BalanceText>
+              ) : null}
+              <Web3Status />
+            </AccountElement>
+          </Link>
         </HeaderElement>
         <HeaderElementWrap>
           <StyledMenuButton onClick={() => toggleDarkMode()}>
