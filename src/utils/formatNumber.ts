@@ -2,7 +2,9 @@ export function formatNumber(
   value: number | string | undefined,
   options: { reduce?: boolean; decimals?: number; maxDecimals?: number } = { reduce: true }
 ): string {
-  if (!value) return '0';
+  if (!value || value === '0' || value === 0) {
+    return '0';
+  }
   if (typeof value === 'string') {
     value = Number(value);
   }
@@ -19,7 +21,7 @@ export function formatNumber(
         ++index;
       }
     }
-    formattedPrice = formattedPrice.slice(0, index + 2);
+    formattedPrice = formattedPrice.slice(0, index + (options.decimals ?? 2));
     return `${formattedPrice}`;
   }
   if (!options.reduce) {
