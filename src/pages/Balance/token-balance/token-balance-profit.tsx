@@ -52,10 +52,10 @@ export default function TokenBalanceProfit({ balance }: { balance?: Balance }) {
   }, [balance]);
   const [change24h, setChange24h] = useState<number | undefined>(undefined);
   useMemo(() => {
-    if (balance24h && price24h) {
+    if (price24h) {
       setChange24h(
         Number(balance?.token.nativeQuote) * Number(nativeToken?.usdPrice) * Number(balance?.balance) -
-          Number(price24h?.closeUsd) * Number(balance24h.amount)
+          Number(price24h?.closeUsd) * Number(balance24h?.amount ?? balance?.balance)
       );
     }
   }, [balance24h, price24h, balance, nativeToken]);

@@ -1,4 +1,4 @@
-import { Currency, ETHER, Token, ChainId as ChainIds, ChainId} from '@retherswap/sdk';
+import { Currency, ETHER, Token, ChainId as ChainIds, ChainId } from '@retherswap/sdk';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import HypraLogo from '../../assets/images/hypra-logo.png';
@@ -11,20 +11,20 @@ import { WrappedTokenInfo } from '../../state/lists/hooks';
 import Logo from '../Logo';
 
 const getTokenLogoURL = (address: string, chainId: ChainId) => {
-  let baseURL = ''; 
+  let baseURL = '';
 
   switch (chainId) {
     case ChainIds.HYPRA:
       baseURL += `https://raw.githubusercontent.com/Retherswap/default-token-list/main/supported_chains/hypra/${address}/logo.png`;
       break;
     case ChainIds.BNB:
-      baseURL += `https://raw.githubusercontent.com/Retherswap/default-token-list/main/supported_chains/bnb/${address}/logo.png`; 
+      baseURL += `https://raw.githubusercontent.com/Retherswap/default-token-list/main/supported_chains/bnb/${address}/logo.png`;
       break;
     case ChainIds.MATIC:
-      baseURL += `https://raw.githubusercontent.com/Retherswap/default-token-list/main/supported_chains/matic/${address}/logo.png`; 
+      baseURL += `https://raw.githubusercontent.com/Retherswap/default-token-list/main/supported_chains/matic/${address}/logo.png`;
       break;
     case ChainIds.ETHEREUM:
-      baseURL += `https://raw.githubusercontent.com/Retherswap/default-token-list/main/supported_chains/ethereum/${address}/logo.png`; 
+      baseURL += `https://raw.githubusercontent.com/Retherswap/default-token-list/main/supported_chains/ethereum/${address}/logo.png`;
       break;
   }
 
@@ -74,19 +74,16 @@ export default function CurrencyLogo({
   if (currency === ETHER) {
     if (chainId === ChainIds.HYPRA) {
       return <StyledEthereumLogo src={HypraLogo} size={size} style={style} />;
-    } 
+    }
     if (chainId === ChainIds.BNB) {
       return <StyledEthereumLogo src={BNBLogo} size={size} style={style} />;
-    } 
+    }
     if (chainId === ChainIds.MATIC) {
       return <StyledEthereumLogo src={MATICLogo} size={size} style={style} />;
-    } 
+    }
     if (chainId === ChainIds.ETHEREUM) {
       return <StyledEthereumLogo src={EthereumLogo} size={size} style={style} />;
     }
-
-  
-    
   }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />;

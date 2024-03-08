@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { X } from 'react-feather';
 import { useDispatch } from 'react-redux';
 import { setShowHeader } from 'state/application/actions';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const BalanceWrapper = styled.div`
@@ -62,7 +62,6 @@ export default function Balance(children: { children: React.ReactNode }) {
       dispatch(setShowHeader(true));
     };
   }, [dispatch]);
-  const theme = useTheme();
   return (
     <BalanceWrapper>
       <BalanceContainer>

@@ -6,7 +6,7 @@ import TokenBalanceHeader from './token-balance-header';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { ChevronLeft } from 'react-feather';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import TokenBalancePrice from './token-balance-price';
 import { Balance as BalanceModel } from 'models/schema';
 import TokenBalanceProfit from './token-balance-profit';
@@ -47,7 +47,6 @@ export default function TokenBalance({
 }: Readonly<RouteComponentProps<{ tokenAddress: string }>>) {
   const web3 = useActiveWeb3React();
   const [balance, setBalance] = useState<BalanceModel | undefined>(undefined);
-  const theme = useTheme();
   useEffect(() => {
     const fetchInfo = () => {
       return fetch(`${apiUrl}/balances/address/${web3.account}/token/${tokenAddress}`)

@@ -27,7 +27,7 @@ export const STAKING_REWARDS_INFO: {
   [ChainId.HYPRA]: [
     {
       tokens: [WETH[ChainId.HYPRA], STAKE1],
-      stakingRewardAddress: '0xf4F4ced49a1D9b9C608EAC7d424546BD4b87b107',
+      stakingRewardAddress: '0xe1a9de49CAc8648332735FEFE7D88C91EdEDfe91',
     },
   ],
 };

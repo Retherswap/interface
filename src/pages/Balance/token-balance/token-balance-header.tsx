@@ -9,7 +9,6 @@ import { ArrowDown, Repeat, Shuffle } from 'react-feather';
 import { transparentize } from 'polished';
 import useTheme from 'hooks/useTheme';
 import CurrencyLogo from 'components/CurrencyLogo';
-import { useDefaultTokens } from 'hooks/Tokens';
 import { Balance } from 'models/schema';
 import TokenBalanceChart from './token-balance-chart';
 import NoStyleLink from 'components/Link/no-style-link';
@@ -75,7 +74,6 @@ export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
     setUsdBalance(Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
   }, [nativeToken, setUsdBalance, balance]);
   const theme = useTheme();
-  const defaultTokens = useDefaultTokens();
   const currency0 = useCurrency(balance?.token?.lpPair?.token0.address);
   const currency1 = useCurrency(balance?.token?.lpPair?.token1.address);
   const currency = useCurrency(balance?.token?.address);
@@ -97,7 +95,7 @@ export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
       <a
         href={`https://explorer.hypra.network/address/${balance?.token?.address}`}
         target="_blank"
-        rel="noreferrer"
+        rel="noreferrer noopener"
         style={{ textDecoration: 'none' }}
       >
         <Title>{balance ? `${name} Balance` : <Skeleton width="200px"></Skeleton>}</Title>

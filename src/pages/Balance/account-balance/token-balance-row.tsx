@@ -6,7 +6,6 @@ import { Fonts } from 'theme';
 import Column from 'components/Column';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { formatNumber } from 'utils/formatNumber';
-import { useDefaultTokens } from 'hooks/Tokens';
 import { useWindowSize } from 'hooks/useWindowSize';
 import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
@@ -17,7 +16,6 @@ import DoubleCurrencyLogo from 'components/DoubleLogo';
 import { useCurrency } from 'hooks/useCurrency';
 import { useTokenName } from 'hooks/useTokenName';
 import { useTokenSymbol } from 'hooks/useTokenSymbol';
-import DualCurrencyLogo from 'components/DualCurrencyLogo/DualCurrencyLogo';
 
 const TokenBalanceRowContainer = styled.div`
   display: flex;
@@ -117,7 +115,7 @@ export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
       <TokenBalanceRowContainer>
         <Row style={{ gap: '10px', width: '50%', flexGrow: 1, flexShrink: 1 }}>
           {balance?.token?.isLP ? (
-            <DualCurrencyLogo size={40} currency0={currency0} currency1={currency1}></DualCurrencyLogo>
+            <DoubleCurrencyLogo size={30} currency0={currency0} currency1={currency1}></DoubleCurrencyLogo>
           ) : (
             <CurrencyLogo currency={currency} style={{ width: '40px', height: '40px' }}></CurrencyLogo>
           )}
