@@ -8,6 +8,7 @@ import {
   setOpenModal,
   setImplements3085,
   setNativeToken,
+  setShowHeader,
 } from './actions';
 import { TokenModel } from 'models/TokenModel';
 
@@ -19,6 +20,7 @@ export interface ApplicationState {
   readonly openModal: ApplicationModal | null;
   readonly implements3085: boolean;
   readonly nativeToken: TokenModel | undefined;
+  readonly showHeader: boolean;
 }
 
 const initialState: ApplicationState = {
@@ -27,6 +29,7 @@ const initialState: ApplicationState = {
   openModal: null,
   implements3085: false,
   nativeToken: undefined,
+  showHeader: true,
 };
 
 export default createReducer(initialState, (builder) =>
@@ -44,6 +47,9 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(setOpenModal, (state, action) => {
       state.openModal = action.payload;
+    })
+    .addCase(setShowHeader, (state, action) => {
+      state.showHeader = action.payload;
     })
     .addCase(setImplements3085, (state, { payload: { implements3085 } }) => {
       state.implements3085 = implements3085;

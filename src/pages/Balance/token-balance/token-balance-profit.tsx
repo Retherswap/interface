@@ -62,11 +62,10 @@ export default function TokenBalanceProfit({ balance }: { balance?: Balance }) {
   const [profit, setProfit] = useState<number | undefined>(undefined);
   useMemo(() => {
     if (balance) {
-      setProfit(
-        Number(balance?.profit?.usdAmount ?? 0) -
-          Number(balance?.spent?.usdAmount ?? 0) +
-          Number(balance?.balance) * Number(balance?.token.nativeQuote) * Number(nativeToken?.usdPrice)
-      );
+      const averageUsdCost = Number(balance?.balance) * Number(balance.averagePrice?.usdQuote);
+      const usdBalance = Number(balance?.balance) * Number(balance?.token.nativeQuote) * Number(nativeToken?.usdPrice);
+      const profit = Number(balance?.profit?.usdAmount ?? 0) - Number(balance?.spent?.usdAmount ?? 0);
+      setProfit(profit + (usdBalance - averageUsdCost));
     }
   }, [balance, nativeToken]);
   return (

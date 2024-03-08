@@ -1,6 +1,6 @@
 export function formatNumber(
   value: number | string | undefined,
-  options: { reduce?: boolean; decimals?: number } = { reduce: true }
+  options: { reduce?: boolean; decimals?: number; maxDecimals?: number } = { reduce: true }
 ): string {
   if (!value) return '0';
   if (typeof value === 'string') {
@@ -14,6 +14,9 @@ export function formatNumber(
       (formattedPrice[index] === '0' || index < formattedPrice.indexOf('.') + 1)
     ) {
       ++index;
+    }
+    if (options.maxDecimals && index > options.maxDecimals) {
+      return '<' + 0.1 / Math.pow(10, options.maxDecimals);
     }
     formattedPrice = formattedPrice.slice(0, index + 2);
     return `${formattedPrice}`;

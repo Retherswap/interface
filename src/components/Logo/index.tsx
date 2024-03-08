@@ -30,5 +30,5 @@ export default function Logo({ srcs, alt, ...rest }: LogoProps) {
     );
   }
 
-  return <HelpCircle {...rest} />;
+  return <HelpCircle style={rest.style} {...rest} />;
 }

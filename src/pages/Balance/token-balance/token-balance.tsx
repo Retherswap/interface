@@ -15,6 +15,12 @@ const BackLink = styled(Link)`
   position: absolute;
   left: 12px;
   top: 12px;
+  padding: 0.5em;
+  cursor: pointer;
+  color: ${({ theme }) => theme.text1};
+  &:hover {
+    color: ${({ theme }) => theme.text2};
+  }
 `;
 
 const TokenBalanceContent = styled.div`
@@ -56,7 +62,7 @@ export default function TokenBalance({
   return (
     <Balance>
       <BackLink to="/balance">
-        <ChevronLeft color={theme.text3} size={30} strokeWidth={1}></ChevronLeft>
+        <ChevronLeft size={25}></ChevronLeft>
       </BackLink>
       <TokenBalanceContainer>
         <TokenBalanceHeader balance={balance}></TokenBalanceHeader>

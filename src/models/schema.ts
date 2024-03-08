@@ -47,6 +47,7 @@ export interface Token {
   usdPrice: number;
   nativeQuote: number;
   isNative: boolean;
+  isLP: boolean;
   idLastTvl: number | null;
   holders: number;
   createdAt: Date;
@@ -62,6 +63,7 @@ export interface Token {
   inputTransactions: PairTransaction[] | null;
   outputTransactions: PairTransaction[] | null;
   balance: Balance[] | null;
+  lpPair: Pair | null;
 }
 
 export interface TokenPrice {
@@ -104,6 +106,7 @@ export interface Pair {
   idChain: number;
   idToken0: number;
   idToken1: number;
+  idLPToken: number;
   idLastTvl: number | null;
   createdAt: Date;
   updatedAt: Date;
@@ -115,6 +118,7 @@ export interface Pair {
   tvl: PairTVL[] | null;
   volume: PairVolume[] | null;
   lastTvl: PairTVL | null;
+  lpToken: Token;
 }
 
 export interface PairVolume {
