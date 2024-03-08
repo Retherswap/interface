@@ -9,14 +9,15 @@ export function formatNumber(
   if (value < 1) {
     let formattedPrice = value.toString();
     let index = formattedPrice.indexOf('.') + 1;
-    while (
-      index < formattedPrice.length &&
-      (formattedPrice[index] === '0' || index < formattedPrice.indexOf('.') + 1)
-    ) {
-      ++index;
-    }
-    if (options.maxDecimals && index > options.maxDecimals) {
-      return '<' + 0.1 / Math.pow(10, options.maxDecimals);
+    if (options.maxDecimals && value < 1 / Math.pow(10, options.maxDecimals)) {
+      return `<0.${'0'.repeat(options.maxDecimals - 1)}1`;
+    } else {
+      while (
+        index < formattedPrice.length &&
+        (formattedPrice[index] === '0' || index < formattedPrice.indexOf('.') + 1)
+      ) {
+        ++index;
+      }
     }
     formattedPrice = formattedPrice.slice(0, index + 2);
     return `${formattedPrice}`;
