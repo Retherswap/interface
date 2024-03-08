@@ -1,21 +1,27 @@
 export function formatNumber(
   value: number | string | undefined,
-  options: { reduce?: boolean; decimals?: number } = { reduce: true }
+  options: { reduce?: boolean; decimals?: number; maxDecimals?: number } = { reduce: true }
 ): string {
-  if (!value) return '0';
+  if (!value || value === '0' || value === 0) {
+    return '0';
+  }
   if (typeof value === 'string') {
     value = Number(value);
   }
   if (value < 1) {
     let formattedPrice = value.toString();
     let index = formattedPrice.indexOf('.') + 1;
-    while (
-      index < formattedPrice.length &&
-      (formattedPrice[index] === '0' || index < formattedPrice.indexOf('.') + 1)
-    ) {
-      ++index;
+    if (options.maxDecimals && value < 1 / Math.pow(10, options.maxDecimals)) {
+      return `<0.${'0'.repeat(options.maxDecimals - 1)}1`;
+    } else {
+      while (
+        index < formattedPrice.length &&
+        (formattedPrice[index] === '0' || index < formattedPrice.indexOf('.') + 1)
+      ) {
+        ++index;
+      }
     }
-    formattedPrice = formattedPrice.slice(0, index + 2);
+    formattedPrice = formattedPrice.slice(0, index + (options.decimals ?? 2));
     return `${formattedPrice}`;
   }
   if (!options.reduce) {

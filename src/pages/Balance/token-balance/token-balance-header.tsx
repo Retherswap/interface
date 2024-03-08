@@ -9,12 +9,15 @@ import { ArrowDown, Repeat, Shuffle } from 'react-feather';
 import { transparentize } from 'polished';
 import useTheme from 'hooks/useTheme';
 import CurrencyLogo from 'components/CurrencyLogo';
-import { useDefaultTokens } from 'hooks/Tokens';
 import { Balance } from 'models/schema';
 import TokenBalanceChart from './token-balance-chart';
 import NoStyleLink from 'components/Link/no-style-link';
 import Skeleton from 'react-loading-skeleton';
 import DepositModal from '../deposit-modal/deposit-modal';
+import DoubleCurrencyLogo from 'components/DoubleLogo';
+import { useCurrency } from 'hooks/useCurrency';
+import { useTokenName } from 'hooks/useTokenName';
+import { useTokenSymbol } from 'hooks/useTokenSymbol';
 
 const Title = styled(Fonts.darkGray)`
   font-size: 20px;
@@ -71,7 +74,11 @@ export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
     setUsdBalance(Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
   }, [nativeToken, setUsdBalance, balance]);
   const theme = useTheme();
-  const defaultTokens = useDefaultTokens();
+  const currency0 = useCurrency(balance?.token?.lpPair?.token0.address);
+  const currency1 = useCurrency(balance?.token?.lpPair?.token1.address);
+  const currency = useCurrency(balance?.token?.address);
+  const name = useTokenName(balance?.token);
+  const symbol = useTokenSymbol(balance?.token);
   return (
     <Column style={{ gap: '0.5em', width: '100%', alignItems: 'center' }}>
       <DepositModal
@@ -80,14 +87,25 @@ export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
           setDepositModalOpen(false);
         }}
       ></DepositModal>
-      <CurrencyLogo currency={defaultTokens[balance?.token?.address ?? '']} size="50px"></CurrencyLogo>
-      <Title>{balance ? `${balance.token.name} Balance` : <Skeleton width="200px"></Skeleton>}</Title>
+      {balance?.token?.isLP ? (
+        <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={50}></DoubleCurrencyLogo>
+      ) : (
+        <CurrencyLogo currency={currency} size="50px"></CurrencyLogo>
+      )}
+      <a
+        href={`https://explorer.hypra.network/address/${balance?.token?.address}`}
+        target="_blank"
+        rel="noreferrer noopener"
+        style={{ textDecoration: 'none' }}
+      >
+        <Title>{balance ? `${name} Balance` : <Skeleton width="200px"></Skeleton>}</Title>
+      </a>
       <BalanceTitle>
         {balance ? `$ ${formatNumber(usdBalance, { reduce: false })} USD` : <Skeleton width="200px"></Skeleton>}
       </BalanceTitle>
       <Fonts.darkGray fontSize={12}>
         {balance ? (
-          `${formatNumber(balance.balance, { reduce: false })} ${balance?.token.symbol}`
+          `${formatNumber(balance.balance, { reduce: false })} ${symbol}`
         ) : (
           <Skeleton width="100px"></Skeleton>
         )}

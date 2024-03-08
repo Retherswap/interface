@@ -6,13 +6,16 @@ import { Fonts } from 'theme';
 import Column from 'components/Column';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { formatNumber } from 'utils/formatNumber';
-import { useDefaultTokens } from 'hooks/Tokens';
 import { useWindowSize } from 'hooks/useWindowSize';
 import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import { ShowUltraSmall } from 'components/Hide/show-ultra-small';
 import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
 import { Balance } from 'models/schema';
+import DoubleCurrencyLogo from 'components/DoubleLogo';
+import { useCurrency } from 'hooks/useCurrency';
+import { useTokenName } from 'hooks/useTokenName';
+import { useTokenSymbol } from 'hooks/useTokenSymbol';
 
 const TokenBalanceRowContainer = styled.div`
   display: flex;
@@ -31,14 +34,22 @@ const TokenBalanceRowContainer = styled.div`
 `;
 
 const TokenName = styled(Fonts.black)`
-  font-size: 15px;
-  font-weight: 800;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  width: 60%;
+  display: block;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 600 !important;
   ${({ theme }) => theme.mediaWidth.upToMedium`
-    font-size: 13px;
+    font-size: 14px;
   `};
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    font-size: 11px;
+    font-size: 13px;
   `};
+  ${({ theme }) => theme.mediaWidth.upToUltraSmall`
+  font-size: 11px;
+`};
 `;
 
 const USDAmount = styled(Fonts.black)`
@@ -46,7 +57,7 @@ const USDAmount = styled(Fonts.black)`
   font-size: 18px;
   font-weight: 800 !important;
   ${({ theme }) => theme.mediaWidth.upToMedium`
-    font-size: 15px;
+    font-size: 14px;
   `};
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
     font-size: 13px;
@@ -56,6 +67,10 @@ const USDAmount = styled(Fonts.black)`
 const TokenCount = styled(Fonts.darkGray)`
   font-size: 13px;
   text-wrap: nowrap;
+  text-overflow: ellipsis;
+  width: 60%;
+  display: block;
+  overflow: hidden;
   ${({ theme }) => theme.mediaWidth.upToMedium`
     font-size: 11px;
   `};
@@ -66,26 +81,50 @@ const TokenCount = styled(Fonts.darkGray)`
 
 export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
   const { nativeToken } = useNativeToken();
-  const defaultTokens = useDefaultTokens();
   const [usdBalance, setUsdBalance] = useState<number | undefined>(undefined);
   useMemo(() => {
     if (!balance || !nativeToken) {
       return;
     }
+    /*if (balance.token.isLP) {
+      const token0 = balance.token.lpPair?.token0;
+      const token1 = balance.token.lpPair?.token1;
+      if (!token0 || !token1) {
+        return;
+      }
+      setUsdBalance(
+        Number(balance.balance) *
+          ((Number(balance.token.lpPair?.token0.nativeQuote) * Number(nativeToken.usdPrice) +
+            Number(balance.token.lpPair?.token1.nativeQuote) * Number(nativeToken.usdPrice)) /
+            2)
+      );
+      return;
+    } else {
+      setUsdBalance(Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
+    }*/
     setUsdBalance(Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
   }, [nativeToken, setUsdBalance, balance]);
   const size = useWindowSize();
+  const currency0 = useCurrency(balance?.token?.lpPair?.token0.address);
+  const currency1 = useCurrency(balance?.token?.lpPair?.token1.address);
+  const currency = useCurrency(balance?.token?.address);
+  const name = useTokenName(balance?.token);
+  const symbol = useTokenSymbol(balance?.token);
   return (
     <Link to={`/balance/${balance?.token.address}`} style={{ textDecoration: 'none', width: '100%' }}>
       <TokenBalanceRowContainer>
-        <Row style={{ gap: '10px' }}>
-          <CurrencyLogo currency={defaultTokens[balance?.token.address ?? '']} size="40px" />
-          <TokenName fontSize={15}>
+        <Row style={{ gap: '10px', width: '50%', flexGrow: 1, flexShrink: 1 }}>
+          {balance?.token?.isLP ? (
+            <DoubleCurrencyLogo size={30} currency0={currency0} currency1={currency1}></DoubleCurrencyLogo>
+          ) : (
+            <CurrencyLogo currency={currency} style={{ width: '40px', height: '40px' }}></CurrencyLogo>
+          )}
+          <TokenName>
             {balance ? (
               (size?.width ?? 0) < 500 ? (
-                balance.token.symbol
+                symbol
               ) : (
-                balance.token.name
+                name
               )
             ) : (
               <>
@@ -99,10 +138,10 @@ export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
             )}
           </TokenName>
         </Row>
-        <Column style={{ alignItems: 'end', textAlign: 'end', gap: '5px' }}>
+        <Column style={{ alignItems: 'end', textAlign: 'end', gap: '5px', width: '50%', flexGrow: 1, flexShrink: 1 }}>
           <USDAmount>
-            {balance && usdBalance ? (
-              `$ ${formatNumber(usdBalance, { reduce: (size?.width ?? 0) < 500 })}`
+            {balance && usdBalance !== undefined ? (
+              `${formatNumber(usdBalance, { reduce: (size?.width ?? 0) < 500, maxDecimals: 2 })} $`
             ) : (
               <>
                 <HideUltraSmall>
@@ -116,7 +155,7 @@ export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
           </USDAmount>
           <TokenCount>
             {balance ? (
-              `${formatNumber(balance?.balance, { reduce: (size?.width ?? 0) < 500 })} ${balance?.token.symbol}`
+              `${formatNumber(balance?.balance, { reduce: (size?.width ?? 0) < 500, maxDecimals: 2 })} ${symbol}`
             ) : (
               <>
                 <HideUltraSmall>

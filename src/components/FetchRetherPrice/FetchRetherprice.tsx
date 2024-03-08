@@ -55,7 +55,7 @@ export const RetherPriceComponent: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <p>${formatNumber(Number(retherInfos?.nativeQuote) * Number(nativeToken?.usdPrice))}</p>
+        <p>${formatNumber(Number(retherInfos?.nativeQuote) * Number(nativeToken?.usdPrice), { decimals: 2 })}</p>
       )}
     </RetherPrice>
   );

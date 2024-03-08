@@ -52,21 +52,20 @@ export default function TokenBalanceProfit({ balance }: { balance?: Balance }) {
   }, [balance]);
   const [change24h, setChange24h] = useState<number | undefined>(undefined);
   useMemo(() => {
-    if (balance24h && price24h) {
+    if (price24h) {
       setChange24h(
         Number(balance?.token.nativeQuote) * Number(nativeToken?.usdPrice) * Number(balance?.balance) -
-          Number(price24h?.closeUsd) * Number(balance24h.amount)
+          Number(price24h?.closeUsd) * Number(balance24h?.amount ?? balance?.balance)
       );
     }
   }, [balance24h, price24h, balance, nativeToken]);
   const [profit, setProfit] = useState<number | undefined>(undefined);
   useMemo(() => {
     if (balance) {
-      setProfit(
-        Number(balance?.profit?.usdAmount ?? 0) -
-          Number(balance?.spent?.usdAmount ?? 0) +
-          Number(balance?.balance) * Number(balance?.token.nativeQuote) * Number(nativeToken?.usdPrice)
-      );
+      const averageUsdCost = Number(balance?.balance) * Number(balance.averagePrice?.usdQuote);
+      const usdBalance = Number(balance?.balance) * Number(balance?.token.nativeQuote) * Number(nativeToken?.usdPrice);
+      const profit = Number(balance?.profit?.usdAmount ?? 0) - Number(balance?.spent?.usdAmount ?? 0);
+      setProfit(profit + (usdBalance - averageUsdCost));
     }
   }, [balance, nativeToken]);
   return (

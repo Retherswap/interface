@@ -20,10 +20,30 @@ export const MEDIA_WIDTHS = {
   upToLarge: 1280,
 };
 
+export const MEDIA_HEIGHTS = {
+  upToUltraSmall: 400,
+  upToExtraSmall: 500,
+  upToSmall: 720,
+  upToMedium: 900,
+  upToLarge: 1280,
+};
+
 const mediaWidthTemplates: { [width in keyof typeof MEDIA_WIDTHS]: typeof css } = Object.keys(MEDIA_WIDTHS).reduce(
   (accumulator, size) => {
     (accumulator as any)[size] = (a: any, b: any, c: any) => css`
       @media (max-width: ${(MEDIA_WIDTHS as any)[size]}px) {
+        ${css(a, b, c)}
+      }
+    `;
+    return accumulator;
+  },
+  {}
+) as any;
+
+const mediaHeightTemplates: { [height in keyof typeof MEDIA_HEIGHTS]: typeof css } = Object.keys(MEDIA_HEIGHTS).reduce(
+  (accumulator, size) => {
+    (accumulator as any)[size] = (a: any, b: any, c: any) => css`
+      @media (max-height: ${(MEDIA_HEIGHTS as any)[size]}px) {
         ${css(a, b, c)}
       }
     `;
@@ -106,6 +126,7 @@ export function theme(darkMode: boolean): DefaultTheme {
 
     // media queries
     mediaWidth: mediaWidthTemplates,
+    mediaHeight: mediaHeightTemplates,
 
     // css snippets
     flexColumnNoWrap: css`

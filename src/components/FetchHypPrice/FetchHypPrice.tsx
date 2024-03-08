@@ -2,6 +2,7 @@ import { useNativeToken } from 'hooks/useNativeToken';
 import React from 'react';
 import { Text } from 'rebass';
 import styled from 'styled-components';
+import { formatNumber } from 'utils/formatNumber';
 
 export const HypPrice = styled(Text)`
   width: 125px;
@@ -28,7 +29,7 @@ export const PriceComponent = () => {
     <HypPrice>
       {!nativeToken && <p>Loading...</p>}
       {nativeToken && error && <p>{error}</p>}
-      {nativeToken && !error && <>HYP ${nativeToken?.usdPrice}</>}
+      {nativeToken && !error && <>HYP ${formatNumber(nativeToken?.usdPrice, { decimals: 4 })}</>}
     </HypPrice>
   );
 };

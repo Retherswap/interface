@@ -14,8 +14,10 @@ import Web3Status from '../Web3Status';
 import { ETH_NAME_AND_SYMBOL } from '../../constants';
 import NetworkSelector from './NetworkSelector';
 import HeaderNavigationMenu from './HeaderNavigationMenu';
+import { useSelector } from 'react-redux';
+import { AppState } from 'state';
 
-const HeaderFrame = styled.div`
+const HeaderFrame = styled.div<{ showHeader: boolean }>`
   width: 100vw;
   margin: 1rem auto;
   padding: 1rem 1.6rem;
@@ -31,6 +33,9 @@ const HeaderFrame = styled.div`
     gap: 1em;
     justify-content: center;
   `};
+  ${({ theme, showHeader }) => theme.mediaHeight.upToMedium`
+    display: ${showHeader ? 'flex' : 'none'};
+`}
 `;
 
 const HeaderControls = styled.div`
@@ -168,8 +173,9 @@ export default function Header() {
   const { account, chainId } = useActiveWeb3React();
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? ''];
   const [darkMode, toggleDarkMode] = useDarkModeManager();
+  const showHeader = useSelector((state: AppState) => state.application.showHeader);
   return (
-    <HeaderFrame>
+    <HeaderFrame showHeader={showHeader}>
       <HeaderRow>
         <Title to="/">
           <Icon>
@@ -215,16 +221,16 @@ export default function Header() {
       <HeaderControls>
         <HeaderElement>
           <NetworkSelector />
-          <Link to="/balance" style={{ textDecoration: 'none', color: 'unset' }}>
-            <AccountElement style={{ pointerEvents: 'auto' }}>
+          <AccountElement style={{ pointerEvents: 'auto' }}>
+            <Link to="/balance" style={{ textDecoration: 'none', color: 'unset' }}>
               {account && userEthBalance ? (
                 <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
                   {userEthBalance?.toSignificant(4)} {chainId ? ETH_NAME_AND_SYMBOL[chainId].symbol : 'Native Tokens'}
                 </BalanceText>
-              ) : null}
-              <Web3Status />
-            </AccountElement>
-          </Link>
+              ) : null}{' '}
+            </Link>
+            <Web3Status />
+          </AccountElement>
         </HeaderElement>
         <HeaderElementWrap>
           <StyledMenuButton onClick={() => toggleDarkMode()}>

@@ -17,6 +17,7 @@ import { Balance, TokenPrice } from 'models/schema';
 import { useIsDarkMode } from 'state/user/hooks';
 import Skeleton from 'react-loading-skeleton';
 import { apiUrl } from 'configs/server';
+import { useTokenSymbol } from 'hooks/useTokenSymbol';
 
 const TokenBalancePriceContainer = styled.div`
   display: flex;
@@ -93,6 +94,7 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
   const theme = useTheme();
   const isDarkMode = useIsDarkMode();
   const defaultTokens = useDefaultTokens();
+  const symbol = useTokenSymbol(balance?.token);
   return (
     <TokenBalancePriceContainer>
       <>
@@ -105,7 +107,7 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
               <>
                 <Fonts.black fontWeight={800} fontSize={15}>
                   <Row style={{ gap: '3px' }}>
-                    <HideUltraSmall>{balance.token.symbol}</HideUltraSmall> Price:
+                    <HideUltraSmall>{symbol}</HideUltraSmall> Price:
                   </Row>
                 </Fonts.black>
                 <Fonts.black fontSize={14}>$ {formatNumber(tokenPrice, { reduce: false })}</Fonts.black>

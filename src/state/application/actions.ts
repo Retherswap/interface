@@ -42,3 +42,4 @@ export const addPopup = createAction<{ key?: string; removeAfterMs?: number | nu
 export const removePopup = createAction<{ key: string }>('application/removePopup');
 export const setImplements3085 = createAction<{ implements3085: boolean }>('application/setImplements3085');
 export const setNativeToken = createAction<TokenModel | undefined>('application/setNativeToken');
+export const setShowHeader = createAction<boolean>('application/setShowHeader');
