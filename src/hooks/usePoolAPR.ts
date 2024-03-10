@@ -9,7 +9,14 @@ export default function usePoolAPR(tokenA: Token | undefined, tokenB: Token | un
   const stakingInfo = useStakingInfo(stakingTokenPair)?.[0];
   const totalSupplyOfStakingToken = useTotalSupply(stakingInfo?.stakedAmount?.token);
   return useMemo(() => {
-    if (totalSupplyOfStakingToken && stakingInfo && stakingInfo.rewardsDuration && stakingTokenPair) {
+    if (
+      totalSupplyOfStakingToken &&
+      totalSupplyOfStakingToken.greaterThan(JSBI.BigInt(0)) &&
+      stakingInfo &&
+      stakingInfo.rewardsDuration &&
+      stakingTokenPair &&
+      stakingInfo.totalStakedAmount.greaterThan(JSBI.BigInt(0))
+    ) {
       return (
         // Annual reward rate
         stakingInfo.totalRewardRate
@@ -35,6 +42,6 @@ export default function usePoolAPR(tokenA: Token | undefined, tokenB: Token | un
           .toFixed(0)
       );
     }
-    return '0';
+    return '-';
   }, [stakingInfo, totalSupplyOfStakingToken, stakingTokenPair]);
 }

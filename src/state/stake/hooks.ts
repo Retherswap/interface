@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WETH, Pair } from '@retherswap/sdk';
 import { useMemo } from 'react';
-import { STAKE, STAKE1 } from '../../constants';
+import { HINU, RETHER, STAKE, STAKE1 } from '../../constants';
 import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards';
 import { useActiveWeb3React } from '../../hooks';
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks';
@@ -16,18 +16,19 @@ export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     tokens: [Token, Token];
     stakingRewardAddress: string;
+    reward: Token;
   }[];
 } = {
-  [ChainId.ETHEREUM]: [
-    {
-      tokens: [WETH[ChainId.ETHEREUM], STAKE1],
-      stakingRewardAddress: '0x0000000000000000000000000000000000000000',
-    },
-  ],
   [ChainId.HYPRA]: [
     {
       tokens: [WETH[ChainId.HYPRA], STAKE1],
       stakingRewardAddress: '0xe1a9de49CAc8648332735FEFE7D88C91EdEDfe91',
+      reward: RETHER[ChainId.HYPRA],
+    },
+    {
+      tokens: [WETH[ChainId.HYPRA], HINU],
+      stakingRewardAddress: '0x79b976B7942B2Ed81997006fbe93c99e83F3535A',
+      reward: HINU,
     },
   ],
 };
@@ -48,6 +49,7 @@ export interface StakingInfo {
   // the current amount of token distributed to the active account per second.
   // equivalent to percent of total supply * reward rate
   rewardRate: TokenAmount;
+  rewardToken: Token;
   // the duration of the rewards
   rewardsDuration: number;
   // when the period ends
@@ -85,8 +87,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         : [],
     [chainId, pairToFilterBy]
   );
-
-  const stake = chainId ? STAKE[chainId] : undefined;
 
   const rewardsAddresses = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info]);
 
@@ -126,7 +126,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   );
 
   return useMemo(() => {
-    if (!chainId || !stake) return [];
+    if (!chainId) return [];
 
     return rewardsAddresses.reduce<StakingInfo[]>((memo, rewardsAddress, index) => {
       // these two are dependent on account
@@ -177,7 +177,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
 
         const stakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0));
         const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState.result?.[0]));
-        const totalRewardRate = new TokenAmount(stake, JSBI.BigInt(rewardRateState.result?.[0]));
+        const totalRewardRate = new TokenAmount(info[index].reward, JSBI.BigInt(rewardRateState.result?.[0]));
 
         const getHypotheticalRewardRate = (
           stakedAmount: TokenAmount,
@@ -185,7 +185,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           totalRewardRate: TokenAmount
         ): TokenAmount => {
           return new TokenAmount(
-            stake,
+            info[index].reward,
             JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
               ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
               : JSBI.BigInt(0)
@@ -210,7 +210,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           lastTimeRewardApplicable: lastTimeRewardApplicableMs > 0 ? new Date(lastTimeRewardApplicableMs) : undefined,
           rewardsDuration: rewardsDurationState.result?.[0]?.toNumber(),
-          earnedAmount: new TokenAmount(stake, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          rewardToken: info[index].reward,
+          earnedAmount: new TokenAmount(info[index].reward, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           rewardRate: individualRewardRate,
           totalRewardRate: totalRewardRate,
           stakedAmount: stakedAmount,
@@ -231,7 +232,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     rewardRates,
     rewardsAddresses,
     totalSupplies,
-    stake,
     rewardsDuration,
     lastTimeRewardApplicable,
   ]);

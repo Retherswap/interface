@@ -14,6 +14,7 @@ import { OutlineCard } from '../../components/Card';
 const PageWrapper = styled(AutoColumn)`
   position: relative;
   max-width: 550px;
+  padding: 0.5em;
   width: 100%;
 
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`

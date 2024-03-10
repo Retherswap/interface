@@ -80,7 +80,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
   // let returnOverMonth: Percent = new Percent('0')
   let valueOfTotalStakedAmountInWETH: TokenAmount | undefined;
-  if (totalSupplyOfStakingToken && isStaking && stakingTokenPair) {
+  if (totalSupplyOfStakingToken?.greaterThan(JSBI.BigInt(0)) && isStaking && stakingTokenPair) {
     // take the total amount of LP tokens staked, multiply by ETH value of all LP tokens, divide by all LP tokens
     valueOfTotalStakedAmountInWETH = new TokenAmount(
       WETH,
