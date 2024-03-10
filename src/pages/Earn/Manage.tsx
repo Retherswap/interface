@@ -251,7 +251,7 @@ export default function Manage({
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
                 <Fonts.white fontSize={14}>
-                  {`RETHERS-LP tokens are required. Once you've added liquidity to the ${currencyA?.symbol}-${currencyB?.symbol} pool you can stake your liquidity tokens on this page.`}
+                  {`${currencyA?.symbol}-${currencyB?.symbol} LP tokens are required. Once you've added liquidity to the ${currencyA?.symbol}-${currencyB?.symbol} pool you can stake your liquidity tokens on this page.`}
                 </Fonts.white>
               </RowBetween>
               <ButtonPrimary
@@ -325,7 +325,7 @@ export default function Manage({
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                  <Fonts.black>Your unclaimed RETHER</Fonts.black>
+                  <Fonts.black>Your unclaimed {stakingInfo?.rewardToken.symbol}</Fonts.black>
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
                   <ButtonSecondary
@@ -361,7 +361,7 @@ export default function Manage({
                         ?.multiply(BIG_INT_SECONDS_IN_WEEK)
                         ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
                     : '0'}
-                  {' RETHER / week'}
+                  {` ${stakingInfo?.rewardToken.symbol} / week`}
                 </Fonts.black>
                 <Fonts.black fontSize={16} fontWeight={500}>
                   {poolAPR}% APR
@@ -377,7 +377,7 @@ export default function Manage({
           <span role="img" aria-label="star-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          When you withdraw, the contract will automagically claim RETHER on your behalf!
+          When you withdraw, the contract will automagically claim {stakingInfo?.rewardToken.symbol} on your behalf!
         </Fonts.main>
 
         {!showAddLiquidityButton && (
@@ -403,7 +403,9 @@ export default function Manage({
           </DataRow>
         )}
         {!userLiquidityUnstaked ? null : userLiquidityUnstaked.equalTo('0') ? null : !stakingInfo?.active ? null : (
-          <Fonts.main>{userLiquidityUnstaked.toSignificant(6)} RETHERS-LP tokens available</Fonts.main>
+          <Fonts.main>
+            {userLiquidityUnstaked.toSignificant(6)} {currencyA?.symbol}-{currencyB?.symbol} LP tokens available
+          </Fonts.main>
         )}
       </PositionInfo>
     </PageWrapper>
