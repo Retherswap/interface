@@ -17,6 +17,7 @@ type ChainTokenList = {
 };
 
 // Tokens
+export const HINU = new Token(ChainId.HYPRA, '0xcBFbd38167519F4DCcfF1dbd48304a4FC8d4De32', 18, 'HINU', 'Hypra INU');
 export const STAKE1 = new Token(ChainId.HYPRA, '0xCf52025D37f68dEdA9ef8307Ba4474eCbf15C33c', 18, 'RETHER', 'Retherswap Token');
 export const BUSD = new Token(ChainId.BNB, '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', 6, 'BUSD', 'BUSD Token');
 export const USDC = new Token(ChainId.HYPRA, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC', 'USD//C');
