@@ -63,6 +63,7 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
 `;
 
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
+  console.log('PoolCard', stakingInfo);
   const token0 = stakingInfo.tokens[0];
   const token1 = stakingInfo.tokens[1];
 

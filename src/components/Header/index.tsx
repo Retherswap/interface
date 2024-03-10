@@ -191,7 +191,7 @@ export default function Header() {
             content={[
               { title: 'Swap', link: '/swap' },
               { title: 'Balance', link: '/balance' },
-              { title: '🚧Tokens' },
+              { title: 'Tokens', link: '/tokens' },
               { title: '🚧Bridge' },
               { title: '🚧USDR Vault' },
             ]}
@@ -209,6 +209,7 @@ export default function Header() {
           <HeaderNavigationMenu
             title={'Others'}
             content={[
+              { title: 'Admin', link: 'admin' },
               { title: 'About', link: 'https://retherswap.org', external: true },
               { title: 'Docs', link: 'https://docs.retherswap.org', external: true },
               { title: 'Code', link: 'https://github.com/Retherswap', external: true },

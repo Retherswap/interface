@@ -18,6 +18,7 @@ import Circle from '../../../assets/images/blue-loader.svg';
 import { formatAddress } from 'utils/formatAddress';
 import useTheme from 'hooks/useTheme';
 import { HideSmall } from 'components/Hide/hide-small';
+import { useCurrency } from 'hooks/useCurrency';
 
 export const AddLiquidityButton = styled(BaseButton)`
   width: 200px;
@@ -81,7 +82,7 @@ export default function TokenInfosHeader({ token }: { token: TokenModel }) {
   }
   formattedPrice = formattedPrice.slice(0, index + 2);
   const priceChange = lastPrice ? (price / lastPrice) * 100 - 100 : 0;
-  const defaultTokens = useDefaultTokens();
+  const currency = useCurrency(token.address);
   const { account } = useActiveWeb3React();
   const tokenBalance = useTokenBalance(account ?? undefined, new Token(token.idChain, token.address, token.decimals));
   const theme = useTheme();
@@ -134,7 +135,7 @@ export default function TokenInfosHeader({ token }: { token: TokenModel }) {
         <Row style={{ alignItems: 'baseline', gap: '1em' }}>
           <Column style={{ gap: '10px' }}>
             <Row style={{ gap: '10px' }}>
-              <CurrencyLogo currency={defaultTokens[token.address]} size="40px"></CurrencyLogo>
+              <CurrencyLogo currency={currency} size="40px"></CurrencyLogo>
               <TitleContainer>
                 <Fonts.black fontWeight={800} fontSize={36}>
                   {token.name}

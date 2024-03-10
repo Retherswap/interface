@@ -1,3 +1,4 @@
-const serverUrl = 'https://api.retherswap.org';
+const serverUrl = 'https://staging-api.retherswap.org';
 const apiUrl = `${serverUrl}/api/v1`;
-export { serverUrl, apiUrl };
+const adminUrl = `${serverUrl}/admin`;
+export { serverUrl, apiUrl, adminUrl };

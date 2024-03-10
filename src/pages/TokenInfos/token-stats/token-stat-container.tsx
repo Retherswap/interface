@@ -111,17 +111,17 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
           </SwiperSlide>
           <SwiperSlide>
             <Column style={{ gap: '1.5em' }}>
+              <TokenStat title="Circulating supply" value={formatNumber(token.circulatingSupply)}></TokenStat>
               <TokenStat title="Total supply" value={formatNumber(token.totalSupply)}></TokenStat>
-              <TokenStat title="Decimals" value={`${token.decimals}`}></TokenStat>
-              <TokenStat title="Transactions 24H" value="-"></TokenStat>
               <TokenStat
-                title="Fully diluted market cap"
+                title="Market cap"
                 value={formatNumber(
-                  Number(token.totalSupply) *
+                  Number(token.circulatingSupply) *
                     Number(token.nativeQuote) *
                     Number(nativeToken?.nativeToken?.usdPrice ?? 0)
                 )}
               ></TokenStat>
+              <TokenStat title="Decimals" value={`${token.decimals}`}></TokenStat>
             </Column>
           </SwiperSlide>
         </Swiper>

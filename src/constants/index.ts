@@ -17,7 +17,14 @@ type ChainTokenList = {
 };
 
 // Tokens
-export const STAKE1 = new Token(ChainId.HYPRA, '0xCf52025D37f68dEdA9ef8307Ba4474eCbf15C33c', 18, 'RETHER', 'Retherswap Token');
+export const HINU = new Token(ChainId.HYPRA, '0xcBFbd38167519F4DCcfF1dbd48304a4FC8d4De32', 18, 'HINU', 'Hypra Inu');
+export const STAKE1 = new Token(
+  ChainId.HYPRA,
+  '0xCf52025D37f68dEdA9ef8307Ba4474eCbf15C33c',
+  18,
+  'RETHER',
+  'Retherswap Token'
+);
 export const BUSD = new Token(ChainId.BNB, '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', 6, 'BUSD', 'BUSD Token');
 export const USDC = new Token(ChainId.HYPRA, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC', 'USD//C');
 export const USDT = new Token(ChainId.HYPRA, '0xfb6352104fEF2f3CF07A91f73C7f679fF6AB50da', 6, 'USDT', 'Tether USD');
@@ -35,11 +42,11 @@ export const RETHER: { [chainId in ChainId]: Token } = {
   [ChainId.HYPRA]: new Token(ChainId.HYPRA, RETHERS_ADDRESS, 18, 'RETHER', 'Retherswap Token'),
 };
 
-const STAKE_ADDRESS = '0xCf52025D37f68dEdA9ef8307Ba4474eCbf15C33c'
+const STAKE_ADDRESS = '0xCf52025D37f68dEdA9ef8307Ba4474eCbf15C33c';
 export const STAKE: { [chainId in ChainId]: Token } | any = {
   [ChainId.ETHEREUM]: new Token(ChainId.ETHEREUM, STAKE_ADDRESS, 18, 'RETHER', 'Retherswap Token'),
   [ChainId.HYPRA]: new Token(ChainId.HYPRA, RETHERS_ADDRESS, 18, 'RETHER', 'Retherswap Token'),
-}
+};
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
 export const AVERAGE_BLOCK_TIME_IN_SECS = 10;
 export const PROPOSAL_LENGTH_IN_BLOCKS = 60_480;
@@ -63,7 +70,7 @@ export const ETH_NAME_AND_SYMBOL = {
   [ChainId.ETHEREUM]: { name: 'Ether', symbol: 'ETH' },
   [ChainId.BNB]: { name: 'BNB', symbol: 'BNB' },
   [ChainId.MATIC]: { name: 'Matic', symbol: 'MATIC' },
-  [ChainId.HYPRA]: { name: 'Hypra', symbol: 'HYP'},
+  [ChainId.HYPRA]: { name: 'Hypra', symbol: 'HYP' },
 };
 
 // used to construct intermediary pairs for trading
@@ -86,7 +93,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.HYPRA]: [...WETH_ONLY[ChainId.HYPRA]], 
+  [ChainId.HYPRA]: [...WETH_ONLY[ChainId.HYPRA]],
   [ChainId.ETHEREUM]: [...WETH_ONLY[ChainId.ETHEREUM], USDC],
 };
 
@@ -145,7 +152,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     iconName: 'coinbaseWalletIcon.svg',
     description: 'Use Coinbase Wallet app on mobile device',
     href: null,
-    color: '#315CF5'
+    color: '#315CF5',
   },
   COINBASE_LINK: {
     name: 'Open in Coinbase Wallet',
@@ -154,7 +161,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: 'https://go.cb-w.com/mtUDhEZPy1',
     color: '#315CF5',
     mobile: true,
-    mobileOnly: true
+    mobileOnly: true,
   },
 };
 

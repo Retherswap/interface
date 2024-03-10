@@ -42,6 +42,7 @@ export interface Token {
   symbol: string;
   decimals: number;
   totalSupply: number;
+  circulatingSupply: number;
   address: string;
   idChain: number;
   usdPrice: number;

@@ -8,9 +8,9 @@ import Row from 'components/Row';
 import { HideSmall, Fonts } from 'theme';
 import { formatNumber } from 'utils/formatNumber';
 import { HideExtraSmall } from 'components/Hide/hide-extra-small';
+import { useCurrency } from 'hooks/useCurrency';
 
 export default function TokenPairRow({ index, token, pair }: { index: number; token: TokenModel; pair: PairModel }) {
-  const defaultTokens = useDefaultTokens();
   const volume24h = Number(
     pair.idToken0 === token.id
       ? pair.volume
@@ -32,6 +32,8 @@ export default function TokenPairRow({ index, token, pair }: { index: number; to
         : pair.volume.reduce((acc, volume) => acc + Number(volume.token1UsdVolume), 0)
     )
   );
+  const currency0 = useCurrency(pair.token0.address);
+  const currency1 = useCurrency(pair.token1.address);
   return (
     <TokenPairListGrid>
       <HideExtraSmall>
@@ -40,11 +42,7 @@ export default function TokenPairRow({ index, token, pair }: { index: number; to
         </Fonts.black>
       </HideExtraSmall>
       <Row style={{ gap: '10px' }}>
-        <DoubleCurrencyLogo
-          size={22}
-          currency0={defaultTokens[pair.token0.address]}
-          currency1={defaultTokens[pair.token1.address]}
-        />
+        <DoubleCurrencyLogo size={22} currency0={currency0} currency1={currency1} />
         <Fonts.black fontWeight={500} fontSize={14}>
           {pair.token0.symbol}/{pair.token1.symbol}
         </Fonts.black>

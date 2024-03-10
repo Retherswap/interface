@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { SwapPoolTabs } from '../../components/NavigationTabs';
-import TokenListRow from './TokenListRow';
+import TokenListRow from './token-list-row';
 import { TokenModel } from 'models/TokenModel';
-import { TokenListGrid } from './TokenListGrid';
+import { TokenListGrid } from './token-list-grid';
 import { Fonts } from 'theme';
 import Column from 'components/Column';
 import Paginator from 'components/Paginator/Paginator';
@@ -51,7 +50,6 @@ export default function TokenList() {
   const [page, setPage] = useState(1);
   return (
     <div style={{ padding: '1em' }}>
-      <SwapPoolTabs active={'swap'} />
       <Wrapper id="token-list-page">
         <TokenListGrid>
           <HideExtraSmall>

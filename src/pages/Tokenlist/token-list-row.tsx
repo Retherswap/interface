@@ -3,7 +3,7 @@ import Row from 'components/Row';
 import { TokenModel } from 'models/TokenModel';
 import React from 'react';
 import styled from 'styled-components';
-import { TokenListGrid } from './TokenListGrid';
+import { TokenListGrid } from './token-list-grid';
 import { HideSmall, Fonts } from 'theme';
 import { useDefaultTokens } from 'hooks/Tokens';
 import { Link } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { formatNumber } from 'utils/formatNumber';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { HideMedium } from 'components/Hide/hide-medium';
 import { HideExtraSmall } from 'components/Hide/hide-extra-small';
+import { useCurrency } from 'hooks/useCurrency';
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
@@ -47,6 +48,7 @@ export default function TokenListRow({ index, token }: { index: number; token: T
   formattedPrice = formattedPrice.slice(0, priceIndex + 2);
   const lastPrice = Number(token.price?.[0]?.closeUsd ?? 0);
   const priceChange = lastPrice ? (price / lastPrice) * 100 - 100 : 0;
+  const currency = useCurrency(token.address);
   return (
     <StyledLink to={`/token/${token.address}`}>
       <TokenListGrid>
@@ -54,7 +56,7 @@ export default function TokenListRow({ index, token }: { index: number; token: T
           <Fonts.black fontWeight={500}>{index}</Fonts.black>
         </HideExtraSmall>
         <Row style={{ gap: '10px' }}>
-          <CurrencyLogo currency={defaultTokens[token.address]} size="35px" />
+          <CurrencyLogo currency={currency} size="35px" />
           <Row style={{ gap: '5px' }}>
             <HideExtraSmall>
               <Fonts.black fontWeight={500}>{token.name}</Fonts.black>
