@@ -36,6 +36,12 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import useTheme from 'hooks/useTheme';
 import { lighten } from 'polished';
+import AdminDashboard from './Admin/admin-dashboard/admin-dashboard';
+import AdminTokenDashboard from './Admin/admin-dashboard/token-dashboard/token-dashboard';
+import AdminConnectModal from 'components/Admin/connect-modal/connect-modal';
+import AdminRouteGuard from 'guards/admin-route-guard';
+import '../styles/max-container.css';
+import AdminManageToken from './Admin/admin-dashboard/token-dashboard/manage-token/manage-token';
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -76,11 +82,27 @@ export default function App() {
         <BodyWrapper>
           <Popups />
           <Polling />
+          <AdminConnectModal />
           <SocketProvider>
             <SkeletonTheme baseColor={theme.bg3} highlightColor={lighten(0.05, theme.bg3)}>
               <Web3ReactManager>
                 <Switch>
                   <Route exact strict path="/swap" component={Swap} />
+                  <Route exact strict path="/admin">
+                    <AdminRouteGuard>
+                      <AdminDashboard></AdminDashboard>
+                    </AdminRouteGuard>
+                  </Route>
+                  <Route exact strict path="/admin/tokens">
+                    <AdminRouteGuard>
+                      <AdminTokenDashboard></AdminTokenDashboard>
+                    </AdminRouteGuard>
+                  </Route>
+                  <Route exact strict path="/admin/token/:address">
+                    <AdminRouteGuard>
+                      <AdminManageToken></AdminManageToken>
+                    </AdminRouteGuard>
+                  </Route>
                   <Route exact strict path="/home" component={Home} />
                   <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
                   <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />

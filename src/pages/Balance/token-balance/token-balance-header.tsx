@@ -18,6 +18,8 @@ import DoubleCurrencyLogo from 'components/DoubleLogo';
 import { useCurrency } from 'hooks/useCurrency';
 import { useTokenName } from 'hooks/useTokenName';
 import { useTokenSymbol } from 'hooks/useTokenSymbol';
+import { useActiveWeb3React } from 'hooks';
+import { useETHBalances } from 'state/wallet/hooks';
 
 const Title = styled(Fonts.darkGray)`
   font-size: 20px;
@@ -66,13 +68,24 @@ const BalanceHeaderButton = styled.button`
 export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
   const [depositModalOpen, setDepositModalOpen] = useState(false);
   const { nativeToken } = useNativeToken();
-  const [usdBalance, setUsdBalance] = useState<number | undefined>(undefined);
-  useMemo(() => {
-    if (!balance || !nativeToken) {
+  const web3 = useActiveWeb3React();
+  const userEthBalance = useETHBalances(web3.account ? [web3.account] : [])?.[web3.account ?? ''];
+  const totalBalance = useMemo(() => {
+    if (!balance) {
       return;
     }
-    setUsdBalance(Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
-  }, [nativeToken, setUsdBalance, balance]);
+    let totalBalance = Number(balance.balance);
+    if (balance.token.isNative && userEthBalance) {
+      totalBalance += Number(userEthBalance.toExact());
+    }
+    return totalBalance;
+  }, [balance, userEthBalance]);
+  const usdBalance = useMemo(() => {
+    if (totalBalance === undefined || !balance || !nativeToken) {
+      return;
+    }
+    return totalBalance * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice);
+  }, [nativeToken, totalBalance, balance]);
   const theme = useTheme();
   const currency0 = useCurrency(balance?.token?.lpPair?.token0.address);
   const currency1 = useCurrency(balance?.token?.lpPair?.token1.address);
@@ -104,11 +117,7 @@ export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
         {balance ? `$ ${formatNumber(usdBalance, { reduce: false })} USD` : <Skeleton width="200px"></Skeleton>}
       </BalanceTitle>
       <Fonts.darkGray fontSize={12}>
-        {balance ? (
-          `${formatNumber(balance.balance, { reduce: false })} ${symbol}`
-        ) : (
-          <Skeleton width="100px"></Skeleton>
-        )}
+        {balance ? `${formatNumber(totalBalance, { reduce: false })} ${symbol}` : <Skeleton width="100px"></Skeleton>}
       </Fonts.darkGray>
       <TokenBalanceChart balance={balance}></TokenBalanceChart>{' '}
       <Row style={{ gap: '0.5em', zIndex: '1000', marginTop: '-2em', justifyContent: 'space-evenly' }}>
@@ -122,7 +131,13 @@ export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
           </BalanceHeaderButton>
           <Fonts.blue fontSize={12}>Deposit</Fonts.blue>
         </BalanceHeaderButtonContainer>
-        <NoStyleLink to={'/swap/' + balance?.token.address}>
+        <NoStyleLink
+          to={
+            balance?.token.isLP
+              ? '/add/' + balance.token.lpPair?.token0.address + '/' + balance.token.lpPair?.token1.address
+              : '/swap/' + balance?.token.address
+          }
+        >
           <BalanceHeaderButtonContainer>
             <BalanceHeaderButton>
               <Repeat color={theme.primary1}></Repeat>

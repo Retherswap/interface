@@ -1,5 +1,5 @@
 import { ChainId } from '@retherswap/sdk';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Text } from 'rebass';
 import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -174,6 +174,26 @@ export default function Header() {
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? ''];
   const [darkMode, toggleDarkMode] = useDarkModeManager();
   const showHeader = useSelector((state: AppState) => state.application.showHeader);
+  const isAdmin = useSelector((state: AppState) => state.application.isAdmin);
+  const otherLinks = useMemo(() => {
+    if (isAdmin) {
+      return [
+        { title: 'Admin', link: '/admin' },
+        { title: 'About', link: 'https://retherswap.org', external: true },
+        { title: 'Docs', link: 'https://docs.retherswap.org', external: true },
+        { title: 'Code', link: 'https://github.com/Retherswap', external: true },
+        { title: 'Discord', link: 'https://discord.gg/xCB4AJDEFb', external: true },
+        { title: 'Geckoterminal', link: 'https://www.geckoterminal.com/hypra-network/pools', external: true },
+      ];
+    }
+    return [
+      { title: 'About', link: 'https://retherswap.org', external: true },
+      { title: 'Docs', link: 'https://docs.retherswap.org', external: true },
+      { title: 'Code', link: 'https://github.com/Retherswap', external: true },
+      { title: 'Discord', link: 'https://discord.gg/xCB4AJDEFb', external: true },
+      { title: 'Geckoterminal', link: 'https://www.geckoterminal.com/hypra-network/pools', external: true },
+    ];
+  }, [isAdmin]);
   return (
     <HeaderFrame showHeader={showHeader}>
       <HeaderRow>
@@ -191,7 +211,7 @@ export default function Header() {
             content={[
               { title: 'Swap', link: '/swap' },
               { title: 'Balance', link: '/balance' },
-              { title: '🚧Tokens' },
+              { title: 'Tokens', link: '/tokens' },
               { title: '🚧Bridge' },
               { title: '🚧USDR Vault' },
             ]}
@@ -206,16 +226,7 @@ export default function Header() {
             ]}
           ></HeaderNavigationMenu>
           <HeaderNavigationMenu title={'Vote'} defaultLink={'/vote'}></HeaderNavigationMenu>
-          <HeaderNavigationMenu
-            title={'Others'}
-            content={[
-              { title: 'About', link: 'https://retherswap.org', external: true },
-              { title: 'Docs', link: 'https://docs.retherswap.org', external: true },
-              { title: 'Code', link: 'https://github.com/Retherswap', external: true },
-              { title: 'Discord', link: 'https://discord.gg/xCB4AJDEFb', external: true },
-              { title: 'Geckoterminal', link: 'https://www.geckoterminal.com/hypra-network/pools', external: true },
-            ]}
-          ></HeaderNavigationMenu>
+          <HeaderNavigationMenu title={'Others'} content={otherLinks}></HeaderNavigationMenu>
         </HeaderLinks>
       </Row>
       <HeaderControls>

@@ -9,6 +9,9 @@ import {
   setImplements3085,
   setNativeToken,
   setShowHeader,
+  setIsAdmin,
+  setLoginToken,
+  setRequestConnection,
 } from './actions';
 import { TokenModel } from 'models/TokenModel';
 
@@ -21,6 +24,9 @@ export interface ApplicationState {
   readonly implements3085: boolean;
   readonly nativeToken: TokenModel | undefined;
   readonly showHeader: boolean;
+  readonly isAdmin: boolean;
+  readonly loginToken: string | undefined;
+  readonly requestConnection: boolean;
 }
 
 const initialState: ApplicationState = {
@@ -30,12 +36,24 @@ const initialState: ApplicationState = {
   implements3085: false,
   nativeToken: undefined,
   showHeader: true,
+  isAdmin: false,
+  loginToken: undefined,
+  requestConnection: false,
 };
 
 export default createReducer(initialState, (builder) =>
   builder
+    .addCase(setIsAdmin, (state, { payload: isAdmin }) => {
+      state.isAdmin = isAdmin;
+    })
+    .addCase(setRequestConnection, (state, action) => {
+      state.requestConnection = action.payload;
+    })
     .addCase(setNativeToken, (state, { payload: token }) => {
       state.nativeToken = token;
+    })
+    .addCase(setLoginToken, (state, { payload: token }) => {
+      state.loginToken = token;
     })
     .addCase(updateBlockNumber, (state, action) => {
       const { chainId, blockNumber } = action.payload;

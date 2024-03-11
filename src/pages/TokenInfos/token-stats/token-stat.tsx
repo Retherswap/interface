@@ -1,5 +1,6 @@
 import Column from 'components/Column';
 import Row from 'components/Row';
+import FullWidthSkeleton from 'components/Skeleton/full-width-skeleton';
 import { rgba } from 'polished';
 import React, { useState } from 'react';
 import { ArrowDown, ArrowUp, Info } from 'react-feather';
@@ -35,11 +36,13 @@ const InfoTooltip = styled.div<{ darkMode: boolean }>`
 export default function TokenStat({
   title,
   value,
+  loading,
   percentChange,
   info,
 }: {
   title: string;
-  value: string;
+  value: string | undefined;
+  loading?: boolean;
   percentChange?: number | undefined;
   info?: string;
 }) {
@@ -81,9 +84,13 @@ export default function TokenStat({
           )}
         </Row>
         <Row style={{ width: '100%', justifyContent: 'space-between' }}>
-          <Fonts.black fontWeight={600} fontSize={25}>
-            {value}
-          </Fonts.black>
+          {loading ? (
+            <Fonts.black fontWeight={600} fontSize={25}>
+              {value}
+            </Fonts.black>
+          ) : (
+            <FullWidthSkeleton width="50%"></FullWidthSkeleton>
+          )}
           {percentChange && (
             <div style={{ display: 'flex' }}>
               {percentChange > 0 ? (

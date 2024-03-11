@@ -1,4 +1,3 @@
-import Row from 'components/Row';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
@@ -7,10 +6,8 @@ import { formatNumber } from 'utils/formatNumber';
 import { AppInfo, PairTransaction } from 'models/schema';
 import { transparentize } from 'polished';
 import Marquee from 'react-fast-marquee';
-import DoubleCurrencyLogo from 'components/DoubleLogo';
-import { useDefaultTokens } from 'hooks/Tokens';
-import { HideSmall } from 'components/Hide/hide-small';
 import { apiUrl } from 'configs/server';
+import DexStatsTransactionRow from './dex-stats-transaction-row';
 const DexStatsSectionComponent = styled.div`
   position: relative;
   display: flex;
@@ -34,16 +31,6 @@ const TransactionContainer = styled.div`
   gap: 1em;
   width: 100%;
   margin-left: 1em;
-`;
-
-const TransactionRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1em;
-  padding: 0.75em 1.25em;
-  border-radius: 1.5em;
-  background-color: ${({ theme }) => theme.bg3};
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
 `;
 
 const Title = styled(Fonts.black)`
@@ -88,8 +75,7 @@ export default function DexStatsSection({ appInfos }: { appInfos?: AppInfo }) {
     };
     fetchRetherInfo();
   }, []);
-  const totalTVL = appInfos?.totalTvl?.[0].reserveUsd;
-  const defaultTokens = useDefaultTokens();
+  const totalTVL = appInfos?.totalTvl?.[0]?.reserveUsd;
   return (
     <DexStatsSectionComponent>
       <Column style={{ textAlign: 'center', alignItems: 'center', gap: '3em' }}>
@@ -111,7 +97,7 @@ export default function DexStatsSection({ appInfos }: { appInfos?: AppInfo }) {
               Total Transactions
             </Fonts.blue>
             <Fonts.blue2 fontSize={40} fontWeight={800}>
-              {formatNumber(appInfos?.totalTransactions, { reduce: false })}
+              {formatNumber(appInfos?.totalTransactions, { reduce: false, decimals: 0 })}
             </Fonts.blue2>
           </Column>
           <Column style={{ alignItems: 'center' }}>
@@ -126,24 +112,10 @@ export default function DexStatsSection({ appInfos }: { appInfos?: AppInfo }) {
         <MarqueeContainer style={{ maxWidth: '1000px', padding: '8px' }}>
           <TransactionContainer>
             {transactions.map((transaction, index) => (
-              <TransactionRow key={`marquee-transaction-${transaction.id}`}>
-                <DoubleCurrencyLogo
-                  currency0={defaultTokens[transaction.inputToken.address]}
-                  currency1={defaultTokens[transaction.outputToken.address]}
-                  size={35}
-                />
-                <Fonts.black fontSize={18}>
-                  <Row style={{ gap: '5px' }}>
-                    <HideSmall>
-                      {transaction.inputToken.symbol}/{transaction.outputToken.symbol} :
-                    </HideSmall>
-                    $
-                    {formatNumber(Number(transaction.inputTokenUsdQuote) * Number(transaction.inputAmount), {
-                      reduce: false,
-                    })}
-                  </Row>
-                </Fonts.black>
-              </TransactionRow>
+              <DexStatsTransactionRow
+                key={`marquee-transaction-${transaction.id}`}
+                transaction={transaction}
+              ></DexStatsTransactionRow>
             ))}
           </TransactionContainer>
         </MarqueeContainer>

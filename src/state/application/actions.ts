@@ -42,4 +42,7 @@ export const addPopup = createAction<{ key?: string; removeAfterMs?: number | nu
 export const removePopup = createAction<{ key: string }>('application/removePopup');
 export const setImplements3085 = createAction<{ implements3085: boolean }>('application/setImplements3085');
 export const setNativeToken = createAction<TokenModel | undefined>('application/setNativeToken');
+export const setLoginToken = createAction<string | undefined>('application/setLoginToken');
+export const setIsAdmin = createAction<boolean>('application/setIsAdmin');
+export const setRequestConnection = createAction<boolean>('application/setRequestConnection');
 export const setShowHeader = createAction<boolean>('application/setShowHeader');

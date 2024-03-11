@@ -8,7 +8,6 @@ import { ArrowDown, ArrowUp } from 'react-feather';
 import { transparentize } from 'polished';
 import useTheme from 'hooks/useTheme';
 import CurrencyLogo from 'components/CurrencyLogo';
-import { useDefaultTokens } from 'hooks/Tokens';
 import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
 import { ShowUltraSmall } from 'components/Hide/show-ultra-small';
 import AverageChartIcon from '../../../assets/svg/average-chart-icon.svg';
@@ -18,6 +17,8 @@ import { useIsDarkMode } from 'state/user/hooks';
 import Skeleton from 'react-loading-skeleton';
 import { apiUrl } from 'configs/server';
 import { useTokenSymbol } from 'hooks/useTokenSymbol';
+import { useCurrency } from 'hooks/useCurrency';
+import DoubleCurrencyLogo from 'components/DoubleLogo';
 
 const TokenBalancePriceContainer = styled.div`
   display: flex;
@@ -71,29 +72,29 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
     };
     fetchInfo();
   }, [balance]);
-  const [tokenPrice, setTokenPrice] = useState<number | undefined>(undefined);
-  useMemo(() => {
-    if (balance?.token.nativeQuote && nativeToken?.usdPrice) {
-      setTokenPrice(Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
+  const tokenPrice = useMemo(() => {
+    if (!balance?.token.nativeQuote || !nativeToken?.usdPrice) {
+      return;
     }
+    return Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice);
   }, [balance, nativeToken]);
-  const [change, setChange] = useState<number | undefined>(undefined);
-  useMemo(() => {
+  const change = useMemo(() => {
     if (!tokenPrice || !price) {
       return;
     }
-    setChange((tokenPrice / Number(price.closeUsd ?? 0)) * 100 - 100);
+    return (tokenPrice / Number(price.closeUsd ?? 0)) * 100 - 100;
   }, [price, tokenPrice]);
-  const [avgChange, setAvgChange] = useState<number | undefined>(undefined);
-  useMemo(() => {
+  const avgChange = useMemo(() => {
     if (!balance || !tokenPrice) {
       return;
     }
-    setAvgChange((tokenPrice / Number(balance.averagePrice?.usdQuote ?? 0)) * 100 - 100);
+    return (tokenPrice / Number(balance.averagePrice?.usdQuote ?? 0)) * 100 - 100;
   }, [balance, tokenPrice]);
   const theme = useTheme();
   const isDarkMode = useIsDarkMode();
-  const defaultTokens = useDefaultTokens();
+  const currency = useCurrency(balance?.token.address);
+  const currency0 = useCurrency(balance?.token?.lpPair?.token0.address);
+  const currency1 = useCurrency(balance?.token?.lpPair?.token1.address);
   const symbol = useTokenSymbol(balance?.token);
   return (
     <TokenBalancePriceContainer>
@@ -101,7 +102,11 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
         <PriceContainer>
           <Row style={{ gap: '5px' }}>
             <HideUltraSmall style={{ height: '25px' }}>
-              <CurrencyLogo currency={defaultTokens[balance?.token.address ?? '']} size="25px"></CurrencyLogo>
+              {balance?.token?.isLP ? (
+                <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={25}></DoubleCurrencyLogo>
+              ) : (
+                <CurrencyLogo currency={currency} size="25px"></CurrencyLogo>
+              )}
             </HideUltraSmall>
             {balance ? (
               <>

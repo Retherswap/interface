@@ -1,5 +1,5 @@
 import { TokenModel } from 'models/TokenModel';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
 import { TokenInfosCard } from '../token-infos-card';
@@ -57,13 +57,16 @@ const TokenChartTab = styled.div<{ active?: boolean }>`
   padding: 1em;
   text-align: center;
   transition: background-color 0.4s;
-  border-radius: 2rem 2rem 0 0;
+  border-radius: 1.5em 1.5em 0 0;
 `;
 
-export default function TokenStatContainer({ token }: { token: TokenModel }) {
+export default function TokenStatContainer({ token }: { token?: TokenModel }) {
   const [pairs, setPairs] = useState<PairModel[]>([]);
 
   useEffect(() => {
+    if (!token) {
+      return;
+    }
     const fetchInfo = () => {
       return fetch(`${apiUrl}/pairs/tokens/${token.address}`)
         .then((res) => res.json())
@@ -73,23 +76,33 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
         });
     };
     fetchInfo();
-  }, [token.address]);
-  const volume24h = token.volume
-    .filter((tokenVolume) => {
-      return new Date(tokenVolume.date).getTime() > new Date().getTime() - 24 * 60 * 60 * 1000;
-    })
-    .reduce((acc, volume) => {
-      return acc + Number(volume.usdVolume);
-    }, 0);
+  }, [token]);
+  const volume24h = useMemo(() => {
+    if (!token) {
+      return undefined;
+    }
+    return token.volume
+      .filter((tokenVolume) => {
+        return new Date(tokenVolume.date).getTime() > new Date().getTime() - 24 * 60 * 60 * 1000;
+      })
+      .reduce((acc, volume) => {
+        return acc + Number(volume.usdVolume);
+      }, 0);
+  }, [token]);
 
-  const volume7d = pairs.reduce((acc, pair) => {
-    const volume = Number(
-      pair.idToken0 === token.id
-        ? pair.volume.reduce((acc, volume) => acc + Number(volume.token0UsdVolume), 0)
-        : pair.volume.reduce((acc, volume) => acc + Number(volume.token1UsdVolume), 0)
-    );
-    return acc + volume;
-  }, 0);
+  const volume7d = useMemo(() => {
+    if (!pairs || !token) {
+      return undefined;
+    }
+    return pairs.reduce((acc, pair) => {
+      const volume = Number(
+        pair.idToken0 === token.id
+          ? pair.volume.reduce((acc, volume) => acc + Number(volume.token0UsdVolume), 0)
+          : pair.volume.reduce((acc, volume) => acc + Number(volume.token1UsdVolume), 0)
+      );
+      return acc + volume;
+    }, 0);
+  }, [pairs, token]);
   const nativeToken = useNativeToken();
   const [activeTab, setActiveTab] = useState(1);
   return (
@@ -103,25 +116,51 @@ export default function TokenStatContainer({ token }: { token: TokenModel }) {
         >
           <SwiperSlide>
             <Column style={{ gap: '1.5em' }}>
-              <TokenStat title="TVL" value={`$${formatNumber(token.lastTvl?.reserveUsd)}`}></TokenStat>
-              <TokenStat title="Volume 24H" value={`$${formatNumber(volume24h)}`}></TokenStat>
-              <TokenStat title="Volume 7D" value={`$${formatNumber(volume7d)}`}></TokenStat>
-              <TokenStat title="Holders" value={token.holders} info="Users holding more than 1 token"></TokenStat>
+              <TokenStat
+                title="TVL"
+                value={`$${formatNumber(token?.lastTvl?.reserveUsd)}`}
+                loading={token !== undefined}
+              ></TokenStat>
+              <TokenStat
+                title="Volume 24H"
+                value={`$${formatNumber(volume24h)}`}
+                loading={volume24h !== undefined}
+              ></TokenStat>
+              <TokenStat
+                title="Volume 7D"
+                value={`$${formatNumber(volume7d)}`}
+                loading={volume7d !== undefined}
+              ></TokenStat>
+              <TokenStat
+                title="Holders"
+                value={token?.holders}
+                info="Users holding more than 1 token"
+                loading={token !== undefined}
+              ></TokenStat>
             </Column>
           </SwiperSlide>
           <SwiperSlide>
             <Column style={{ gap: '1.5em' }}>
-              <TokenStat title="Total supply" value={formatNumber(token.totalSupply)}></TokenStat>
-              <TokenStat title="Decimals" value={`${token.decimals}`}></TokenStat>
-              <TokenStat title="Transactions 24H" value="-"></TokenStat>
               <TokenStat
-                title="Fully diluted market cap"
+                title="Circulating supply"
+                value={formatNumber(token?.circulatingSupply)}
+                loading={token !== undefined}
+              ></TokenStat>
+              <TokenStat
+                title="Total supply"
+                value={formatNumber(token?.totalSupply)}
+                loading={token !== undefined}
+              ></TokenStat>
+              <TokenStat
+                title="Market cap"
                 value={formatNumber(
-                  Number(token.totalSupply) *
-                    Number(token.nativeQuote) *
+                  Number(token?.circulatingSupply) *
+                    Number(token?.nativeQuote) *
                     Number(nativeToken?.nativeToken?.usdPrice ?? 0)
                 )}
+                loading={token !== undefined}
               ></TokenStat>
+              <TokenStat title="Decimals" value={`${token?.decimals}`} loading={token !== undefined}></TokenStat>
             </Column>
           </SwiperSlide>
         </Swiper>

@@ -24,8 +24,7 @@ export default function AccountBalanceChart({ balances }: { balances?: Balance[]
   const findNearestPrice = (prices: TokenPrice[], date: Date) => {
     let start = 0;
     let end = prices.length - 1;
-    let max = 0;
-    while (start <= end && max < 10) {
+    while (start <= end) {
       let mid = Math.floor((start + end) / 2);
       if (new Date(prices[mid].date).getTime() === date.getTime()) {
         return prices[mid];
@@ -34,7 +33,6 @@ export default function AccountBalanceChart({ balances }: { balances?: Balance[]
       } else {
         end = mid - 1;
       }
-      ++max;
     }
     if (start >= prices.length) return prices[prices.length - 1];
     if (end < 0) return prices[0];

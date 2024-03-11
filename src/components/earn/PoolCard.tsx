@@ -63,6 +63,7 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
 `;
 
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
+  console.log('PoolCard', stakingInfo);
   const token0 = stakingInfo.tokens[0];
   const token1 = stakingInfo.tokens[1];
 
@@ -173,8 +174,8 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                     ? stakingInfo.active
                       ? `${stakingInfo.rewardRate
                           ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                          ?.toSignificant(4, { groupSeparator: ',' })} RETHER / week`
-                      : '0 RETHER / week'
+                          ?.toSignificant(4, { groupSeparator: ',' })} ${stakingInfo.rewardToken.symbol} / week`
+                      : `0 ${stakingInfo.rewardToken.symbol} / week`
                     : '-'}
                 </Fonts.black>
               </RowBetween>

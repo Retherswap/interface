@@ -8,6 +8,7 @@ export interface TokenModel {
   symbol: string;
   decimals: number;
   totalSupply: string;
+  circulatingSupply: string;
   address: string;
   idChain: number;
   usdPrice: string;

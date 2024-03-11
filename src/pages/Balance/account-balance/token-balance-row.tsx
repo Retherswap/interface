@@ -1,6 +1,6 @@
 import CurrencyLogo from 'components/CurrencyLogo';
 import Row from 'components/Row';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
 import Column from 'components/Column';
@@ -16,6 +16,8 @@ import DoubleCurrencyLogo from 'components/DoubleLogo';
 import { useCurrency } from 'hooks/useCurrency';
 import { useTokenName } from 'hooks/useTokenName';
 import { useTokenSymbol } from 'hooks/useTokenSymbol';
+import { useETHBalances } from 'state/wallet/hooks';
+import { useActiveWeb3React } from 'hooks';
 
 const TokenBalanceRowContainer = styled.div`
   display: flex;
@@ -81,29 +83,24 @@ const TokenCount = styled(Fonts.darkGray)`
 
 export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
   const { nativeToken } = useNativeToken();
-  const [usdBalance, setUsdBalance] = useState<number | undefined>(undefined);
-  useMemo(() => {
-    if (!balance || !nativeToken) {
+  const web3 = useActiveWeb3React();
+  const userEthBalance = useETHBalances(web3.account ? [web3.account] : [])?.[web3.account ?? ''];
+  const totalBalance = useMemo(() => {
+    if (!balance) {
       return;
     }
-    /*if (balance.token.isLP) {
-      const token0 = balance.token.lpPair?.token0;
-      const token1 = balance.token.lpPair?.token1;
-      if (!token0 || !token1) {
-        return;
-      }
-      setUsdBalance(
-        Number(balance.balance) *
-          ((Number(balance.token.lpPair?.token0.nativeQuote) * Number(nativeToken.usdPrice) +
-            Number(balance.token.lpPair?.token1.nativeQuote) * Number(nativeToken.usdPrice)) /
-            2)
-      );
+    let totalBalance = Number(balance.balance);
+    if (balance.token.isNative && userEthBalance) {
+      totalBalance += Number(userEthBalance.toExact());
+    }
+    return totalBalance;
+  }, [balance, userEthBalance]);
+  const usdBalance = useMemo(() => {
+    if (totalBalance === undefined || nativeToken === undefined || balance === undefined) {
       return;
-    } else {
-      setUsdBalance(Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
-    }*/
-    setUsdBalance(Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
-  }, [nativeToken, setUsdBalance, balance]);
+    }
+    return totalBalance * Number(balance.token.nativeQuote) * Number(nativeToken?.usdPrice);
+  }, [nativeToken, balance, totalBalance]);
   const size = useWindowSize();
   const currency0 = useCurrency(balance?.token?.lpPair?.token0.address);
   const currency1 = useCurrency(balance?.token?.lpPair?.token1.address);
@@ -155,7 +152,7 @@ export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
           </USDAmount>
           <TokenCount>
             {balance ? (
-              `${formatNumber(balance?.balance, { reduce: (size?.width ?? 0) < 500, maxDecimals: 2 })} ${symbol}`
+              `${formatNumber(totalBalance, { reduce: (size?.width ?? 0) < 500, maxDecimals: 2 })} ${symbol}`
             ) : (
               <>
                 <HideUltraSmall>

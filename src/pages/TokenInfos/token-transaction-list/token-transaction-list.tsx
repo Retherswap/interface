@@ -19,10 +19,13 @@ export const Divider = styled.div`
 export const RowDivider = styled(Divider)`
   height: 1px;
 `;
-export default function TokenTransactionList({ token }: { token: TokenModel }) {
+export default function TokenTransactionList({ token }: { token?: TokenModel }) {
   const elementsPerPage = 10;
   const [transactions, setTransactions] = useState<PairTransactionModel[]>([]);
   useEffect(() => {
+    if (!token) {
+      return;
+    }
     const fetchInfo = () => {
       return fetch(`${apiUrl}/pair_transactions/tokens/${token.address}`)
         .then((res) => res.json())
@@ -32,7 +35,7 @@ export default function TokenTransactionList({ token }: { token: TokenModel }) {
         });
     };
     fetchInfo();
-  }, [token.address]);
+  }, [token]);
   const [page, setPage] = useState(1);
   return (
     <Column style={{ width: '100%' }}>
@@ -55,12 +58,19 @@ export default function TokenTransactionList({ token }: { token: TokenModel }) {
           <Fonts.blue fontWeight={500}>Time</Fonts.blue>
         </TokenTransactionListGrid>
         <Divider></Divider>
-        {transactions.slice((page - 1) * elementsPerPage, page * elementsPerPage).map((transaction) => (
-          <Column key={`token-transaction-row-${transaction.id}`} style={{ gap: '1em' }}>
-            <TokenTransactionRow token={token} pairTransaction={transaction}></TokenTransactionRow>
-            <RowDivider></RowDivider>
-          </Column>
-        ))}
+        {transactions.length > 0
+          ? transactions.slice((page - 1) * elementsPerPage, page * elementsPerPage).map((transaction) => (
+              <Column key={`token-transaction-row-${transaction.id}`} style={{ gap: '1em' }}>
+                <TokenTransactionRow token={token} pairTransaction={transaction}></TokenTransactionRow>
+                <RowDivider></RowDivider>
+              </Column>
+            ))
+          : Array.from({ length: 10 }).map((_, index) => (
+              <Column key={`skeleton-token-transaction-row-${index}`} style={{ gap: '1em' }}>
+                <TokenTransactionRow></TokenTransactionRow>
+                <RowDivider />
+              </Column>
+            ))}
         <Paginator
           page={page}
           elementsPerPage={elementsPerPage}
