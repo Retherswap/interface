@@ -55,7 +55,10 @@ export default function AdminTokenDashboard() {
   const [search, setSearch] = useState('');
   const filteredTokens = useMemo(() => {
     return tokens.filter((token: any) => {
-      return token.name.toLowerCase().includes(search.toLowerCase());
+      return (
+        token.name.toLowerCase().includes(search.toLowerCase()) ||
+        token.address.toLowerCase().includes(search.toLowerCase())
+      );
     });
   }, [tokens, search]);
   return (
