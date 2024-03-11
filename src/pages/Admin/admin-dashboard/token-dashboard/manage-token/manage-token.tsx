@@ -73,7 +73,8 @@ export default function AdminManageToken() {
     <Column style={{ gap: '1.5em' }}>
       {address}
       <RowBetween>
-        <Fonts.black>Token Name</Fonts.black> <input type="text" value={name}></input>
+        <Fonts.black>Token Name</Fonts.black>{' '}
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)}></input>
       </RowBetween>
       <RowBetween>
         <Fonts.black>Is Listed</Fonts.black>
