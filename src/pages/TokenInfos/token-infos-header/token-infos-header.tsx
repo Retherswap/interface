@@ -1,6 +1,5 @@
 import { TokenModel } from 'models/TokenModel';
-import React from 'react';
-import { useDefaultTokens } from 'hooks/Tokens';
+import React, { useMemo } from 'react';
 import { CustomLightSpinner, HideExtraSmall, Fonts } from 'theme';
 import Column from 'components/Column';
 import Row from 'components/Row';
@@ -19,6 +18,7 @@ import { formatAddress } from 'utils/formatAddress';
 import useTheme from 'hooks/useTheme';
 import { HideSmall } from 'components/Hide/hide-small';
 import { useCurrency } from 'hooks/useCurrency';
+import FullWidthSkeleton from 'components/Skeleton/full-width-skeleton';
 
 export const AddLiquidityButton = styled(BaseButton)`
   width: 200px;
@@ -68,13 +68,22 @@ const PriceContainer = styled(Row)`
   `};
 `;
 
-export default function TokenInfosHeader({ token }: { token: TokenModel }) {
+export default function TokenInfosHeader({ token }: { token?: TokenModel }) {
   const { nativeToken } = useNativeToken();
-  const lastPrice = Number(
-    token.price.filter((price) => new Date(price.date).getTime() < new Date().getTime() - 24 * 60 * 60 * 1000)?.[0]
-      ?.closeUsd ?? 0
-  );
-  const price = Number(token.nativeQuote) * Number(nativeToken?.usdPrice);
+  const lastPrice = useMemo(() => {
+    if (!token) {
+      return undefined;
+    }
+    return Number(
+      [...token.price]
+        .sort((a, b) => {
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        })
+        .filter((price) => new Date(price.date).getTime() < new Date().getTime() - 24 * 60 * 60 * 1000)?.[0]
+        ?.closeUsd ?? 0
+    );
+  }, [token]);
+  const price = Number(token?.nativeQuote) * Number(nativeToken?.usdPrice);
   let formattedPrice = price.toString();
   let index = formattedPrice.indexOf('.') + 1;
   while (index < formattedPrice.length && (formattedPrice[index] === '0' || index < formattedPrice.indexOf('.') + 1)) {
@@ -82,12 +91,15 @@ export default function TokenInfosHeader({ token }: { token: TokenModel }) {
   }
   formattedPrice = formattedPrice.slice(0, index + 2);
   const priceChange = lastPrice ? (price / lastPrice) * 100 - 100 : 0;
-  const currency = useCurrency(token.address);
+  const currency = useCurrency(token?.address);
   const { account } = useActiveWeb3React();
-  const tokenBalance = useTokenBalance(account ?? undefined, new Token(token.idChain, token.address, token.decimals));
+  const tokenBalance = useTokenBalance(
+    account ?? undefined,
+    token ? new Token(token.idChain, token.address, token.decimals) : undefined
+  );
   const theme = useTheme();
   const copyAddress = () => {
-    navigator.clipboard.writeText(token.address);
+    navigator.clipboard.writeText(token?.address ?? 'Error');
   };
   return (
     <Column style={{ gap: '3em', width: '100%' }}>
@@ -105,20 +117,24 @@ export default function TokenInfosHeader({ token }: { token: TokenModel }) {
             </Fonts.blue>
           </Link>
           <ChevronRight color="darkgray" size={15}></ChevronRight>
-          <Fonts.black fontWeight={500} fontSize={14} style={{ textOverflow: 'ellipsis', textWrap: 'nowrap' }}>
-            {token.symbol} <HideExtraSmall>({formatAddress(token.address, 4, 4)})</HideExtraSmall>
-          </Fonts.black>
+          {token ? (
+            <Fonts.black fontWeight={500} fontSize={14} style={{ textOverflow: 'ellipsis', textWrap: 'nowrap' }}>
+              {token.symbol} <HideExtraSmall>({formatAddress(token.address, 4, 4)})</HideExtraSmall>
+            </Fonts.black>
+          ) : (
+            <FullWidthSkeleton width="75%"></FullWidthSkeleton>
+          )}
         </Row>
         <Row style={{ justifyContent: 'end', gap: '10px' }}>
           <HideExtraSmall>
             <a
-              href={`https://explorer.hypra.network/address/${token.address}`}
+              href={`https://explorer.hypra.network/address/${token?.address}`}
               target="_blank"
               rel="noreferrer noopener"
               style={{ textDecoration: 'none' }}
             >
               <Fonts.blue fontWeight={800} fontSize={14}>
-                View on hypra explorer
+                View on explorer
               </Fonts.blue>
             </a>
           </HideExtraSmall>
@@ -136,29 +152,39 @@ export default function TokenInfosHeader({ token }: { token: TokenModel }) {
           <Column style={{ gap: '10px' }}>
             <Row style={{ gap: '10px' }}>
               <CurrencyLogo currency={currency} size="40px"></CurrencyLogo>
-              <TitleContainer>
-                <Fonts.black fontWeight={800} fontSize={36}>
-                  {token.name}
-                </Fonts.black>
-                <Fonts.darkGray fontWeight={500}>({token.symbol})</Fonts.darkGray>
-              </TitleContainer>
+              {token ? (
+                <TitleContainer>
+                  <Fonts.black fontWeight={800} fontSize={36}>
+                    {token.name}
+                  </Fonts.black>
+                  <Fonts.darkGray fontWeight={500}>({token.symbol})</Fonts.darkGray>
+                </TitleContainer>
+              ) : (
+                <FullWidthSkeleton width="75%"></FullWidthSkeleton>
+              )}
             </Row>
             <PriceContainer style={{ marginLeft: '50px', gap: '10px' }}>
-              <Row>
-                <Fonts.black fontWeight={600} fontSize={25}>
-                  ${formattedPrice}
-                </Fonts.black>
-              </Row>
-              {priceChange > 0 ? (
-                <Row>
-                  <Fonts.green fontSize={25}>{priceChange.toFixed(2)}%</Fonts.green>
-                  <ArrowUp color="green"></ArrowUp>
-                </Row>
+              {token ? (
+                <>
+                  <Row>
+                    <Fonts.black fontWeight={600} fontSize={25}>
+                      ${formattedPrice}
+                    </Fonts.black>
+                  </Row>
+                  {priceChange > 0 ? (
+                    <Row>
+                      <Fonts.green fontSize={25}>{priceChange.toFixed(2)}%</Fonts.green>
+                      <ArrowUp color="green"></ArrowUp>
+                    </Row>
+                  ) : (
+                    <Row>
+                      <Fonts.red fontSize={25}>{priceChange.toFixed(2)}%</Fonts.red>
+                      <ArrowDown color="red"></ArrowDown>
+                    </Row>
+                  )}{' '}
+                </>
               ) : (
-                <Row>
-                  <Fonts.red fontSize={25}>{priceChange.toFixed(2)}%</Fonts.red>
-                  <ArrowDown color="red"></ArrowDown>
-                </Row>
+                <FullWidthSkeleton width="75%"></FullWidthSkeleton>
               )}
             </PriceContainer>
             <Row style={{ marginLeft: '50px' }}>
@@ -175,10 +201,10 @@ export default function TokenInfosHeader({ token }: { token: TokenModel }) {
         </Row>
         <HideSmall>
           <Row style={{ justifyContent: 'end', gap: '10px' }}>
-            <StyledLink to={`/add/${token.address}`}>
+            <StyledLink to={`/add/${token?.address}`}>
               <AddLiquidityButton>Add liquidity</AddLiquidityButton>
             </StyledLink>
-            <StyledLink to={`/swap?outputCurrency=${token.address}`}>
+            <StyledLink to={`/swap?outputCurrency=${token?.address}`}>
               <TradeButton>Trade</TradeButton>
             </StyledLink>
           </Row>

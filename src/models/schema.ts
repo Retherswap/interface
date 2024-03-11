@@ -48,6 +48,7 @@ export interface Token {
   usdPrice: number;
   nativeQuote: number;
   isNative: boolean;
+  isListed: boolean;
   isLP: boolean;
   idLastTvl: number | null;
   holders: number;
@@ -65,6 +66,15 @@ export interface Token {
   outputTransactions: PairTransaction[] | null;
   balance: Balance[] | null;
   lpPair: Pair | null;
+  excludedSupplyAddresses: ExcludedSupplyAddresses[] | null;
+}
+
+export interface ExcludedSupplyAddresses {
+  id: number;
+  idAddress: number;
+  idToken: number;
+  token: Token;
+  address: Address;
 }
 
 export interface TokenPrice {

@@ -14,7 +14,6 @@ export default function TokenInfos({
   },
 }: Readonly<RouteComponentProps<{ address: string }>>) {
   const [token, setToken] = useState<TokenModel | undefined>(undefined);
-
   useEffect(() => {
     const fetchInfo = () => {
       return fetch(`${apiUrl}/tokens/address/${address}`)
@@ -28,14 +27,10 @@ export default function TokenInfos({
   }, [address]);
   return (
     <Column style={{ gap: '4em', width: '100%', maxWidth: '1200px', alignItems: 'center', padding: '1em' }}>
-      {token && (
-        <>
-          <TokenInfosHeader token={token}></TokenInfosHeader>
-          <TokenStatContainer token={token}></TokenStatContainer>
-          <TokenPairList token={token}></TokenPairList>
-          <TokenTransactionList token={token}></TokenTransactionList>
-        </>
-      )}
+      <TokenInfosHeader token={token}></TokenInfosHeader>
+      <TokenStatContainer token={token}></TokenStatContainer>
+      <TokenPairList token={token}></TokenPairList>
+      <TokenTransactionList token={token}></TokenTransactionList>
     </Column>
   );
 }

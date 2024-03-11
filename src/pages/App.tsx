@@ -40,6 +40,8 @@ import AdminDashboard from './Admin/admin-dashboard/admin-dashboard';
 import AdminTokenDashboard from './Admin/admin-dashboard/token-dashboard/token-dashboard';
 import AdminConnectModal from 'components/Admin/connect-modal/connect-modal';
 import AdminRouteGuard from 'guards/admin-route-guard';
+import '../styles/max-container.css';
+import AdminManageToken from './Admin/admin-dashboard/token-dashboard/manage-token/manage-token';
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -94,6 +96,11 @@ export default function App() {
                   <Route exact strict path="/admin/tokens">
                     <AdminRouteGuard>
                       <AdminTokenDashboard></AdminTokenDashboard>
+                    </AdminRouteGuard>
+                  </Route>
+                  <Route exact strict path="/admin/token/:address">
+                    <AdminRouteGuard>
+                      <AdminManageToken></AdminManageToken>
                     </AdminRouteGuard>
                   </Route>
                   <Route exact strict path="/home" component={Home} />

@@ -4,7 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 import { formatNumber } from 'utils/formatNumber';
 import { useIsDarkMode } from 'state/user/hooks';
 
-export default function TokenPriceChart({ token }: { token: TokenModel }) {
+export default function TokenPriceChart({ token }: { token?: TokenModel }) {
   const isDarkMode = useIsDarkMode();
   /*const hourPrices: { [date: number]: { min: number; max: number } } = {};
   for (const price of token.price) {
@@ -20,18 +20,6 @@ export default function TokenPriceChart({ token }: { token: TokenModel }) {
       hourPrices[date.getTime()].max = Math.max(hourPrices[date.getTime()].max, price.usdPrice);
     }
   }*/
-  const state = {
-    series: [
-      {
-        name: 'Price',
-        data: token.price
-          .map((price) => {
-            return { x: new Date(price.date), y: [price.openUsd, price.highUsd, price.lowUsd, price.closeUsd] };
-          })
-          .sort((a, b) => (a.x.getTime() > b.x.getTime() ? 1 : -1)),
-      },
-    ],
-  };
 
   return (
     <ReactApexChart
@@ -86,7 +74,18 @@ export default function TokenPriceChart({ token }: { token: TokenModel }) {
         },
       }}
       height="100%"
-      series={state.series}
+      series={
+        token
+          ? [
+              {
+                name: 'Price',
+                data: token.price.map((price) => {
+                  return { x: new Date(price.date), y: [price.openUsd, price.highUsd, price.lowUsd, price.closeUsd] };
+                }),
+              },
+            ]
+          : []
+      }
     ></ReactApexChart>
   );
 }

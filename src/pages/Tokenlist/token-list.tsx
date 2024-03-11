@@ -8,8 +8,8 @@ import Column from 'components/Column';
 import Paginator from 'components/Paginator/Paginator';
 import { HideMedium } from 'components/Hide/hide-medium';
 import { HideSmall } from 'components/Hide/hide-small';
-import { HideExtraSmall } from 'components/Hide/hide-extra-small';
 import { apiUrl } from 'configs/server';
+import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
 
 export const Wrapper = styled.div`
   display: grid;
@@ -37,7 +37,7 @@ export default function TokenList() {
   const elementsPerPage = 10;
   const [tokens, setTokens] = useState<TokenModel[]>([]);
   const fetchInfo = () => {
-    return fetch(`${apiUrl}/tokens`)
+    return fetch(`${apiUrl}/tokens/listed_tokens`)
       .then((res) => res.json())
       .then((d) => setTokens(d))
       .catch((e) => {
@@ -50,11 +50,11 @@ export default function TokenList() {
   const [page, setPage] = useState(1);
   return (
     <div style={{ padding: '1em' }}>
-      <Wrapper id="token-list-page">
+      <Wrapper id="token-list-page" style={{ borderRadius: '1.5em' }}>
         <TokenListGrid>
-          <HideExtraSmall>
+          <HideUltraSmall>
             <Fonts.blue fontWeight={600}>#</Fonts.blue>
-          </HideExtraSmall>
+          </HideUltraSmall>
           <Fonts.blue fontWeight={600}>Token</Fonts.blue>
           <Fonts.blue fontWeight={600}>Price</Fonts.blue>
           <HideMedium>
@@ -68,12 +68,19 @@ export default function TokenList() {
           </HideSmall>
         </TokenListGrid>
         <Divider />
-        {tokens &&
-          tokens.slice((page - 1) * elementsPerPage, page * elementsPerPage).map((token, index) => (
-            <Column key={`token-row-${token.id}`} style={{ gap: '1em' }}>
-              <TokenListRow index={index + 1} token={token} /> <RowDivider />
-            </Column>
-          ))}
+        {tokens.length > 0
+          ? tokens.slice((page - 1) * elementsPerPage, page * elementsPerPage).map((token, index) => (
+              <Column key={`token-row-${token.id}`} style={{ gap: '1em' }}>
+                <TokenListRow index={(page - 1) * elementsPerPage + index + 1} token={token} />
+                <RowDivider />
+              </Column>
+            ))
+          : Array.from({ length: 10 }).map((_, index) => (
+              <Column key={`skeleton-token-row-${index}`} style={{ gap: '1em' }}>
+                <TokenListRow index={index + 1}></TokenListRow>
+                <RowDivider />
+              </Column>
+            ))}
         <Paginator
           page={page}
           elementsPerPage={elementsPerPage}

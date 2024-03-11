@@ -1,4 +1,3 @@
-import Row from 'components/Row';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
@@ -7,11 +6,7 @@ import { formatNumber } from 'utils/formatNumber';
 import { AppInfo, PairTransaction } from 'models/schema';
 import { transparentize } from 'polished';
 import Marquee from 'react-fast-marquee';
-import DoubleCurrencyLogo from 'components/DoubleLogo';
-import { useDefaultTokens } from 'hooks/Tokens';
-import { HideSmall } from 'components/Hide/hide-small';
 import { apiUrl } from 'configs/server';
-import { useCurrency } from 'hooks/useCurrency';
 import DexStatsTransactionRow from './dex-stats-transaction-row';
 const DexStatsSectionComponent = styled.div`
   position: relative;
@@ -36,16 +31,6 @@ const TransactionContainer = styled.div`
   gap: 1em;
   width: 100%;
   margin-left: 1em;
-`;
-
-const TransactionRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1em;
-  padding: 0.75em 1.25em;
-  border-radius: 1.5em;
-  background-color: ${({ theme }) => theme.bg3};
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
 `;
 
 const Title = styled(Fonts.black)`

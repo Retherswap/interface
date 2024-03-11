@@ -13,6 +13,8 @@ import useTheme from 'hooks/useTheme';
 import NoStyleLink from 'components/Link/no-style-link';
 import Skeleton from 'react-loading-skeleton';
 import DepositModal from '../deposit-modal/deposit-modal';
+import { useActiveWeb3React } from 'hooks';
+import { useETHBalances } from 'state/wallet/hooks';
 
 const BalanceHeaderButtonContainer = styled.div`
   display: flex;
@@ -62,52 +64,53 @@ const BalanceTitle = styled(Fonts.black)`
 export default function AccountBalanceHeader({ balances }: { balances: Balance[] }) {
   const [depositModalOpen, setDepositModalOpen] = useState(false);
   const { nativeToken } = useNativeToken();
-  const [totalBalance, setTotalBalance] = useState<number>(0);
-  const [change24h, setChange24h] = useState<number | undefined>(undefined);
-  useMemo(() => {
+  const web3 = useActiveWeb3React();
+  const userEthBalance = useETHBalances(web3.account ? [web3.account] : [])?.[web3.account ?? ''];
+
+  const totalBalance = useMemo(() => {
     if (!nativeToken) {
       return;
     }
-    setTotalBalance(
-      balances.reduce((acc, balance) => {
-        return acc + balance.balance * Number(balance.token.nativeQuote) * Number(nativeToken?.usdPrice);
-      }, 0)
-    );
-  }, [balances, nativeToken]);
-  useMemo(() => {
+    return balances.reduce((acc, balance) => {
+      let amount = Number(balance.balance);
+      if (balance.token.isNative && userEthBalance) {
+        amount += Number(userEthBalance.toExact());
+      }
+      return acc + amount * Number(balance.token.nativeQuote) * Number(nativeToken?.usdPrice);
+    }, 0);
+  }, [userEthBalance, balances, nativeToken]);
+  const change24h = useMemo(() => {
     if (!nativeToken) {
       return;
     }
-    setChange24h(
-      balances.reduce((acc, balance) => {
-        let balance24h: BalanceChange | undefined = undefined;
-        if (balance.balanceChanges) {
-          for (const change of balance.balanceChanges) {
-            if (new Date(change.date).getTime() > Date.now() - 1000 * 60 * 60 * 24) {
-              if (!balance24h || new Date(balance24h.date).getTime() > new Date(change.date).getTime()) {
-                balance24h = change;
-              }
+    return balances.reduce((acc, balance) => {
+      let balance24h: BalanceChange | undefined = undefined;
+      if (balance.balanceChanges) {
+        for (const change of balance.balanceChanges) {
+          if (new Date(change.date).getTime() > Date.now() - 1000 * 60 * 60 * 24) {
+            if (!balance24h || new Date(balance24h.date).getTime() > new Date(change.date).getTime()) {
+              balance24h = change;
             }
           }
         }
-        let price24h: TokenPrice | undefined = undefined;
-        if (balance.token.price) {
-          for (const price of balance.token.price) {
-            if (new Date(price.date).getTime() > Date.now() - 1000 * 60 * 60 * 24) {
-              if (!price24h || new Date(price24h.date).getTime() > new Date(price.date).getTime()) {
-                price24h = price;
-              }
+      }
+      let price24h: TokenPrice | undefined = undefined;
+      if (balance.token.price) {
+        for (const price of balance.token.price) {
+          if (new Date(price.date).getTime() > Date.now() - 1000 * 60 * 60 * 24) {
+            if (!price24h || new Date(price24h.date).getTime() > new Date(price.date).getTime()) {
+              price24h = price;
             }
           }
         }
-        if (!price24h) return acc;
-        return (
-          acc +
-          Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice) -
-          Number(balance24h ? balance24h.amount : balance?.balance) * Number(price24h.closeUsd)
-        );
-      }, 0)
-    );
+      }
+      if (!price24h) return acc;
+      return (
+        acc +
+        Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice) -
+        Number(balance24h ? balance24h.amount : balance?.balance) * Number(price24h.closeUsd)
+      );
+    }, 0);
   }, [balances, nativeToken]);
   const theme = useTheme();
   return (

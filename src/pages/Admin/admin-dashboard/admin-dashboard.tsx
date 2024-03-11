@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { adminUrl, apiUrl } from 'configs/server';
-import { useSelector } from 'react-redux';
-import { AppState } from 'state';
 const AdminDashboardGrid = styled.div`
   width: 100%;
   max-width: 1200px;

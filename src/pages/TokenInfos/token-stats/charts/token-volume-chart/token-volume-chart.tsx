@@ -1,32 +1,29 @@
 import { TokenModel } from 'models/TokenModel';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatNumber } from 'utils/formatNumber';
 import { useIsDarkMode } from 'state/user/hooks';
+import barChartSkeletonData from 'components/Skeleton/bar-chart-skeleton-data';
 
-export default function TokenVolumeChart({ token }: { token: TokenModel }) {
+export default function TokenVolumeChart({ token }: { token?: TokenModel }) {
   const isDarkMode = useIsDarkMode();
-  const volumeData: { [date: number]: number } = {};
-  for (const volume of token.volume) {
-    const date = new Date(volume.date);
-    date.setHours(0, 0, 0, 0);
-    if (!volumeData[date.getTime()]) {
-      volumeData[date.getTime()] = 0;
+  const [isLoading, setLoading] = useState(true);
+  const volumeData = useMemo(() => {
+    if (!token) {
+      return barChartSkeletonData;
     }
-    volumeData[date.getTime()] += Number(volume.usdVolume);
-  }
-  const state = {
-    series: [
-      {
-        name: 'Volume',
-        data: Object.entries(volumeData)
-          .sort((a, b) => (new Date(a[0]).getTime() > new Date(b[0]).getTime() ? 1 : -1))
-          .map(([date, volume]) => {
-            return volume;
-          }),
-      },
-    ],
-  };
+    const volumeData: { [date: number]: number } = {};
+    for (const volume of token.volume) {
+      const date = new Date(volume.date);
+      date.setHours(0, 0, 0, 0);
+      if (!volumeData[date.getTime()]) {
+        volumeData[date.getTime()] = 0;
+      }
+      volumeData[date.getTime()] += Number(volume.usdVolume);
+    }
+    setLoading(false);
+    return volumeData;
+  }, [token]);
 
   return (
     <ReactApexChart
@@ -61,9 +58,7 @@ export default function TokenVolumeChart({ token }: { token: TokenModel }) {
           },
         },
         xaxis: {
-          categories: Object.keys(volumeData)
-            .map((date) => new Date(Number(date)).toLocaleDateString())
-            .sort((a, b) => (new Date(a).getTime() > new Date(b).getTime() ? 1 : -1)),
+          categories: Object.keys(volumeData).map((date) => new Date(Number(date)).toLocaleDateString()),
           labels: {
             show: false,
           },
@@ -77,18 +72,49 @@ export default function TokenVolumeChart({ token }: { token: TokenModel }) {
             show: false,
           },
         },
+        fill: isLoading
+          ? {
+              type: 'gradient',
+              gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100],
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'gray',
+                    opacity: 0.5,
+                  },
+                  {
+                    offset: 100,
+                    color: 'gray',
+                    opacity: 1,
+                  },
+                ],
+              },
+            }
+          : {},
         dataLabels: {
           enabled: false,
         },
         grid: { show: false },
         tooltip: {
+          enabled: !isLoading,
           style: {
             fontFamily: 'Roboto, sans-serif !important',
           },
         },
       }}
       height="100%"
-      series={state.series}
+      series={[
+        {
+          name: 'Volume',
+          data: Object.entries(volumeData).map(([date, volume]) => {
+            return volume;
+          }),
+        },
+      ]}
     ></ReactApexChart>
   );
 }

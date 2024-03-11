@@ -22,10 +22,13 @@ export const RowDivider = styled(Divider)`
   height: 1px;
 `;
 
-export default function TokenPairList({ token }: { token: TokenModel }) {
+export default function TokenPairList({ token }: { token?: TokenModel }) {
   const elementsPerPage = 10;
   const [pairs, setPairs] = useState<PairModel[]>([]);
   useEffect(() => {
+    if (!token) {
+      return;
+    }
     const fetchInfo = () => {
       return fetch(`${apiUrl}/pairs/tokens/${token.address}`)
         .then((res) => res.json())
@@ -35,7 +38,7 @@ export default function TokenPairList({ token }: { token: TokenModel }) {
         });
     };
     fetchInfo();
-  }, [token.address]);
+  }, [token]);
   const [page, setPage] = useState(1);
   return (
     <Column style={{ width: '100%' }}>
@@ -55,17 +58,24 @@ export default function TokenPairList({ token }: { token: TokenModel }) {
           </HideSmall>
         </TokenPairListGrid>
         <Divider></Divider>
-        {pairs.slice((page - 1) * elementsPerPage, page * elementsPerPage).map((pair, index) => (
-          <Column key={`token-pair-row-${pair.id}`} style={{ gap: '1em' }}>
-            <TokenPairRow
-              index={(page - 1) * elementsPerPage + index + 1}
-              token={token}
-              pair={pair}
-              key={pair.id}
-            ></TokenPairRow>
-            <RowDivider></RowDivider>
-          </Column>
-        ))}
+        {pairs.length > 0
+          ? pairs.slice((page - 1) * elementsPerPage, page * elementsPerPage).map((pair, index) => (
+              <Column key={`token-pair-row-${pair.id}`} style={{ gap: '1em' }}>
+                <TokenPairRow
+                  index={(page - 1) * elementsPerPage + index + 1}
+                  token={token}
+                  pair={pair}
+                  key={pair.id}
+                ></TokenPairRow>
+                <RowDivider></RowDivider>
+              </Column>
+            ))
+          : Array.from({ length: 10 }).map((_, index) => (
+              <Column key={`skeleton-token-pair-row-${index}`} style={{ gap: '1em' }}>
+                <TokenPairRow index={(page - 1) * elementsPerPage + index + 1}></TokenPairRow>
+                <RowDivider />
+              </Column>
+            ))}
         <Paginator
           page={page}
           elementsPerPage={elementsPerPage}

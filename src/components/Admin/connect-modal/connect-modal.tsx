@@ -3,7 +3,7 @@ import Column from 'components/Column';
 import Modal from 'components/Modal';
 import { apiUrl } from 'configs/server';
 import { useActiveWeb3React } from 'hooks/web3';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from 'state';
 import { setIsAdmin, setLoginToken, setRequestConnection } from 'state/application/actions';
@@ -28,7 +28,7 @@ export default function AdminConnectModal() {
         });
     };
     fetchInfo();
-  }, [web3]);
+  }, [web3, dispatch]);
   const connect = useCallback(async () => {
     const token = 'retherswap-token-' + new Date().getTime();
     web3.library
@@ -42,7 +42,7 @@ export default function AdminConnectModal() {
     if (isAdmin && loginToken) {
       dispatch(setRequestConnection(false));
     }
-  }, [loginToken]);
+  }, [loginToken, dispatch, isAdmin]);
   return (
     <Modal isOpen={requestConnection} onDismiss={() => dispatch(setRequestConnection(false))}>
       <Column style={{ alignItems: 'center', gap: '1.5em', padding: '1.5em' }}>

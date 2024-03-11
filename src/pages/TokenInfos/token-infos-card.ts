@@ -6,7 +6,7 @@ export const TokenInfosCard = styled.div`
   position: relative;
   padding: 1.5rem;
   width: 100%;
-  border-radius: 2rem;
+  border-radius: 1.5em;
   box-shadow: 0 0 10px skyblue; /* Use skyblue color for the glow */
   background: ${({ theme }) => theme.bg1};
 `;
