@@ -38,10 +38,6 @@ import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import AppBody from '../AppBody';
 import { ClickableText } from '../Pool/styleds';
 import Loader from '../../components/Loader';
-import { RetherPriceComponent } from 'components/FetchRetherPrice/FetchRetherprice';
-import { PriceComponent } from 'components/FetchHypPrice/FetchHypPrice';
-//import { RetherPriceComponent } from '../../components/FetchRetherPrice/FetchRetherprice'
-//import { PriceComponent } from '../../components/FetchHypPrice/FetchHypPrice'
 
 export default function Swap() {
   const loadedUrlParams = useDefaultsFromURLSearch();
@@ -445,12 +441,6 @@ export default function Swap() {
         </Wrapper>
 
         {trade && <AdvancedSwapDetailsDropdown trade={trade} />}
-        <RowBetween>
-          <RowBetweenPrice>
-            <RetherPriceComponent />
-            <PriceComponent />
-          </RowBetweenPrice>
-        </RowBetween>
       </AppBody>
     </>
   );
