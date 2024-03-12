@@ -23,13 +23,6 @@ export const RowBetween = styled(Row)`
   justify-content: space-between;
 `;
 
-export const RowBetweenPrice= styled(Row)`
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  
-`;
-
 export const RowFlat = styled.div`
   display: flex;
   align-items: flex-end;
