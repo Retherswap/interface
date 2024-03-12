@@ -10,7 +10,7 @@ import Column, { AutoColumn } from '../../components/Column';
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal';
 import CurrencyInputPanel from '../../components/CurrencyInputPanel';
 import { SwapPoolTabs } from '../../components/NavigationTabs';
-import { AutoRow, RowBetween, RowBetweenPrice } from '../../components/Row';
+import { AutoRow, RowBetween } from '../../components/Row';
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee';
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds';
 import TradePrice from '../../components/swap/TradePrice';
