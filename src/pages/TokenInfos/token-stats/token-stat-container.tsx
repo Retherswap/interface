@@ -117,8 +117,12 @@ export default function TokenStatContainer({ token }: { token?: TokenModel }) {
           <SwiperSlide>
             <Column style={{ gap: '1.5em' }}>
               <TokenStat
-                title="TVL"
-                value={`$${formatNumber(token?.lastTvl?.reserveUsd)}`}
+                title="Market cap"
+                value={formatNumber(
+                  Number(token?.circulatingSupply) *
+                    Number(token?.nativeQuote) *
+                    Number(nativeToken?.nativeToken?.usdPrice ?? 0)
+                )}
                 loading={token !== undefined}
               ></TokenStat>
               <TokenStat
@@ -142,6 +146,11 @@ export default function TokenStatContainer({ token }: { token?: TokenModel }) {
           <SwiperSlide>
             <Column style={{ gap: '1.5em' }}>
               <TokenStat
+                title="TVL"
+                value={`$${formatNumber(token?.lastTvl?.reserveUsd)}`}
+                loading={token !== undefined}
+              ></TokenStat>
+              <TokenStat
                 title="Circulating supply"
                 value={formatNumber(token?.circulatingSupply)}
                 loading={token !== undefined}
@@ -149,15 +158,6 @@ export default function TokenStatContainer({ token }: { token?: TokenModel }) {
               <TokenStat
                 title="Total supply"
                 value={formatNumber(token?.totalSupply)}
-                loading={token !== undefined}
-              ></TokenStat>
-              <TokenStat
-                title="Market cap"
-                value={formatNumber(
-                  Number(token?.circulatingSupply) *
-                    Number(token?.nativeQuote) *
-                    Number(nativeToken?.nativeToken?.usdPrice ?? 0)
-                )}
                 loading={token !== undefined}
               ></TokenStat>
               <TokenStat title="Decimals" value={`${token?.decimals}`} loading={token !== undefined}></TokenStat>

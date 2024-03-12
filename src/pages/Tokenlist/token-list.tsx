@@ -64,7 +64,7 @@ export default function TokenList() {
             <Fonts.blue fontWeight={600}>Volume 24H</Fonts.blue>
           </HideMedium>
           <HideSmall>
-            <Fonts.blue fontWeight={600}>TVL</Fonts.blue>
+            <Fonts.blue fontWeight={600}>Market cap</Fonts.blue>
           </HideSmall>
         </TokenListGrid>
         <Divider />

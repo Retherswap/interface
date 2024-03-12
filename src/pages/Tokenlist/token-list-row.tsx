@@ -109,7 +109,7 @@ export default function TokenListRow({ index, token }: { index: number; token?: 
         <HideSmall>
           <Row style={{ gap: '5px' }}>
             {token ? (
-              <Fonts.black fontWeight={500}>${formatNumber(token.lastTvl?.reserveUsd)}</Fonts.black>
+              <Fonts.black fontWeight={500}>${formatNumber(Number(token.circulatingSupply) * price)}</Fonts.black>
             ) : (
               <FullWidthSkeleton width="75%"></FullWidthSkeleton>
             )}
