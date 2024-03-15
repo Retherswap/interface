@@ -126,7 +126,8 @@
     "socket.io-client": "^4.7.4",
     "swiper": "^6.8.4",
     "swr": "^2.2.5",
-    "web3-utils": "1.5.3"
+    "web3-utils": "1.5.3",
+    "charting_library": "git@github.com:tradingview/charting_library.git#2099f2689c68af5c47ce4d0fcab8226370131528"
   },
   "eslintConfig": {
     "extends": "react-app",

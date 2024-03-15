@@ -3,7 +3,24 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatNumber } from 'utils/formatNumber';
 import { useIsDarkMode } from 'state/user/hooks';
-
+import { widget as twWidget, ResolutionString } from 'charting_library/charting_library';
+import { UDFCompatibleDatafeed } from 'charting_library/datafeeds/udf';
+const initOnReady = () => {
+  var widget = ((window as any).tvWidget = new twWidget({
+    //library_path: "https://charting-library.tradingview-widget.com/charting_library/",
+    // debug: true, // uncomment this line to see Library errors and warnings in the console
+    fullscreen: true,
+    symbol: 'AAPL',
+    interval: '1D' as ResolutionString,
+    container: 'tv_chart_container',
+    datafeed: new UDFCompatibleDatafeed('https://demo-feed-data.tradingview.com'),
+    locale: 'en',
+    disabled_features: [],
+    enabled_features: [],
+  }));
+  console.log('registered');
+};
+window.addEventListener('DOMContentLoaded', initOnReady, false);
 export default function TokenPriceChart({ token }: { token?: TokenModel }) {
   const isDarkMode = useIsDarkMode();
   /*const hourPrices: { [date: number]: { min: number; max: number } } = {};

@@ -35,6 +35,7 @@ export default function AdminDashboard() {
   return (
     <AdminDashboardGrid>
       <AdminDashboardCard to={'/admin/tokens'}>Tokens</AdminDashboardCard>
+      <AdminDashboardCard to={'/admin/roadmap'}>Roadmap</AdminDashboardCard>
     </AdminDashboardGrid>
   );
 }

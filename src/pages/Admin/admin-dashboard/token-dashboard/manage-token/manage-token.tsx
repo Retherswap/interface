@@ -11,6 +11,7 @@ import { useParams } from 'react-router';
 import { Fonts } from 'theme';
 import TokenExcludedSupplyAddressList from './token-excluded-supply-address-list/token-excluded-supply-address-list';
 import { useAppSelector } from 'state/hooks';
+import { useHistory } from 'react-router-dom';
 
 export default function AdminManageToken() {
   const { address } = useParams<any>();
@@ -18,6 +19,8 @@ export default function AdminManageToken() {
   const [isListed, setIsListed] = useState(false);
   const [excludedSupplyAddresses, setExcludedSupplyAddresses] = useState<ExcludedSupplyAddresses[]>([]);
   const loginToken = useAppSelector((state) => state.application.loginToken);
+  const history = useHistory();
+
   useEffect(() => {
     if (!loginToken) {
       return;
@@ -56,18 +59,9 @@ export default function AdminManageToken() {
         isListed: isListed,
         excludedSupplyAddresses: excludedSupplyAddresses,
       }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          console.error(res.error);
-          return;
-        }
-        console.log('Token updated');
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+    }).then((res) => {
+      history.push('/admin/tokens');
+    });
   }, [address, excludedSupplyAddresses, isListed, loginToken, name]);
   return (
     <Column style={{ gap: '1.5em' }}>
