@@ -42,8 +42,8 @@
     "@types/styled-components": "5.1.10",
     "@types/ua-parser-js": "0.7.35",
     "@types/wcag-contrast": "3.0.0",
-    "@typescript-eslint/eslint-plugin": "^2.34.0",
-    "@typescript-eslint/parser": "^2.34.0",
+    "@typescript-eslint/eslint-plugin": "2.34.0",
+    "@typescript-eslint/parser": "2.34.0",
     "@unstoppabledomains/resolution": "8.3.3",
     "@web3-react/core": "6.1.9",
     "@web3-react/injected-connector": "6.0.7",
@@ -95,7 +95,7 @@
     "redux-localstorage-simple": "2.4.1",
     "styled-components": "5.3.0",
     "truffle-plugin-verify": "0.5.15",
-    "typescript": "^5.4.2",
+    "typescript": "3.9.10",
     "ua-parser-js": "0.7.28",
     "use-count-up": "2.2.5",
     "wcag-contrast": "3.0.0"
@@ -113,6 +113,7 @@
   "dependencies": {
     "@babel/core": "7.23.3",
     "@retherswap/default-token-list": "1.0.4",
+    "@web3-react/abstract-connector": "^6.0.7",
     "apexcharts": "^3.46.0",
     "dotenv": "10.0.0",
     "express": "4.18.2",

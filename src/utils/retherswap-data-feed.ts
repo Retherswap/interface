@@ -22,7 +22,7 @@ import {
 export class RetherswapDataFeed implements IExternalDatafeed, IDatafeedChartApi {
   //private channelToSubscription = new Map();
   //private lastBar: Bar | undefined;
-  private resolutions: { [key: ResolutionString]: { resolution: string } } = {
+  private resolutions: { [key: string]: { resolution: string } } = {
     /*'1S': { resolution: '1 second' },
     '1': { resolution: '1 min' },
     '5': { resolution: '5 min' },
