@@ -13,7 +13,7 @@ export default function TokenPriceChart({ token }: { token?: Token }) {
   const web3 = useActiveWeb3React();
   const { nativeToken } = useNativeToken();
   useEffect(() => {
-    if (!socket || !token || !web3?.account || !nativeToken) {
+    if (!socket || !token || !nativeToken) {
       return;
     }
     if (!document.getElementById('tv_chart_container')) return;
