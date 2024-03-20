@@ -87,11 +87,12 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <Fonts.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
               </Fonts.body>
-              <Fonts.body>Unclaimed RETHER</Fonts.body>
+              <Fonts.body>Unclaimed {stakingInfo?.rewardToken.symbol}</Fonts.body>
             </AutoColumn>
           )}
           <Fonts.subHeader style={{ textAlign: 'center' }}>
-            When you withdraw, your RETHER is claimed and your liquidity is removed from the mining pool.
+            When you withdraw, your {stakingInfo?.rewardToken.symbol} is claimed and your liquidity is removed from the
+            mining pool.
           </Fonts.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
             {error ?? 'Withdraw & Claim'}
@@ -101,8 +102,13 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <Fonts.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} RETHERS-LP</Fonts.body>
-            <Fonts.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} RETHER</Fonts.body>
+            <Fonts.body fontSize={20}>
+              Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} {stakingInfo.tokens[0].symbol}-
+              {stakingInfo.tokens[1].symbol} LP
+            </Fonts.body>
+            <Fonts.body fontSize={20}>
+              Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} {stakingInfo?.rewardToken.symbol}
+            </Fonts.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -110,8 +116,10 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
         <SubmittedView onDismiss={wrappedOndismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <Fonts.largeHeader>Transaction Submitted</Fonts.largeHeader>
-            <Fonts.body fontSize={20}>Withdrew RETHERS-LP!</Fonts.body>
-            <Fonts.body fontSize={20}>Claimed RETHER!</Fonts.body>
+            <Fonts.body fontSize={20}>
+              Withdrew {stakingInfo.tokens[0].symbol}-{stakingInfo.tokens[1].symbol} LP!
+            </Fonts.body>
+            <Fonts.body fontSize={20}>Claimed {stakingInfo?.rewardToken.symbol}!</Fonts.body>
           </AutoColumn>
         </SubmittedView>
       )}

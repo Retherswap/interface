@@ -57,7 +57,7 @@ export default function AdminTokenDashboard() {
     return tokens.filter((token: any) => {
       return (
         token.name.toLowerCase().includes(search.toLowerCase()) ||
-        token.address.toLowerCase().includes(search.toLowerCase())
+        token.address.address.toLowerCase().includes(search.toLowerCase())
       );
     });
   }, [tokens, search]);

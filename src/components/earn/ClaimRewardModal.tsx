@@ -78,7 +78,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
               <Fonts.body fontWeight={600} fontSize={36}>
                 {stakingInfo?.earnedAmount?.toSignificant(6)}
               </Fonts.body>
-              <Fonts.body>Unclaimed RETHER</Fonts.body>
+              <Fonts.body>Unclaimed {stakingInfo?.rewardToken.symbol}</Fonts.body>
             </AutoColumn>
           )}
           <Fonts.subHeader style={{ textAlign: 'center' }}>
@@ -92,7 +92,9 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <Fonts.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} RETHER</Fonts.body>
+            <Fonts.body fontSize={20}>
+              Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} {stakingInfo?.rewardToken.symbol}
+            </Fonts.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -100,7 +102,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <Fonts.largeHeader>Transaction Submitted</Fonts.largeHeader>
-            <Fonts.body fontSize={20}>Claimed RETHER!</Fonts.body>
+            <Fonts.body fontSize={20}>Claimed {stakingInfo?.rewardToken.symbol}!</Fonts.body>
           </AutoColumn>
         </SubmittedView>
       )}
