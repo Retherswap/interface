@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useIsDarkMode } from 'state/user/hooks';
 import { serverUrl } from 'configs/server';
 import { RetherswapDataFeed } from 'utils/retherswap-data-feed';
@@ -7,11 +7,20 @@ import { Token } from 'models/schema';
 import { useActiveWeb3React } from 'hooks/web3';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { widget as twWidget, ResolutionString } from 'utils/trading-view/charting_library';
+import { useWindowSize } from 'hooks/useWindowSize';
 export default function TokenPriceChart({ token }: { token?: Token }) {
   const isDarkMode = useIsDarkMode();
   const socket = useSocket();
   const web3 = useActiveWeb3React();
   const { nativeToken } = useNativeToken();
+  const size = useWindowSize();
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mobile = (size?.width ?? 0) < 768;
+    if (mobile !== isMobile) {
+      setIsMobile(mobile);
+    }
+  }, [size, isMobile, setIsMobile]);
   useEffect(() => {
     if (!socket || !token || !nativeToken) {
       return;
@@ -33,15 +42,16 @@ export default function TokenPriceChart({ token }: { token?: Token }) {
         'header_quick_search',
         'header_screenshot',
         'display_market_status',
+        isMobile ? 'left_toolbar' : 'display_market_status',
       ],
-      enabled_features: [],
+      enabled_features: ['iframe_loading_compatibility_mode'],
       height: '100%' as any,
       width: '100%' as any,
     }));
     return () => {
       widget.remove();
     };
-  }, [isDarkMode, socket, token, web3, nativeToken]);
+  }, [isDarkMode, socket, token, web3, nativeToken, isMobile]);
   return (
     <>
       <div id="tv_chart_container" style={{ width: '100%', height: '100%' }}></div>
