@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIsDarkMode } from 'state/user/hooks';
 import { serverUrl } from 'configs/server';
 import { RetherswapDataFeed } from 'utils/retherswap-data-feed';
