@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
 import { TokenInfosCard } from '../token-infos-card';
@@ -8,7 +8,6 @@ import { TokenPairListGrid } from './token-pair-list-grid';
 import Paginator from 'components/Paginator/Paginator';
 import { HideSmall } from 'components/Hide/hide-small';
 import { HideExtraSmall } from 'components/Hide/hide-extra-small';
-import { apiUrl } from 'configs/server';
 import { Pair, Token } from 'models/schema';
 
 export const Divider = styled.div`

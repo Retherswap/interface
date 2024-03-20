@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ChainId, Pair, Token } from '@retherswap/sdk';
 import flatMap from 'lodash.flatmap';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';

@@ -41,7 +41,7 @@ export default function TokenPriceChart({ token }: { token?: Token }) {
     return () => {
       widget.remove();
     };
-  }, [isDarkMode, socket, token, web3.account, nativeToken]);
+  }, [isDarkMode, socket, token, web3, nativeToken]);
   return (
     <>
       <div id="tv_chart_container" style={{ width: '100%', height: '100%' }}></div>
