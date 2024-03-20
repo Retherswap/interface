@@ -43,7 +43,7 @@ export interface Token {
   decimals: number;
   totalSupply: number;
   circulatingSupply: number;
-  address: string;
+  idAddress: number;
   idChain: number;
   usdPrice: number;
   nativeQuote: number;
@@ -67,6 +67,7 @@ export interface Token {
   balance: Balance[] | null;
   lpPair: Pair | null;
   excludedSupplyAddresses: ExcludedSupplyAddresses[] | null;
+  address: Address;
 }
 
 export interface ExcludedSupplyAddresses {
@@ -80,14 +81,8 @@ export interface ExcludedSupplyAddresses {
 export interface TokenPrice {
   id: number;
   idToken: number;
-  openUsd: number;
-  closeUsd: number;
-  highUsd: number;
-  lowUsd: number;
-  openNativeQuote: number;
-  closeNativeQuote: number;
-  highNativeQuote: number;
-  lowNativeQuote: number;
+  usdQuote: number;
+  nativeQuote: number;
   date: Date;
   token: Token;
 }
@@ -114,6 +109,7 @@ export interface TokenVolume {
 export interface Pair {
   id: number;
   address: string;
+  ticker: string;
   idChain: number;
   idToken0: number;
   idToken1: number;

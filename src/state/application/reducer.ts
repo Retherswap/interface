@@ -13,7 +13,7 @@ import {
   setLoginToken,
   setRequestConnection,
 } from './actions';
-import { TokenModel } from 'models/TokenModel';
+import { Token } from 'models/schema';
 
 type PopupList = Array<{ key: string; show: boolean; content: PopupContent; removeAfterMs: number | null }>;
 
@@ -22,7 +22,7 @@ export interface ApplicationState {
   readonly popupList: PopupList;
   readonly openModal: ApplicationModal | null;
   readonly implements3085: boolean;
-  readonly nativeToken: TokenModel | undefined;
+  readonly nativeToken: Token | undefined;
   readonly showHeader: boolean;
   readonly isAdmin: boolean;
   readonly loginToken: string | undefined;

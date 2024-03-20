@@ -1,8 +1,8 @@
+import React, { useState } from 'react';
 import Column from 'components/Column';
 import Row from 'components/Row';
 import FullWidthSkeleton from 'components/Skeleton/full-width-skeleton';
 import { rgba } from 'polished';
-import React, { useState } from 'react';
 import { ArrowDown, ArrowUp, Info } from 'react-feather';
 import { useIsDarkMode } from 'state/user/hooks';
 import styled from 'styled-components';
@@ -12,6 +12,11 @@ const Stat = styled.div`
   gap: 5px;
   user-select: none;
   align-items: bottom;
+  border-radius: 10px;
+  box-shadow: 0 0 10px skyblue;
+  padding: 1em;
+  width: 100%;
+  background-color: ${({ theme }) => theme.bg1};
 `;
 
 const InfoContainer = styled.div`
@@ -52,7 +57,7 @@ export default function TokenStat({
     <Stat>
       <Column style={{ gap: '5px', width: '100%' }}>
         <Row style={{ gap: '5px' }}>
-          <Fonts.blue fontWeight={800} fontSize={13}>
+          <Fonts.blue fontWeight={700} fontSize={13}>
             {title}
           </Fonts.blue>
           {info && (

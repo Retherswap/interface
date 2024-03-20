@@ -1,5 +1,5 @@
-import { Currency, Pair } from '@retherswap/sdk';
 import React, { useState, useCallback, useEffect } from 'react';
+import { Currency, Pair } from '@retherswap/sdk';
 import styled from 'styled-components';
 import { darken } from 'polished';
 import { useCurrencyBalance } from '../../state/wallet/hooks';
@@ -16,9 +16,9 @@ import { useTranslation } from 'react-i18next';
 import useTheme from '../../hooks/useTheme';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { apiUrl } from 'configs/server';
-import { TokenModel } from 'models/TokenModel';
 import { formatNumber } from 'utils/formatNumber';
 import { wrappedCurrency } from 'utils/wrappedCurrency';
+import { Token } from 'models/schema';
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -164,7 +164,7 @@ export default function CurrencyInputPanel({
   const { nativeToken } = useNativeToken();
   const web3 = useActiveWeb3React();
   const [outputTokenPriceLoading, setOutputTokenPriceLoading] = useState<boolean>(false);
-  const [outputToken, setOutputToken] = useState<TokenModel | undefined>(undefined);
+  const [outputToken, setOutputToken] = useState<Token | undefined>(undefined);
   useEffect(() => {
     const fetchRetherInfo = () => {
       if (!web3 || !currency) {

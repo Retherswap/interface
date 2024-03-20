@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { TokenList } from '@retherswap/token-lists';
-import { TokenModel } from 'models/TokenModel';
+import { Token } from 'models/schema';
 
 export type PopupContent =
   | {
@@ -41,7 +41,7 @@ export const addPopup = createAction<{ key?: string; removeAfterMs?: number | nu
 );
 export const removePopup = createAction<{ key: string }>('application/removePopup');
 export const setImplements3085 = createAction<{ implements3085: boolean }>('application/setImplements3085');
-export const setNativeToken = createAction<TokenModel | undefined>('application/setNativeToken');
+export const setNativeToken = createAction<Token | undefined>('application/setNativeToken');
 export const setLoginToken = createAction<string | undefined>('application/setLoginToken');
 export const setIsAdmin = createAction<boolean>('application/setIsAdmin');
 export const setRequestConnection = createAction<boolean>('application/setRequestConnection');

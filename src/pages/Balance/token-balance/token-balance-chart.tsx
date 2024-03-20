@@ -54,9 +54,9 @@ export default function TokenBalanceChart({ balance }: { balance?: Balance }) {
           const balanceChange = findNearestBalanceChange(new Date(price.date));
           return {
             x: new Date(price.date).getTime(),
-            y: (Number(balanceChange.balanceChange.amount) * Number(price.closeUsd)).toFixed(2),
+            y: (Number(balanceChange.balanceChange.amount) * Number(price.usdQuote)).toFixed(2),
             amount: Number(balanceChange.balanceChange.amount),
-            price: Number(price.closeUsd),
+            price: Number(price.usdQuote),
           };
         })
         .sort((a, b) => {

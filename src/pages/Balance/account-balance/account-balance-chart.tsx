@@ -77,12 +77,12 @@ export default function AccountBalanceChart({ balances }: { balances?: Balance[]
         if (!balance.token.price || !balance.balanceChanges) {
           continue;
         }
-        const balanceAmount = findNearestBalanceChange(balance.balanceChanges, time);
+        const balanceAmount = findNearestBalanceChange(balance.balanceChanges, time)?.amount ?? Number(balance.balance);
         const nearestPrice = findNearestPrice(balance.token.price, time);
         if (!nearestPrice || !balanceAmount) {
           continue;
         }
-        price += Number(nearestPrice.closeUsd) * Number(balanceAmount.amount);
+        price += Number(nearestPrice.usdQuote) * Number(balanceAmount);
       }
       data.push({
         x: time.getTime(),

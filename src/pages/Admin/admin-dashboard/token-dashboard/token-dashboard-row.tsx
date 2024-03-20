@@ -1,7 +1,7 @@
+import React from 'react';
 import CurrencyLogo from 'components/CurrencyLogo';
 import { useCurrency } from 'hooks/useCurrency';
 import { Token } from 'models/schema';
-import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
@@ -33,9 +33,9 @@ export const StyledLink = styled(Link)`
 `;
 
 export default function AdminTokenDashboardRow({ token }: { token: Token }) {
-  const currencyLogo = useCurrency(token.address);
+  const currencyLogo = useCurrency(token.address.address);
   return (
-    <StyledLink to={`/admin/token/${token.address}`}>
+    <StyledLink to={`/admin/token/${token.address.address}`}>
       <TokenDashboardRowContainer>
         <CurrencyLogo currency={currencyLogo} size="30px"></CurrencyLogo>
         <Fonts.black>{token.name}</Fonts.black>

@@ -55,7 +55,7 @@ export default function TokenBalanceProfit({ balance }: { balance?: Balance }) {
     if (price24h) {
       setChange24h(
         Number(balance?.token.nativeQuote) * Number(nativeToken?.usdPrice) * Number(balance?.balance) -
-          Number(price24h?.closeUsd) * Number(balance24h?.amount ?? balance?.balance)
+          Number(price24h?.usdQuote) * Number(balance24h?.amount ?? balance?.balance)
       );
     }
   }, [balance24h, price24h, balance, nativeToken]);

@@ -1,6 +1,4 @@
-import { TokenModel } from 'models/TokenModel';
 import React, { useMemo } from 'react';
-import { PairModel } from 'models/PairModel';
 import DoubleCurrencyLogo from 'components/DoubleLogo';
 import { TokenPairListGrid } from '../token-pair-list-grid';
 import Row from 'components/Row';
@@ -9,8 +7,9 @@ import { formatNumber } from 'utils/formatNumber';
 import { HideExtraSmall } from 'components/Hide/hide-extra-small';
 import { useCurrency } from 'hooks/useCurrency';
 import FullWidthSkeleton from 'components/Skeleton/full-width-skeleton';
+import { Pair, Token } from 'models/schema';
 
-export default function TokenPairRow({ index, token, pair }: { index?: number; token?: TokenModel; pair?: PairModel }) {
+export default function TokenPairRow({ index, token, pair }: { index?: number; token?: Token; pair?: Pair }) {
   const volume24h = useMemo(() => {
     if (!pair || !token) {
       return undefined;
@@ -18,12 +17,12 @@ export default function TokenPairRow({ index, token, pair }: { index?: number; t
     return Number(
       pair.idToken0 === token.id
         ? pair.volume
-            .filter((pairVolume) => {
+            ?.filter((pairVolume) => {
               return new Date(pairVolume.date).getTime() > new Date().getTime() - 24 * 60 * 60 * 1000;
             })
             .reduce((acc, volume) => acc + Number(volume.token0UsdVolume), 0)
         : pair.volume
-            .filter((pairVolume) => {
+            ?.filter((pairVolume) => {
               return new Date(pairVolume.date).getTime() > new Date().getTime() - 24 * 60 * 60 * 1000;
             })
             .slice(0, 24)
@@ -37,13 +36,13 @@ export default function TokenPairRow({ index, token, pair }: { index?: number; t
     return Math.floor(
       Number(
         pair.idToken0 === token.id
-          ? pair.volume.reduce((acc, volume) => acc + Number(volume.token0UsdVolume), 0)
-          : pair.volume.reduce((acc, volume) => acc + Number(volume.token1UsdVolume), 0)
+          ? pair.volume?.reduce((acc, volume) => acc + Number(volume.token0UsdVolume), 0)
+          : pair.volume?.reduce((acc, volume) => acc + Number(volume.token1UsdVolume), 0)
       )
     );
   }, [pair, token]);
-  const currency0 = useCurrency(pair?.token0.address);
-  const currency1 = useCurrency(pair?.token1.address);
+  const currency0 = useCurrency(pair?.token0?.address?.address);
+  const currency1 = useCurrency(pair?.token1?.address?.address);
   return (
     <TokenPairListGrid>
       <HideExtraSmall>

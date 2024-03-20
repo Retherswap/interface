@@ -1,4 +1,3 @@
-import { TokenModel } from 'models/TokenModel';
 import React, { useMemo } from 'react';
 import { CustomLightSpinner, HideExtraSmall, Fonts } from 'theme';
 import Column from 'components/Column';
@@ -10,7 +9,6 @@ import { Link } from 'react-router-dom';
 import { ArrowDown, ArrowUp, ChevronRight, Copy } from 'react-feather';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { useTokenBalance } from 'state/wallet/hooks';
-import { Token } from '@retherswap/sdk';
 import { useActiveWeb3React } from 'hooks';
 import { formatNumber } from 'utils/formatNumber';
 import Circle from '../../../assets/images/blue-loader.svg';
@@ -19,6 +17,8 @@ import useTheme from 'hooks/useTheme';
 import { HideSmall } from 'components/Hide/hide-small';
 import { useCurrency } from 'hooks/useCurrency';
 import FullWidthSkeleton from 'components/Skeleton/full-width-skeleton';
+import { Token } from 'models/schema';
+import { Token as SDKToken } from '@retherswap/sdk';
 
 export const AddLiquidityButton = styled(BaseButton)`
   width: 200px;
@@ -68,10 +68,10 @@ const PriceContainer = styled(Row)`
   `};
 `;
 
-export default function TokenInfosHeader({ token }: { token?: TokenModel }) {
+export default function TokenInfosHeader({ token }: { token?: Token }) {
   const { nativeToken } = useNativeToken();
   const lastPrice = useMemo(() => {
-    if (!token) {
+    if (!token || !token.price) {
       return undefined;
     }
     return Number(
@@ -80,7 +80,7 @@ export default function TokenInfosHeader({ token }: { token?: TokenModel }) {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
         })
         .filter((price) => new Date(price.date).getTime() < new Date().getTime() - 24 * 60 * 60 * 1000)?.[0]
-        ?.closeUsd ?? 0
+        ?.usdQuote ?? 0
     );
   }, [token]);
   const price = Number(token?.nativeQuote) * Number(nativeToken?.usdPrice);
@@ -91,15 +91,15 @@ export default function TokenInfosHeader({ token }: { token?: TokenModel }) {
   }
   formattedPrice = formattedPrice.slice(0, index + 2);
   const priceChange = lastPrice ? (price / lastPrice) * 100 - 100 : 0;
-  const currency = useCurrency(token?.address);
+  const currency = useCurrency(token?.address?.address);
   const { account } = useActiveWeb3React();
   const tokenBalance = useTokenBalance(
     account ?? undefined,
-    token ? new Token(token.idChain, token.address, token.decimals) : undefined
+    token ? new SDKToken(token.idChain, token.address?.address, token.decimals) : undefined
   );
   const theme = useTheme();
   const copyAddress = () => {
-    navigator.clipboard.writeText(token?.address ?? 'Error');
+    navigator.clipboard.writeText(token?.address?.address ?? 'Error');
   };
   return (
     <Column style={{ gap: '3em', width: '100%' }}>
@@ -119,7 +119,7 @@ export default function TokenInfosHeader({ token }: { token?: TokenModel }) {
           <ChevronRight color="darkgray" size={15}></ChevronRight>
           {token ? (
             <Fonts.black fontWeight={500} fontSize={14} style={{ textOverflow: 'ellipsis', textWrap: 'nowrap' }}>
-              {token.symbol} <HideExtraSmall>({formatAddress(token.address, 4, 4)})</HideExtraSmall>
+              {token.symbol} <HideExtraSmall>({formatAddress(token.address?.address, 4, 4)})</HideExtraSmall>
             </Fonts.black>
           ) : (
             <FullWidthSkeleton width="75%"></FullWidthSkeleton>
@@ -128,7 +128,7 @@ export default function TokenInfosHeader({ token }: { token?: TokenModel }) {
         <Row style={{ justifyContent: 'end', gap: '10px' }}>
           <HideExtraSmall>
             <a
-              href={`https://explorer.hypra.network/address/${token?.address}`}
+              href={`https://explorer.hypra.network/address/${token?.address?.address}`}
               target="_blank"
               rel="noreferrer noopener"
               style={{ textDecoration: 'none' }}
@@ -157,7 +157,9 @@ export default function TokenInfosHeader({ token }: { token?: TokenModel }) {
                   <Fonts.black fontWeight={800} fontSize={36}>
                     {token.name}
                   </Fonts.black>
-                  <Fonts.darkGray fontWeight={500}>({token.symbol})</Fonts.darkGray>
+                  <HideExtraSmall>
+                    <Fonts.darkGray fontWeight={500}>({token.symbol})</Fonts.darkGray>
+                  </HideExtraSmall>
                 </TitleContainer>
               ) : (
                 <FullWidthSkeleton width="75%"></FullWidthSkeleton>
@@ -201,10 +203,10 @@ export default function TokenInfosHeader({ token }: { token?: TokenModel }) {
         </Row>
         <HideSmall>
           <Row style={{ justifyContent: 'end', gap: '10px' }}>
-            <StyledLink to={`/add/${token?.address}`}>
+            <StyledLink to={`/add/${token?.address?.address}`}>
               <AddLiquidityButton>Add liquidity</AddLiquidityButton>
             </StyledLink>
-            <StyledLink to={`/swap?outputCurrency=${token?.address}`}>
+            <StyledLink to={`/swap?outputCurrency=${token?.address?.address}`}>
               <TradeButton>Trade</TradeButton>
             </StyledLink>
           </Row>

@@ -42,8 +42,8 @@
     "@types/styled-components": "5.1.10",
     "@types/ua-parser-js": "0.7.35",
     "@types/wcag-contrast": "3.0.0",
-    "@typescript-eslint/eslint-plugin": "2.34.0",
-    "@typescript-eslint/parser": "2.34.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.2.0",
     "@unstoppabledomains/resolution": "8.3.3",
     "@web3-react/core": "6.1.9",
     "@web3-react/injected-connector": "6.0.7",
@@ -95,7 +95,7 @@
     "redux-localstorage-simple": "2.4.1",
     "styled-components": "5.3.0",
     "truffle-plugin-verify": "0.5.15",
-    "typescript": "3.9.10",
+    "typescript": "^5.4.2",
     "ua-parser-js": "0.7.28",
     "use-count-up": "2.2.5",
     "wcag-contrast": "3.0.0"
@@ -126,8 +126,7 @@
     "socket.io-client": "^4.7.4",
     "swiper": "^6.8.4",
     "swr": "^2.2.5",
-    "web3-utils": "1.5.3",
-    "charting_library": "git@github.com:tradingview/charting_library.git#2099f2689c68af5c47ce4d0fcab8226370131528"
+    "web3-utils": "1.5.3"
   },
   "eslintConfig": {
     "extends": "react-app",

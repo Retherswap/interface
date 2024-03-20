@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import { ButtonPrimary } from 'components/Button';
 import Column from 'components/Column';
 import NoStyleLink from 'components/Link/no-style-link';
@@ -5,7 +6,6 @@ import Row, { RowBetween } from 'components/Row';
 import Toggle from 'components/Toggle';
 import { adminUrl } from 'configs/server';
 import { ExcludedSupplyAddresses, Token } from 'models/schema';
-import React, { useCallback, useEffect, useState } from 'react';
 import { Save, X } from 'react-feather';
 import { useParams } from 'react-router';
 import { Fonts } from 'theme';
@@ -62,7 +62,7 @@ export default function AdminManageToken() {
     }).then((res) => {
       history.push('/admin/tokens');
     });
-  }, [address, excludedSupplyAddresses, isListed, loginToken, name]);
+  }, [address, excludedSupplyAddresses, isListed, loginToken, name, history]);
   return (
     <Column style={{ gap: '1.5em' }}>
       {address}

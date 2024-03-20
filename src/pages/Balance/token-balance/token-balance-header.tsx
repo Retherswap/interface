@@ -87,9 +87,9 @@ export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
     return totalBalance * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice);
   }, [nativeToken, totalBalance, balance]);
   const theme = useTheme();
-  const currency0 = useCurrency(balance?.token?.lpPair?.token0.address);
-  const currency1 = useCurrency(balance?.token?.lpPair?.token1.address);
-  const currency = useCurrency(balance?.token?.address);
+  const currency0 = useCurrency(balance?.token?.lpPair?.token0?.address?.address);
+  const currency1 = useCurrency(balance?.token?.lpPair?.token1?.address?.address);
+  const currency = useCurrency(balance?.token?.address?.address);
   const name = useTokenName(balance?.token);
   const symbol = useTokenSymbol(balance?.token);
   return (
@@ -106,7 +106,7 @@ export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
         <CurrencyLogo currency={currency} size="50px"></CurrencyLogo>
       )}
       <a
-        href={`https://explorer.hypra.network/address/${balance?.token?.address}`}
+        href={`https://explorer.hypra.network/address/${balance?.token?.address?.address}`}
         target="_blank"
         rel="noreferrer noopener"
         style={{ textDecoration: 'none' }}
@@ -134,8 +134,11 @@ export default function TokenBalanceHeader({ balance }: { balance?: Balance }) {
         <NoStyleLink
           to={
             balance?.token.isLP
-              ? '/add/' + balance.token.lpPair?.token0.address + '/' + balance.token.lpPair?.token1.address
-              : '/swap/' + balance?.token.address
+              ? '/add/' +
+                balance.token.lpPair?.token0?.address?.address +
+                '/' +
+                balance.token.lpPair?.token1?.address?.address
+              : '/swap/' + balance?.token?.address?.address
           }
         >
           <BalanceHeaderButtonContainer>

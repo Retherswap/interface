@@ -1,7 +1,6 @@
+import React, { useMemo } from 'react';
 import CurrencyLogo from 'components/CurrencyLogo';
 import Row from 'components/Row';
-import { TokenModel } from 'models/TokenModel';
-import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { TokenListGrid } from './token-list-grid';
 import { HideSmall, Fonts } from 'theme';
@@ -13,6 +12,7 @@ import { HideExtraSmall } from 'components/Hide/hide-extra-small';
 import { useCurrency } from 'hooks/useCurrency';
 import FullWidthSkeleton from 'components/Skeleton/full-width-skeleton';
 import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
+import { Token } from 'models/schema';
 export const StyledLink = styled(Link)`
   text-decoration: none;
   cursor: pointer;
@@ -32,9 +32,9 @@ export const StyledLink = styled(Link)`
   }
 `;
 
-export default function TokenListRow({ index, token }: { index: number; token?: TokenModel }) {
+export default function TokenListRow({ index, token }: { index: number; token?: Token }) {
   const volume = useMemo(() => {
-    return token?.volume.reduce((acc, volume) => acc + Number(volume.usdVolume), 0);
+    return token?.volume?.reduce((acc, volume) => acc + Number(volume.usdVolume), 0);
   }, [token]);
   const { nativeToken } = useNativeToken();
   const price = Number(token?.nativeQuote) * Number(nativeToken?.usdPrice);
@@ -47,11 +47,11 @@ export default function TokenListRow({ index, token }: { index: number; token?: 
     ++priceIndex;
   }
   formattedPrice = formattedPrice.slice(0, priceIndex + 2);
-  const lastPrice = Number(token?.price?.[0]?.closeUsd ?? 0);
+  const lastPrice = Number(token?.price?.[0]?.usdQuote ?? 0);
   const priceChange = lastPrice ? (price / lastPrice) * 100 - 100 : 0;
-  const currency = useCurrency(token?.address);
+  const currency = useCurrency(token?.address?.address);
   return (
-    <StyledLink to={`/token/${token?.address}`}>
+    <StyledLink to={`/token/${token?.address?.address}`}>
       <TokenListGrid>
         <HideUltraSmall>
           <Fonts.black fontWeight={500}>{index}</Fonts.black>

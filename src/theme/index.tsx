@@ -148,25 +148,25 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
   return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>;
 }
 
-const TextWrapper = styled(Text)<{ color: keyof Colors }>`
+const TextWrapper: React.FunctionComponent<TextProps> = styled(Text)<{ color: keyof Colors }>`
   color: ${({ color, theme }) => (theme as any)[color]};
 `;
 
 export const Fonts = {
   main(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text2'} {...props} />;
+    return <TextWrapper fontWeight={500} color={'primaryText1'} {...props} />;
   },
   link(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'primary1'} {...props} />;
   },
   black(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text1'} {...props} />;
+    return <TextWrapper fontWeight={500} color={'primaryText1'} {...props} />;
   },
   white(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'white'} {...props} />;
   },
   body(props: TextProps) {
-    return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />;
+    return <TextWrapper fontWeight={400} fontSize={16} color={'primaryText1'} {...props} />;
   },
   largeHeader(props: TextProps) {
     return <TextWrapper fontWeight={600} fontSize={24} {...props} />;
