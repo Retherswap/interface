@@ -1,5 +1,5 @@
-import Row from 'components/Row';
 import React from 'react';
+import Row from 'components/Row';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
 import { formatNumber } from 'utils/formatNumber';
@@ -19,8 +19,8 @@ const TransactionRow = styled.div`
 `;
 
 export default function DexStatsTransactionRow({ transaction }: { transaction: PairTransaction }) {
-  const inputCurrency = useCurrency(transaction.inputToken.address);
-  const outputCurrency = useCurrency(transaction.outputToken.address);
+  const inputCurrency = useCurrency(transaction.inputToken.address.address);
+  const outputCurrency = useCurrency(transaction.outputToken.address.address);
   return (
     <TransactionRow>
       <DoubleCurrencyLogo currency0={inputCurrency} currency1={outputCurrency} size={35} />

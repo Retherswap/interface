@@ -1,5 +1,5 @@
-import { darken } from 'polished';
 import React, { useState } from 'react';
+import { darken } from 'polished';
 import { ExternalLink } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -22,7 +22,8 @@ const MenuContent = styled.div`
   margin-left: -0.2rem;
   gap: 0.3em;
   padding: 0.5em;
-  width: 140px;
+  min-width: 140px;
+  width: max-content;
   background-color: ${({ theme }) => theme.bg1};
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.text4};
@@ -196,6 +197,7 @@ export default function HeaderNavigationMenu({
                     key={item.title}
                     href={item.link}
                     target="_blank"
+                    style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                   >
                     {t(item.title)}
                     <ExternalLink size={12}></ExternalLink>

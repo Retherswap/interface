@@ -1,15 +1,15 @@
-import { TokenModel } from 'models/TokenModel';
 import React, { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatNumber } from 'utils/formatNumber';
 import { useIsDarkMode } from 'state/user/hooks';
 import barChartSkeletonData from 'components/Skeleton/bar-chart-skeleton-data';
+import { Token } from 'models/schema';
 
-export default function TokenVolumeChart({ token }: { token?: TokenModel }) {
+export default function TokenVolumeChart({ token }: { token?: Token }) {
   const isDarkMode = useIsDarkMode();
   const [isLoading, setLoading] = useState(true);
   const volumeData = useMemo(() => {
-    if (!token) {
+    if (!token || !token.volume) {
       return barChartSkeletonData;
     }
     const volumeData: { [date: number]: number } = {};

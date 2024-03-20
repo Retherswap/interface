@@ -1,91 +1,60 @@
-import { TokenModel } from 'models/TokenModel';
-import React from 'react';
-import ReactApexChart from 'react-apexcharts';
-import { formatNumber } from 'utils/formatNumber';
+import React, { useEffect, useState } from 'react';
 import { useIsDarkMode } from 'state/user/hooks';
-
-export default function TokenPriceChart({ token }: { token?: TokenModel }) {
+import { serverUrl } from 'configs/server';
+import { RetherswapDataFeed } from 'utils/retherswap-data-feed';
+import { useSocket } from 'hooks/useSocket';
+import { Token } from 'models/schema';
+import { useActiveWeb3React } from 'hooks/web3';
+import { useNativeToken } from 'hooks/useNativeToken';
+import { widget as twWidget, ResolutionString } from 'utils/trading-view/charting_library';
+import { useWindowSize } from 'hooks/useWindowSize';
+export default function TokenPriceChart({ token }: { token?: Token }) {
   const isDarkMode = useIsDarkMode();
-  /*const hourPrices: { [date: number]: { min: number; max: number } } = {};
-  for (const price of token.price) {
-    const date = new Date(price.date);
-    date.setHours(0, 0, 0, 0);
-    if (!hourPrices[date.getTime()]) {
-      hourPrices[date.getTime()] = {
-        min: price.usdPrice,
-        max: price.usdPrice,
-      };
-    } else {
-      hourPrices[date.getTime()].min = Math.min(hourPrices[date.getTime()].min, price.usdPrice);
-      hourPrices[date.getTime()].max = Math.max(hourPrices[date.getTime()].max, price.usdPrice);
+  const socket = useSocket();
+  const web3 = useActiveWeb3React();
+  const { nativeToken } = useNativeToken();
+  const size = useWindowSize();
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mobile = (size?.width ?? 0) < 768;
+    if (mobile !== isMobile) {
+      setIsMobile(mobile);
     }
-  }*/
-
+  }, [size, isMobile, setIsMobile]);
+  useEffect(() => {
+    if (!socket || !token || !nativeToken) {
+      return;
+    }
+    if (!document.getElementById('tv_chart_container')) return;
+    const widget = ((window as any).tvWidget = new twWidget({
+      library_path: `${serverUrl}/assets/trading_view/`,
+      fullscreen: false,
+      theme: isDarkMode ? 'dark' : 'light',
+      symbol: token.name,
+      interval: '1D' as ResolutionString,
+      container: 'tv_chart_container',
+      datafeed: new RetherswapDataFeed(socket, token, nativeToken, web3.account),
+      locale: 'en',
+      disabled_features: [
+        'header_symbol_search',
+        'save_chart_properties_to_local_storage',
+        'control_bar',
+        'header_quick_search',
+        'header_screenshot',
+        'display_market_status',
+        isMobile ? 'left_toolbar' : 'display_market_status',
+      ],
+      enabled_features: ['iframe_loading_compatibility_mode'],
+      height: '100%' as any,
+      width: '100%' as any,
+    }));
+    return () => {
+      widget.remove();
+    };
+  }, [isDarkMode, socket, token, web3, nativeToken, isMobile]);
   return (
-    <ReactApexChart
-      type="candlestick"
-      options={{
-        theme: { mode: isDarkMode ? 'dark' : 'light' },
-        chart: {
-          toolbar: { show: false },
-          zoom: {
-            enabled: false,
-          },
-          background: 'transparent',
-        },
-        yaxis: {
-          opposite: true,
-          labels: {
-            formatter: (value) => {
-              return '$' + formatNumber(value);
-            },
-          },
-        },
-        xaxis: {
-          labels: {
-            show: false,
-            formatter: (value) => {
-              return new Date(value).toLocaleDateString() + ' ' + new Date(value).toLocaleTimeString();
-            },
-          },
-          axisBorder: {
-            show: false,
-          },
-          axisTicks: {
-            show: false,
-          },
-          tooltip: {
-            enabled: false,
-          },
-        },
-        grid: { show: false },
-        tooltip: {
-          custom: function ({ seriesIndex, dataPointIndex, w }) {
-            const o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
-            const c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
-            const change = ((c - o) / o) * 100;
-            const date = w.globals.categoryLabels[dataPointIndex];
-            return `<div>
-              <div class="header"><span>${date}</span></div>
-              <div>change: <span class="value">${change.toFixed(2)}%</span></div>
-              <div>Close: <span class="value">$${formatNumber(c)}</span></div>
-            </div>`;
-          },
-        },
-      }}
-      height="100%"
-      series={
-        token
-          ? [
-              {
-                name: 'Price',
-                data: token.price.map((price) => {
-                  return { x: new Date(price.date), y: [price.openUsd, price.highUsd, price.lowUsd, price.closeUsd] };
-                }),
-              },
-            ]
-          : []
-      }
-    ></ReactApexChart>
+    <>
+      <div id="tv_chart_container" style={{ width: '100%', height: '100%' }}></div>
+    </>
   );
 }

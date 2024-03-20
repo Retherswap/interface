@@ -108,7 +108,7 @@ export default function AccountBalanceHeader({ balances }: { balances: Balance[]
       return (
         acc +
         Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice) -
-        Number(balance24h ? balance24h.amount : balance?.balance) * Number(price24h.closeUsd)
+        Number(balance24h ? balance24h.amount : balance?.balance) * Number(price24h.usdQuote)
       );
     }, 0);
   }, [balances, nativeToken]);

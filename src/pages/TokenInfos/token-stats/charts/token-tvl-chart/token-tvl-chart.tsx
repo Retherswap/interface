@@ -1,17 +1,17 @@
-import { TokenModel } from 'models/TokenModel';
 import React, { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatNumber } from 'utils/formatNumber';
 import { useIsDarkMode } from 'state/user/hooks';
 import areaChartSkeletonData from 'components/Skeleton/area-chart-skeleton-data';
 import useTheme from 'hooks/useTheme';
+import { Token } from 'models/schema';
 
-export default function TokenTVLChart({ token }: { token?: TokenModel }) {
+export default function TokenTVLChart({ token }: { token?: Token }) {
   const isDarkMode = useIsDarkMode();
   const [isLoading, setIsLoading] = useState(true);
   const theme = useTheme();
   const series = useMemo(() => {
-    if (!token) {
+    if (!token || !token.tvl) {
       return [
         {
           name: 'TVL',

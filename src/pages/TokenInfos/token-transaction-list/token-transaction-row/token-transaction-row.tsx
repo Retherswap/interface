@@ -1,15 +1,14 @@
 import React, { useMemo } from 'react';
-import { PairTransactionModel } from 'models/PairTransactionModel';
 import { HideSmall, Fonts } from 'theme';
 import { TokenTransactionListGrid } from '../token-transaction-list-grid';
 import styled from 'styled-components';
 import { formatNumber } from 'utils/formatNumber';
 import { formatAddress } from 'utils/formatAddress';
-import { TokenModel } from 'models/TokenModel';
 import { Circle } from 'react-feather';
 import Row from 'components/Row';
 import { HideMedium } from 'components/Hide/hide-medium';
 import FullWidthSkeleton from 'components/Skeleton/full-width-skeleton';
+import { PairTransaction, Token } from 'models/schema';
 
 export const StyledLink = styled('a')`
   text-decoration: none;
@@ -25,8 +24,8 @@ export default function TokenTransactionRow({
   token,
   pairTransaction,
 }: {
-  token?: TokenModel;
-  pairTransaction?: PairTransactionModel;
+  token?: Token;
+  pairTransaction?: PairTransaction;
 }) {
   const timeAgo = useMemo(() => {
     if (!pairTransaction) {

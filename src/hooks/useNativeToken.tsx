@@ -1,5 +1,5 @@
 import { apiUrl } from 'configs/server';
-import { TokenModel } from 'models/TokenModel';
+import { Token } from 'models/schema';
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from 'state';
@@ -17,7 +17,7 @@ export const useNativeToken = () => {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      dispatch(setNativeToken(data as TokenModel));
+      dispatch(setNativeToken(data as Token));
     } catch (error) {
       console.log('error', error);
       setError(error as any);

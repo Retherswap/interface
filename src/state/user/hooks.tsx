@@ -1,6 +1,6 @@
+import { useCallback, useMemo } from 'react';
 import { ChainId, Pair, Token } from '@retherswap/sdk';
 import flatMap from 'lodash.flatmap';
-import { useCallback, useMemo } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS, LP_TOKEN_NAME, LP_TOKEN_SYMBOL } from '../../constants';
 
@@ -245,10 +245,11 @@ export function useTrackedTokenPairs(): [Token, Token][] {
     });
   }, [savedSerializedPairs, chainId]);
 
-  const combinedList = useMemo(
-    () => userPairs.concat(generatedPairs).concat(pinnedPairs),
-    [generatedPairs, pinnedPairs, userPairs]
-  );
+  const combinedList = useMemo(() => userPairs.concat(generatedPairs).concat(pinnedPairs), [
+    generatedPairs,
+    pinnedPairs,
+    userPairs,
+  ]);
 
   return useMemo(() => {
     // dedupes pairs of tokens in the combined list

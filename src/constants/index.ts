@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent, Token, WETH } from '@retherswap/sdk';
-import { AbstractConnector } from '@web3-react/abstract-connector';
+import { AbstractConnector } from '@web3-react/abstract-connector/dist';
 import { injected, walletlink } from '../connectors';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';

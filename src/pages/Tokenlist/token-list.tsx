@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import TokenListRow from './token-list-row';
-import { TokenModel } from 'models/TokenModel';
 import { TokenListGrid } from './token-list-grid';
 import { Fonts } from 'theme';
 import Column from 'components/Column';
@@ -10,6 +9,7 @@ import { HideMedium } from 'components/Hide/hide-medium';
 import { HideSmall } from 'components/Hide/hide-small';
 import { apiUrl } from 'configs/server';
 import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
+import { Token } from 'models/schema';
 
 export const Wrapper = styled.div`
   display: grid;
@@ -35,7 +35,7 @@ export const RowDivider = styled(Divider)`
 
 export default function TokenList() {
   const elementsPerPage = 10;
-  const [tokens, setTokens] = useState<TokenModel[]>([]);
+  const [tokens, setTokens] = useState<Token[]>([]);
   const fetchInfo = () => {
     return fetch(`${apiUrl}/tokens/listed_tokens`)
       .then((res) => res.json())
@@ -64,7 +64,7 @@ export default function TokenList() {
             <Fonts.blue fontWeight={600}>Volume 24H</Fonts.blue>
           </HideMedium>
           <HideSmall>
-            <Fonts.blue fontWeight={600}>TVL</Fonts.blue>
+            <Fonts.blue fontWeight={600}>Market cap</Fonts.blue>
           </HideSmall>
         </TokenListGrid>
         <Divider />

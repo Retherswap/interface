@@ -74,6 +74,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
 
   // pair contract for this token to be staked
   const dummyPair = new Pair(new TokenAmount(stakingInfo.tokens[0], '0'), new TokenAmount(stakingInfo.tokens[1], '0'));
+
   const pairContract = usePairContract(dummyPair.liquidityToken.address);
 
   // approval data for stake
@@ -220,7 +221,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
 
             <Fonts.black>
               {hypotheticalRewardRate.multiply((60 * 60 * 24 * 7).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
-              RETHER / week
+              {stakingInfo?.rewardToken.symbol} / week
             </Fonts.black>
           </HypotheticalRewardRate>
 
@@ -248,7 +249,9 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <Fonts.largeHeader>Depositing Liquidity</Fonts.largeHeader>
-            <Fonts.body fontSize={20}>{parsedAmount?.toSignificant(4)} RETHERS-LP</Fonts.body>
+            <Fonts.body fontSize={20}>
+              {parsedAmount?.toSignificant(4)} {dummyPair.token0.symbol}-{dummyPair.token1.symbol} LP
+            </Fonts.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -256,7 +259,9 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
         <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <Fonts.largeHeader>Transaction Submitted</Fonts.largeHeader>
-            <Fonts.body fontSize={20}>Deposited {parsedAmount?.toSignificant(4)} RETHERS-LP</Fonts.body>
+            <Fonts.body fontSize={20}>
+              Deposited {parsedAmount?.toSignificant(4)} {dummyPair.token0.symbol}-{dummyPair.token1.symbol} LP
+            </Fonts.body>
           </AutoColumn>
         </SubmittedView>
       )}

@@ -1,5 +1,5 @@
-import { ChainId } from '@retherswap/sdk';
 import React, { useMemo } from 'react';
+import { ChainId } from '@retherswap/sdk';
 import { Text } from 'rebass';
 import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -183,6 +183,7 @@ export default function Header() {
         { title: 'Docs', link: 'https://docs.retherswap.org', external: true },
         { title: 'Code', link: 'https://github.com/Retherswap', external: true },
         { title: 'Discord', link: 'https://discord.gg/xCB4AJDEFb', external: true },
+        { title: 'TradingView', link: 'https://www.tradingview.com/', external: true },
         { title: 'Geckoterminal', link: 'https://www.geckoterminal.com/hypra-network/pools', external: true },
       ];
     }
@@ -191,6 +192,7 @@ export default function Header() {
       { title: 'Docs', link: 'https://docs.retherswap.org', external: true },
       { title: 'Code', link: 'https://github.com/Retherswap', external: true },
       { title: 'Discord', link: 'https://discord.gg/xCB4AJDEFb', external: true },
+      { title: 'TradingView', link: 'https://www.tradingview.com/', external: true },
       { title: 'Geckoterminal', link: 'https://www.geckoterminal.com/hypra-network/pools', external: true },
     ];
   }, [isAdmin]);

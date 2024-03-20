@@ -60,7 +60,7 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
     if (!balance?.token.address) return;
     const fetchInfo = () => {
       return fetch(
-        `${apiUrl}/tokens/${balance.token.address}/price_at/${new Date(
+        `${apiUrl}/tokens/${balance.token.address.address}/price_at/${new Date(
           new Date().getTime() - 1000 * 60 * 60 * 24
         ).toISOString()}`
       )
@@ -73,7 +73,7 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
     fetchInfo();
   }, [balance]);
   const tokenPrice = useMemo(() => {
-    if (!balance?.token.nativeQuote || !nativeToken?.usdPrice) {
+    if (!balance?.token?.nativeQuote || !nativeToken?.usdPrice) {
       return;
     }
     return Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice);
@@ -82,7 +82,7 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
     if (!tokenPrice || !price) {
       return;
     }
-    return (tokenPrice / Number(price.closeUsd ?? 0)) * 100 - 100;
+    return (tokenPrice / Number(price.usdQuote ?? 0)) * 100 - 100;
   }, [price, tokenPrice]);
   const avgChange = useMemo(() => {
     if (!balance || !tokenPrice) {
@@ -92,9 +92,9 @@ export default function TokenBalancePrice({ balance }: { balance?: Balance }) {
   }, [balance, tokenPrice]);
   const theme = useTheme();
   const isDarkMode = useIsDarkMode();
-  const currency = useCurrency(balance?.token.address);
-  const currency0 = useCurrency(balance?.token?.lpPair?.token0.address);
-  const currency1 = useCurrency(balance?.token?.lpPair?.token1.address);
+  const currency = useCurrency(balance?.token?.address?.address);
+  const currency0 = useCurrency(balance?.token?.lpPair?.token0?.address?.address);
+  const currency1 = useCurrency(balance?.token?.lpPair?.token1?.address?.address);
   const symbol = useTokenSymbol(balance?.token);
   return (
     <TokenBalancePriceContainer>

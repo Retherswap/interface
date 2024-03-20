@@ -1,6 +1,6 @@
+import React, { useMemo } from 'react';
 import CurrencyLogo from 'components/CurrencyLogo';
 import Row from 'components/Row';
-import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
 import Column from 'components/Column';
@@ -102,13 +102,13 @@ export default function TokenBalanceRow({ balance }: { balance?: Balance }) {
     return totalBalance * Number(balance.token.nativeQuote) * Number(nativeToken?.usdPrice);
   }, [nativeToken, balance, totalBalance]);
   const size = useWindowSize();
-  const currency0 = useCurrency(balance?.token?.lpPair?.token0.address);
-  const currency1 = useCurrency(balance?.token?.lpPair?.token1.address);
-  const currency = useCurrency(balance?.token?.address);
+  const currency0 = useCurrency(balance?.token?.lpPair?.token0?.address?.address);
+  const currency1 = useCurrency(balance?.token?.lpPair?.token1?.address?.address);
+  const currency = useCurrency(balance?.token?.address?.address);
   const name = useTokenName(balance?.token);
   const symbol = useTokenSymbol(balance?.token);
   return (
-    <Link to={`/balance/${balance?.token.address}`} style={{ textDecoration: 'none', width: '100%' }}>
+    <Link to={`/balance/${balance?.token?.address?.address}`} style={{ textDecoration: 'none', width: '100%' }}>
       <TokenBalanceRowContainer>
         <Row style={{ gap: '10px', width: '50%', flexGrow: 1, flexShrink: 1 }}>
           {balance?.token?.isLP ? (

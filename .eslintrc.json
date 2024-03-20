@@ -4,7 +4,6 @@
     "ecmaVersion": 2020,
     "sourceType": "module",
     "ecmaFeatures": {
-      // Allows for the parsing of JSX
       "jsx": true
     }
   },
@@ -31,6 +30,8 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
     "react/react-in-jsx-scope": "off",
     "object-shorthand": ["error", "always"],
     "no-restricted-imports": [

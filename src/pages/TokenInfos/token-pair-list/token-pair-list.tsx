@@ -1,16 +1,14 @@
-import { TokenModel } from 'models/TokenModel';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Fonts } from 'theme';
 import { TokenInfosCard } from '../token-infos-card';
 import Column from 'components/Column';
-import { PairModel } from 'models/PairModel';
 import TokenPairRow from './token-pair-row/token-pair-row';
 import { TokenPairListGrid } from './token-pair-list-grid';
 import Paginator from 'components/Paginator/Paginator';
 import { HideSmall } from 'components/Hide/hide-small';
 import { HideExtraSmall } from 'components/Hide/hide-extra-small';
-import { apiUrl } from 'configs/server';
+import { Pair, Token } from 'models/schema';
 
 export const Divider = styled.div`
   width: 100%;
@@ -22,23 +20,8 @@ export const RowDivider = styled(Divider)`
   height: 1px;
 `;
 
-export default function TokenPairList({ token }: { token?: TokenModel }) {
+export default function TokenPairList({ token, pairs }: { token?: Token; pairs: Pair[] }) {
   const elementsPerPage = 10;
-  const [pairs, setPairs] = useState<PairModel[]>([]);
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-    const fetchInfo = () => {
-      return fetch(`${apiUrl}/pairs/tokens/${token.address}`)
-        .then((res) => res.json())
-        .then((d) => setPairs(d))
-        .catch((e) => {
-          console.error(e);
-        });
-    };
-    fetchInfo();
-  }, [token]);
   const [page, setPage] = useState(1);
   return (
     <Column style={{ width: '100%' }}>
