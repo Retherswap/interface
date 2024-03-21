@@ -15,7 +15,7 @@ import { RowBetween } from '../../components/Row';
 import { CardSection, DataCard, CardNoise } from '../../components/earn/styled';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import StakingModal from '../../components/earn/StakingModal';
-import { useStakingInfo } from '../../state/stake/hooks';
+import { StakingInfo, useStakingInfo } from '../../state/stake/hooks';
 import UnstakingModal from '../../components/earn/UnstakingModal';
 import ClaimRewardModal from '../../components/earn/ClaimRewardModal';
 import { useTokenBalance } from '../../state/wallet/hooks';
@@ -101,17 +101,23 @@ export default function Manage({
   const { account, chainId } = useActiveWeb3React();
 
   // get currencies and pair
-  const [currencyA, currencyB] = [useCurrency(currencyIdA), useCurrency(currencyIdB)];
-  const tokenA = wrappedCurrency(currencyA ?? undefined, chainId);
-  const tokenB = wrappedCurrency(currencyB ?? undefined, chainId);
+  const currencyA = useCurrency(currencyIdA);
+  const currencyB = useCurrency(currencyIdB);
+  const tokenA = useMemo(() => wrappedCurrency(currencyA ?? undefined, chainId), [currencyA, chainId]);
+  const tokenB = useMemo(() => wrappedCurrency(currencyB ?? undefined, chainId), [currencyB, chainId]);
 
   const [, stakingTokenPair] = usePair(tokenA, tokenB);
-  const stakingInfo = useStakingInfo(stakingTokenPair)?.[0];
+  const stakingInfos = useStakingInfo(stakingTokenPair);
+  const [stakingInfo, setStakingInfo] = useState<StakingInfo>();
+  useEffect(() => {
+    setStakingInfo(stakingInfos?.[0]);
+  }, [stakingInfos]);
 
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token);
-  const showAddLiquidityButton = Boolean(
-    stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0')
+  const showAddLiquidityButton = useMemo(
+    () => Boolean(stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0')),
+    [stakingInfo, userLiquidityUnstaked]
   );
 
   // toggle for staking modal and unstaking modal
@@ -120,28 +126,35 @@ export default function Manage({
   const [showClaimRewardModal, setShowClaimRewardModal] = useState(false);
 
   // fade cards if nothing staked or nothing earned yet
-  const disableTop = !stakingInfo?.stakedAmount || stakingInfo.stakedAmount.equalTo(JSBI.BigInt(0));
+  const disableTop = useMemo(() => {
+    return !stakingInfo?.stakedAmount || stakingInfo.stakedAmount.equalTo(JSBI.BigInt(0));
+  }, [stakingInfo]);
 
-  const token = currencyA === ETHER ? tokenB : tokenA;
-  const WETH = currencyA === ETHER ? tokenA : tokenB;
+  const token = useMemo(() => (currencyA === ETHER ? tokenB : tokenA), [currencyA, tokenA, tokenB]);
+  const WETH = useMemo(() => (currencyA === ETHER ? tokenA : tokenB), [currencyA, tokenA, tokenB]);
   const backgroundColor = useColor(token);
 
   // get WETH value of staked LP tokens
   const totalSupplyOfStakingToken = useTotalSupply(stakingInfo?.stakedAmount?.token);
-  let valueOfTotalStakedAmountInWETH: TokenAmount | undefined;
-  if (totalSupplyOfStakingToken && !disableTop && stakingTokenPair && stakingInfo && WETH) {
-    // take the total amount of LP tokens staked, multiply by ETH value of all LP tokens, divide by all LP tokens
-    valueOfTotalStakedAmountInWETH = new TokenAmount(
-      WETH,
-      JSBI.divide(
-        JSBI.multiply(
-          JSBI.multiply(stakingInfo.totalStakedAmount.raw, stakingTokenPair.reserveOf(WETH).raw),
-          JSBI.BigInt(2) // this is b/c the value of LP shares are ~double the value of the WETH they entitle owner to
-        ),
-        totalSupplyOfStakingToken.raw
-      )
-    );
-  }
+  let [valueOfTotalStakedAmountInWETH, setValueOfTotalStakedAmountInWETH] = useState<TokenAmount | undefined>();
+  useEffect(() => {
+    if (totalSupplyOfStakingToken && !disableTop && stakingTokenPair && stakingInfo && WETH) {
+      // take the total amount of LP tokens staked, multiply by ETH value of all LP tokens, divide by all LP tokens
+      setValueOfTotalStakedAmountInWETH(
+        new TokenAmount(
+          WETH,
+          JSBI.divide(
+            JSBI.multiply(
+              JSBI.multiply(stakingInfo.totalStakedAmount.raw, stakingTokenPair.reserveOf(WETH).raw),
+              JSBI.BigInt(2) // this is b/c the value of LP shares are ~double the value of the WETH they entitle owner to
+            ),
+            totalSupplyOfStakingToken.raw
+          )
+        )
+      );
+    }
+  }, [totalSupplyOfStakingToken, disableTop, stakingInfo, stakingTokenPair, WETH]);
+
   const [countUpAmount, setCountUpAmount] = useState('0');
   useEffect(() => {
     const interval = setInterval(() => {
@@ -190,11 +203,14 @@ export default function Manage({
 
   // get the USD value of staked WETH
   const USDPrice = useUSDCPrice(WETH);
-  const valueOfTotalStakedAmountInUSDC =
-    valueOfTotalStakedAmountInWETH &&
-    USDPrice &&
-    USDPrice.greaterThan('0') &&
-    USDPrice.quote(valueOfTotalStakedAmountInWETH);
+  const valueOfTotalStakedAmountInUSDC = useMemo(
+    () =>
+      valueOfTotalStakedAmountInWETH &&
+      USDPrice &&
+      USDPrice.greaterThan('0') &&
+      USDPrice.quote(valueOfTotalStakedAmountInWETH),
+    [USDPrice, valueOfTotalStakedAmountInWETH]
+  );
 
   const toggleWalletModal = useWalletModalToggle();
 
@@ -205,7 +221,6 @@ export default function Manage({
       toggleWalletModal();
     }
   }, [account, toggleWalletModal]);
-
   return (
     <PageWrapper gap="lg" justify="center">
       <RowBetween style={{ gap: '24px' }}>

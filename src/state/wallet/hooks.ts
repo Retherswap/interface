@@ -10,7 +10,9 @@ import { useSingleContractMultipleData, useMultipleContractSingleData } from '..
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
  */
-export function useETHBalances(uncheckedAddresses?: (string | undefined)[]): {
+export function useETHBalances(
+  uncheckedAddresses?: (string | undefined)[]
+): {
   [address: string]: CurrencyAmount | undefined;
 } {
   const multicallContract = useMulticallContract();
@@ -90,18 +92,21 @@ export function useTokenBalances(
 // get the balance for a single token/account combo
 export function useTokenBalance(account?: string, token?: Token): TokenAmount | undefined {
   const tokenBalances = useTokenBalances(account, [token]);
-  if (!token) return undefined;
-  return tokenBalances[token.address];
+  return useMemo(() => {
+    if (!token) {
+      return undefined;
+    }
+    return tokenBalances[token.address];
+  }, [tokenBalances, token]);
 }
 
 export function useCurrencyBalances(
   account?: string,
   currencies?: (Currency | undefined)[]
 ): (CurrencyAmount | undefined)[] {
-  const tokens = useMemo(
-    () => currencies?.filter((currency): currency is Token => currency instanceof Token) ?? [],
-    [currencies]
-  );
+  const tokens = useMemo(() => currencies?.filter((currency): currency is Token => currency instanceof Token) ?? [], [
+    currencies,
+  ]);
 
   const tokenBalances = useTokenBalances(account, tokens);
   const containsETH: boolean = useMemo(() => currencies?.some((currency) => currency === ETHER) ?? false, [currencies]);

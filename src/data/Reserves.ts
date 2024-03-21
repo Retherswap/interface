@@ -1,5 +1,5 @@
 import { TokenAmount, Pair, Currency } from '@retherswap/sdk';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { abi as IRetherswapPairABI } from '@retherswap/core/build/IRetherswapPair.json';
 import { Interface } from '@ethersproject/abi';
 import { useActiveWeb3React } from '../hooks';
@@ -38,8 +38,6 @@ export function usePairs(currencies: [Currency | undefined, Currency | undefined
   // computePairAddress
   const results = useMultipleContractSingleData(pairAddresses, PAIR_INTERFACE, 'getReserves');
 
-  console.groupEnd();
-
   return useMemo(() => {
     return results.map((result, i) => {
       const { result: reserves, loading } = result;
@@ -60,5 +58,6 @@ export function usePairs(currencies: [Currency | undefined, Currency | undefined
 }
 
 export function usePair(tokenA?: Currency, tokenB?: Currency): [PairState, Pair | null] {
-  return usePairs([[tokenA, tokenB]])[0];
+  const tokens = useMemo(() => [[tokenA, tokenB]], [tokenA, tokenB]);
+  return usePairs(tokens as [Currency | undefined, Currency | undefined][])[0];
 }

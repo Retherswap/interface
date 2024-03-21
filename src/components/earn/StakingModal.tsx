@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import useTransactionDeadline from '../../hooks/useTransactionDeadline';
 import Modal from '../Modal';
 import { AutoColumn } from '../Column';
@@ -73,7 +73,10 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
   }, [onDismiss]);
 
   // pair contract for this token to be staked
-  const dummyPair = new Pair(new TokenAmount(stakingInfo.tokens[0], '0'), new TokenAmount(stakingInfo.tokens[1], '0'));
+  const dummyPair = useMemo(
+    () => new Pair(new TokenAmount(stakingInfo.tokens[0], '0'), new TokenAmount(stakingInfo.tokens[1], '0')),
+    [stakingInfo]
+  );
 
   const pairContract = usePairContract(dummyPair.liquidityToken.address);
 
@@ -125,7 +128,10 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
 
   // used for max input button
   const maxAmountInput = maxAmountSpend(userLiquidityUnstaked);
-  const atMaxAmount = Boolean(maxAmountInput && parsedAmount?.equalTo(maxAmountInput));
+  const atMaxAmount = useMemo(() => Boolean(maxAmountInput && parsedAmount?.equalTo(maxAmountInput)), [
+    maxAmountInput,
+    parsedAmount,
+  ]);
   const handleMax = useCallback(() => {
     maxAmountInput && onUserInput(maxAmountInput.toExact());
   }, [maxAmountInput, onUserInput]);
@@ -192,7 +198,6 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
         }
       });
   }
-
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
       {!attempting && !hash && (
