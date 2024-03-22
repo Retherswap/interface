@@ -1,5 +1,5 @@
 import { TokenAmount, Pair, Currency } from '@retherswap/sdk';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { abi as IRetherswapPairABI } from '@retherswap/core/build/IRetherswapPair.json';
 import { Interface } from '@ethersproject/abi';
 import { useActiveWeb3React } from '../hooks';
