@@ -8,6 +8,7 @@ import { useActiveWeb3React } from 'hooks/web3';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { widget as twWidget, ResolutionString } from 'utils/trading-view/charting_library';
 import { useWindowSize } from 'hooks/useWindowSize';
+import './enable-transactions-slider.css';
 export default function TokenPriceChart({ token }: { token?: Token }) {
   const isDarkMode = useIsDarkMode();
   const socket = useSocket();
@@ -48,6 +49,27 @@ export default function TokenPriceChart({ token }: { token?: Token }) {
       height: '100%' as any,
       width: '100%' as any,
     }));
+    widget.headerReady().then(function () {
+      let showTransactions = true;
+      const button = widget.createButton({ align: 'left', useTradingViewStyle: false });
+      const refreshButton = (show: boolean) => {
+        if (show) {
+          widget.activeChart().refreshMarks();
+        } else {
+          widget.activeChart().clearMarks();
+        }
+        button.innerHTML = `
+        <div style="display:flex; align-items:center; gap:5px"> 
+            <input type="checkbox" ${show ? 'checked' : ''}>
+          <span>Show transactions</span>
+        </div>`;
+        showTransactions = show;
+      };
+      button.addEventListener('click', function () {
+        refreshButton(!showTransactions);
+      });
+      refreshButton(showTransactions);
+    });
     return () => {
       widget.remove();
     };
