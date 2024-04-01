@@ -42,6 +42,11 @@ import AdminConnectModal from 'components/Admin/connect-modal/connect-modal';
 import AdminRouteGuard from 'guards/admin-route-guard';
 import '../styles/max-container.css';
 import AdminManageToken from './Admin/admin-dashboard/token-dashboard/manage-token/manage-token';
+import TokenBalanceProfit from './Balance/token-balance/token-balance-profit/token-balance-profit';
+import TokenBalanceTransactionList from './Balance/token-balance/token-balance-transaction-list/token-balance-transaction-list';
+import TokenApiComponent from 'apis/token-api';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import BalanceApiComponent from 'apis/balance-api';
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -69,6 +74,8 @@ const BodyWrapper = styled.div`
   z-index: 1;
 `;
 
+const queryClient = new QueryClient();
+
 export default function App() {
   const theme = useTheme();
   return (
@@ -83,55 +90,66 @@ export default function App() {
           <Popups />
           <Polling />
           <AdminConnectModal />
-          <SocketProvider>
-            <SkeletonTheme baseColor={theme.bg3} highlightColor={lighten(0.05, theme.bg3)}>
-              <Web3ReactManager>
-                <Switch>
-                  <Route exact strict path="/swap" component={Swap} />
-                  <Route exact strict path="/admin">
-                    <AdminRouteGuard>
-                      <AdminDashboard></AdminDashboard>
-                    </AdminRouteGuard>
-                  </Route>
-                  <Route exact strict path="/admin/tokens">
-                    <AdminRouteGuard>
-                      <AdminTokenDashboard></AdminTokenDashboard>
-                    </AdminRouteGuard>
-                  </Route>
-                  <Route exact strict path="/admin/token/:address">
-                    <AdminRouteGuard>
-                      <AdminManageToken></AdminManageToken>
-                    </AdminRouteGuard>
-                  </Route>
-                  <Route exact strict path="/home" component={Home} />
-                  <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
-                  <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
-                  <Route exact strict path="/find" component={PoolFinder} />
-                  <Route exact strict path="/pool" component={Pool} />
-                  <Route exact strict path="/bridge" component={Bridge} />
-                  <Route exact strict path="/usdr" component={USDRVault} />
-                  <Route exact strict path="/tokens" component={TokenList} />
-                  <Route exact strict path="/token/:address" component={TokenInfos} />
-                  <Route exact strict path="/balance" component={AccountBalance} />
-                  <Route exact strict path="/balance/:tokenAddress" component={TokenBalance} />
-                  <Route exact strict path="/farm" component={Earn} />
-                  <Route exact strict path="/vote" component={Vote} />
-                  <Route exact strict path="/create" component={RedirectToAddLiquidity} />
-                  <Route exact path="/add" component={AddLiquidity} />
-                  <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
-                  <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
-                  <Route exact path="/create" component={AddLiquidity} />
-                  <Route exact path="/create/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
-                  <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
-                  <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
-                  <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
-                  <Route exact strict path="/farm/:currencyIdA/:currencyIdB" component={Manage} />
-                  <Route exact strict path="/vote/:id" component={VotePage} />
-                  <Route component={RedirectPathToHomeOnly} />
-                </Switch>
-              </Web3ReactManager>
-            </SkeletonTheme>
-          </SocketProvider>
+          <QueryClientProvider client={queryClient}>
+            <SocketProvider>
+              <TokenApiComponent />
+              <BalanceApiComponent />
+              <SkeletonTheme baseColor={theme.bg3} highlightColor={lighten(0.05, theme.bg3)}>
+                <Web3ReactManager>
+                  <Switch>
+                    <Route exact strict path="/swap" component={Swap} />
+                    <Route exact strict path="/admin">
+                      <AdminRouteGuard>
+                        <AdminDashboard></AdminDashboard>
+                      </AdminRouteGuard>
+                    </Route>
+                    <Route exact strict path="/admin/tokens">
+                      <AdminRouteGuard>
+                        <AdminTokenDashboard></AdminTokenDashboard>
+                      </AdminRouteGuard>
+                    </Route>
+                    <Route exact strict path="/admin/token/:address">
+                      <AdminRouteGuard>
+                        <AdminManageToken></AdminManageToken>
+                      </AdminRouteGuard>
+                    </Route>
+                    <Route exact strict path="/home" component={Home} />
+                    <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
+                    <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
+                    <Route exact strict path="/find" component={PoolFinder} />
+                    <Route exact strict path="/pool" component={Pool} />
+                    <Route exact strict path="/bridge" component={Bridge} />
+                    <Route exact strict path="/usdr" component={USDRVault} />
+                    <Route exact strict path="/tokens" component={TokenList} />
+                    <Route exact strict path="/token/:address" component={TokenInfos} />
+                    <Route exact strict path="/balance" component={AccountBalance} />
+                    <Route exact strict path="/balance/:tokenAddress" component={TokenBalance} />
+                    <Route exact strict path="/balance/:tokenAddress/profit" component={TokenBalanceProfit} />
+                    <Route
+                      exact
+                      strict
+                      path="/balance/:tokenAddress/transactions"
+                      component={TokenBalanceTransactionList}
+                    />
+                    <Route exact strict path="/farm" component={Earn} />
+                    <Route exact strict path="/vote" component={Vote} />
+                    <Route exact strict path="/create" component={RedirectToAddLiquidity} />
+                    <Route exact path="/add" component={AddLiquidity} />
+                    <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+                    <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+                    <Route exact path="/create" component={AddLiquidity} />
+                    <Route exact path="/create/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+                    <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+                    <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
+                    <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+                    <Route exact strict path="/farm/:currencyIdA/:currencyIdB" component={Manage} />
+                    <Route exact strict path="/vote/:id" component={VotePage} />
+                    <Route component={RedirectPathToHomeOnly} />
+                  </Switch>
+                </Web3ReactManager>
+              </SkeletonTheme>
+            </SocketProvider>
+          </QueryClientProvider>
         </BodyWrapper>
       </AppWrapper>
     </Suspense>

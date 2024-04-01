@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatNumber } from 'utils/formatNumber';
 import ReactApexChart from 'react-apexcharts';
 import { useIsDarkMode } from 'state/user/hooks';
 import useTheme from 'hooks/useTheme';
 import styled from 'styled-components';
 import { Balance } from 'models/schema';
-import { useNativeToken } from 'hooks/useNativeToken';
 import areaChartSkeletonData from 'components/Skeleton/area-chart-skeleton-data';
+import { apiUrl } from 'configs/server';
+import { useActiveWeb3React } from 'hooks';
 
 const AccountBalanceChartWrapper = styled.div`
   width: calc(100% + 10px);
@@ -14,57 +15,35 @@ const AccountBalanceChartWrapper = styled.div`
 `;
 
 export default function TokenBalanceChart({ balance }: { balance?: Balance }) {
-  const [data, setData] = useState<any[]>(areaChartSkeletonData);
+  const [chart, setChart] = useState<any[]>(areaChartSkeletonData);
   const [loading, setLoading] = useState(true);
-  const { nativeToken } = useNativeToken();
-  useMemo(() => {
-    if (!nativeToken) return;
-    if (!balance || !balance.balanceChanges || balance.balanceChanges.length === 0) return;
-    if (!balance.token.price || balance.token.price.length === 0) return;
-    const balanceChanges = balance.balanceChanges.map((balanceChange) => {
-      return { time: new Date(balanceChange.date).getTime(), balanceChange: balanceChange };
-    });
-    balanceChanges.sort((a, b) => {
-      return a.time - b.time;
-    });
-    const findNearestBalanceChange = (date: Date) => {
-      let start = 0;
-      let end = balanceChanges.length - 1;
-      let max = 0;
-      while (start <= end && max < 10) {
-        let mid = Math.floor((start + end) / 2);
-        if (balanceChanges[mid].time === date.getTime()) {
-          return balanceChanges[mid];
-        } else if (balanceChanges[mid].time < date.getTime()) {
-          start = mid + 1;
-        } else {
-          end = mid - 1;
-        }
-        ++max;
-      }
-      if (start >= balanceChanges.length) return balanceChanges[balanceChanges.length - 1];
-      if (end < 0) return balanceChanges[0];
-      const distStart = Math.abs(balanceChanges[start].time - date.getTime());
-      const distEnd = Math.abs(date.getTime() - balanceChanges[end].time);
-      return distStart < distEnd ? balanceChanges[start] : balanceChanges[end];
+  const web3 = useActiveWeb3React();
+  useEffect(() => {
+    if (!web3.account || !balance) {
+      return;
+    }
+    const fetchInfo = () => {
+      return fetch(`${apiUrl}/balances/address/${web3.account}/token/${balance.token.address.address}/chart`)
+        .then((res) => res.json())
+        .then((data) => {
+          setLoading(false);
+          setChart(
+            data.map((item, index) => {
+              return {
+                x: new Date(item.date).getTime(),
+                y: (Number(item.amount) * Number(item.usd_quote)).toFixed(2),
+                amount: Number(item.amount),
+                price: Number(item.usd_quote),
+              };
+            })
+          );
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     };
-    setData(
-      balance.token.price
-        .map((price) => {
-          const balanceChange = findNearestBalanceChange(new Date(price.date));
-          return {
-            x: new Date(price.date).getTime(),
-            y: (Number(balanceChange.balanceChange.amount) * Number(price.usdQuote)).toFixed(2),
-            amount: Number(balanceChange.balanceChange.amount),
-            price: Number(price.usdQuote),
-          };
-        })
-        .sort((a, b) => {
-          return a.x - b.x;
-        })
-    );
-    setLoading(false);
-  }, [balance, nativeToken]);
+    fetchInfo();
+  }, [balance, web3]);
   const isDarkMode = useIsDarkMode();
   const theme = useTheme();
   return (
@@ -144,7 +123,6 @@ export default function TokenBalanceChart({ balance }: { balance?: Balance }) {
             colors: [loading ? 'gray' : theme.primary1],
             width: 2,
           },
-
           fill: {
             type: 'gradient',
             gradient: {
@@ -172,7 +150,7 @@ export default function TokenBalanceChart({ balance }: { balance?: Balance }) {
         series={[
           {
             name: 'Balance',
-            data: data,
+            data: chart,
           },
         ]}
       ></ReactApexChart>

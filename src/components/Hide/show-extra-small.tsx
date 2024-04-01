@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export const HideExtraSmall = styled.div`
-  display: unset;
+export const ShowExtraSmall = styled.div`
+  display: none;
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    display: none;
+    display: unset;
   `};
 `;

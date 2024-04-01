@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { STAKING_GENESIS, REWARDS_DURATION_DAYS } from '../../state/stake/hooks';
 import { Fonts } from '../../theme';
+import { RowBetween } from 'components/Row';
 
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
@@ -54,15 +55,17 @@ export function Countdown({ exactEnd }: { exactEnd?: Date }) {
   const seconds = timeRemaining;
 
   return (
-    <Fonts.black fontWeight={400}>
-      {message}{' '}
-      {Number.isFinite(timeRemaining) && (
-        <code>
-          {`${days}:${hours.toString().padStart(2, '0')}:${minutes
-            .toString()
-            .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
-        </code>
-      )}
-    </Fonts.black>
+    <RowBetween>
+      <Fonts.black fontSize={14}>{message}</Fonts.black>
+      <Fonts.black fontSize={14}>
+        {Number.isFinite(timeRemaining) && (
+          <>
+            {`${days}:${hours.toString().padStart(2, '0')}:${minutes
+              .toString()
+              .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+          </>
+        )}
+      </Fonts.black>
+    </RowBetween>
   );
 }

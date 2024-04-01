@@ -8,7 +8,6 @@ import { useActiveWeb3React } from 'hooks/web3';
 import { useNativeToken } from 'hooks/useNativeToken';
 import { widget as twWidget, ResolutionString } from 'utils/trading-view/charting_library';
 import { useWindowSize } from 'hooks/useWindowSize';
-import './enable-transactions-slider.css';
 export default function TokenPriceChart({ token }: { token?: Token }) {
   const isDarkMode = useIsDarkMode();
   const socket = useSocket();
@@ -22,8 +21,20 @@ export default function TokenPriceChart({ token }: { token?: Token }) {
       setIsMobile(mobile);
     }
   }, [size, isMobile, setIsMobile]);
+  const tokenName = token?.name;
+  const [dataFeed, setDataFeed] = useState<RetherswapDataFeed | undefined>(undefined);
   useEffect(() => {
     if (!socket || !token || !nativeToken) {
+      return;
+    }
+    if (dataFeed) {
+      dataFeed.setToken(token);
+    } else {
+      setDataFeed(new RetherswapDataFeed(socket, token, nativeToken, web3.account));
+    }
+  }, [socket, token, nativeToken, web3, dataFeed, setDataFeed]);
+  useEffect(() => {
+    if (!dataFeed) {
       return;
     }
     if (!document.getElementById('tv_chart_container')) return;
@@ -31,10 +42,10 @@ export default function TokenPriceChart({ token }: { token?: Token }) {
       library_path: `${serverUrl}/assets/trading_view/`,
       fullscreen: false,
       theme: isDarkMode ? 'dark' : 'light',
-      symbol: token.name,
+      symbol: tokenName,
       interval: '1D' as ResolutionString,
       container: 'tv_chart_container',
-      datafeed: new RetherswapDataFeed(socket, token, nativeToken, web3.account),
+      datafeed: dataFeed,
       locale: 'en',
       disabled_features: [
         'header_symbol_search',
@@ -73,7 +84,7 @@ export default function TokenPriceChart({ token }: { token?: Token }) {
     return () => {
       widget.remove();
     };
-  }, [isDarkMode, socket, token, web3, nativeToken, isMobile]);
+  }, [isDarkMode, dataFeed, tokenName, isMobile]);
   return (
     <>
       <div id="tv_chart_container" style={{ width: '100%', height: '100%' }}></div>

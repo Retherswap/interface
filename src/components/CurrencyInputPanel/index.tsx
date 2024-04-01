@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Currency, Pair } from '@retherswap/sdk';
+import { Currency, Pair, TokenAmount } from '@retherswap/sdk';
 import styled from 'styled-components';
 import { darken } from 'polished';
 import { useCurrencyBalance } from '../../state/wallet/hooks';
@@ -136,6 +136,7 @@ interface CurrencyInputPanelProps {
   id: string;
   showCommonBases?: boolean;
   customBalanceText?: string;
+  customBalance?: TokenAmount;
 }
 
 export default function CurrencyInputPanel({
@@ -154,6 +155,7 @@ export default function CurrencyInputPanel({
   id,
   showCommonBases,
   customBalanceText,
+  customBalance,
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation();
 
@@ -210,8 +212,9 @@ export default function CurrencyInputPanel({
                   fontSize={14}
                   style={{ display: 'inline', cursor: 'pointer' }}
                 >
-                  {!hideBalance && !!currency && selectedCurrencyBalance
-                    ? (customBalanceText ?? 'Balance: ') + selectedCurrencyBalance?.toSignificant(6)
+                  {!hideBalance && ((!!currency && selectedCurrencyBalance) || customBalance)
+                    ? (customBalanceText ?? 'Balance: ') +
+                      (customBalance ? customBalance?.toSignificant(6) : selectedCurrencyBalance?.toSignificant(6))
                     : ' -'}
                 </Fonts.body>
               )}

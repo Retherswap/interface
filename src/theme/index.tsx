@@ -199,7 +199,7 @@ export const Fonts = {
     return <TextWrapper fontWeight={600} color={'text2'} {...props} />;
   },
   gray(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'bg3'} {...props} />;
+    return <TextWrapper fontWeight={500} color={'text3'} {...props} />;
   },
   italic(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={12} fontStyle={'italic'} color={'text2'} {...props} />;

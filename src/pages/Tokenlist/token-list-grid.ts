@@ -7,15 +7,15 @@ export const TokenListGrid = styled.div`
   align-items: center;
   gap: 1em;
   ${({ theme }) => theme.mediaWidth.upToMedium`
-    grid-template-columns: 20px 3fr repeat(2, 1fr);
+    grid-template-columns: 20px 3fr repeat(3, 1fr);
   `};
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 20px 3fr 1fr;
+    grid-template-columns: 20px 2fr repeat(2, 0.8fr);
   `};
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-  grid-template-columns: 20px 2fr 1fr;
+  grid-template-columns: 2fr repeat(2, 1fr);
 `};
   ${({ theme }) => theme.mediaWidth.upToUltraSmall`
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.6fr repeat(2, 1fr);
   `};
 `;

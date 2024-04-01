@@ -84,12 +84,6 @@ export default function TokenInfosHeader({ token }: { token?: Token }) {
     );
   }, [token]);
   const price = Number(token?.nativeQuote) * Number(nativeToken?.usdPrice);
-  let formattedPrice = price.toString();
-  let index = formattedPrice.indexOf('.') + 1;
-  while (index < formattedPrice.length && (formattedPrice[index] === '0' || index < formattedPrice.indexOf('.') + 1)) {
-    ++index;
-  }
-  formattedPrice = formattedPrice.slice(0, index + 2);
   const priceChange = lastPrice ? (price / lastPrice) * 100 - 100 : 0;
   const currency = useCurrency(token?.address?.address);
   const { account } = useActiveWeb3React();
@@ -170,7 +164,7 @@ export default function TokenInfosHeader({ token }: { token?: Token }) {
                 <>
                   <Row>
                     <Fonts.black fontWeight={600} fontSize={25}>
-                      ${formattedPrice}
+                      ${formatNumber(price)}
                     </Fonts.black>
                   </Row>
                   {priceChange > 0 ? (
@@ -183,22 +177,24 @@ export default function TokenInfosHeader({ token }: { token?: Token }) {
                       <Fonts.red fontSize={25}>{priceChange.toFixed(2)}%</Fonts.red>
                       <ArrowDown color="red"></ArrowDown>
                     </Row>
-                  )}{' '}
+                  )}
                 </>
               ) : (
                 <FullWidthSkeleton width="75%"></FullWidthSkeleton>
               )}
             </PriceContainer>
-            <Row style={{ marginLeft: '50px' }}>
-              <Row style={{ gap: '10px' }}>
-                <Fonts.black>Balance :</Fonts.black>
-                {tokenBalance ? (
-                  <Fonts.black>${formatNumber(Number(tokenBalance.toExact()) * price)}</Fonts.black>
-                ) : (
-                  <CustomLightSpinner src={Circle} alt="loader" size={'18px'} />
-                )}
+            <StyledLink to={`/balance/${token?.address?.address}`}>
+              <Row style={{ marginLeft: '50px' }}>
+                <Row style={{ gap: '10px' }}>
+                  <Fonts.black>Balance :</Fonts.black>
+                  {tokenBalance ? (
+                    <Fonts.black>${formatNumber(Number(tokenBalance.toExact()) * price)}</Fonts.black>
+                  ) : (
+                    <CustomLightSpinner src={Circle} alt="loader" size={'18px'} />
+                  )}
+                </Row>
               </Row>
-            </Row>
+            </StyledLink>
           </Column>
         </Row>
         <HideSmall>
