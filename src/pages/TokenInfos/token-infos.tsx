@@ -6,25 +6,15 @@ import TokenTransactionList from './token-transaction-list/token-transaction-lis
 import Column from 'components/Column';
 import TokenInfosHeader from './token-infos-header/token-infos-header';
 import { apiUrl } from 'configs/server';
-import { Pair, Token } from 'models/schema';
+import { Pair } from 'models/schema';
+import { useToken } from 'apis/token-api';
 
 export default function TokenInfos({
   match: {
     params: { address },
   },
 }: Readonly<RouteComponentProps<{ address: string }>>) {
-  const [token, setToken] = useState<Token | undefined>(undefined);
-  useEffect(() => {
-    const fetchInfo = () => {
-      return fetch(`${apiUrl}/tokens/address/${address}`)
-        .then((res) => res.json())
-        .then((d) => setToken(d))
-        .catch((e) => {
-          console.error(e);
-        });
-    };
-    fetchInfo();
-  }, [address]);
+  const { token } = useToken(address);
   const [pairs, setPairs] = useState<Pair[]>([]);
   useEffect(() => {
     const fetchInfo = () => {

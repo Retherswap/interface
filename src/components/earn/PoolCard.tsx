@@ -21,13 +21,9 @@ const StatContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   margin-right: 1rem;
   margin-left: 1rem;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-  display: none;
-`};
 `;
 
 const Wrapper = styled(AutoColumn)<{ showBackground: boolean; bgColor: any }>`
@@ -36,7 +32,8 @@ const Wrapper = styled(AutoColumn)<{ showBackground: boolean; bgColor: any }>`
   overflow: hidden;
   position: relative;
   opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
-  background-color: ${({ theme }) => theme.blue1};
+  background-color: ${({ theme }) => theme.bg1};
+  box-shadow: ${({ theme }) => theme.boxShadow};
 `;
 
 const TopSection = styled.div`
@@ -45,9 +42,10 @@ const TopSection = styled.div`
   grid-gap: 0px;
   align-items: center;
   padding: 1rem;
+  padding-bottom: 0.2rem;
   z-index: 1;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 48px 1fr 96px;
+    grid-template-columns: 48px 1fr 70px;
   `};
 `;
 
@@ -63,7 +61,6 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
 `;
 
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
-  console.log('PoolCard', stakingInfo);
   const token0 = stakingInfo.tokens[0];
   const token1 = stakingInfo.tokens[1];
 
@@ -81,7 +78,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
   // let returnOverMonth: Percent = new Percent('0')
   let valueOfTotalStakedAmountInWETH: TokenAmount | undefined;
-  if (totalSupplyOfStakingToken?.greaterThan(JSBI.BigInt(0)) && isStaking && stakingTokenPair) {
+  if (totalSupplyOfStakingToken?.greaterThan(JSBI.BigInt(0)) && stakingTokenPair) {
     // take the total amount of LP tokens staked, multiply by ETH value of all LP tokens, divide by all LP tokens
     valueOfTotalStakedAmountInWETH = new TokenAmount(
       WETH,
@@ -110,66 +107,58 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
       <TopSection>
         <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
-        <Fonts.white fontWeight={600} fontSize={24} style={{ marginLeft: '10px' }}>
+        <Fonts.black fontWeight={600} fontSize={14} style={{ marginLeft: '10px' }}>
           {currency0.symbol}-{currency1.symbol}
-        </Fonts.white>
-
+        </Fonts.black>
         <StyledInternalLink to={`/farm/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
-          <ButtonPrimary padding="8px" borderRadius="8px">
+          <ButtonPrimary fontSize={14} padding="8px 0" borderRadius="8px">
             {isStaking ? 'Manage' : 'Deposit'}
           </ButtonPrimary>
         </StyledInternalLink>
       </TopSection>
-
       <StatContainer>
-        <RowBetween>
-          <Fonts.white> Total deposited</Fonts.white>
-          <Fonts.white>
-            {valueOfTotalStakedAmountInUSDC
-              ? `$${valueOfTotalStakedAmountInUSDC.toFixed(0, { groupSeparator: ',' })}`
-              : `${valueOfTotalStakedAmountInWETH?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} HYP`}
-          </Fonts.white>
-        </RowBetween>
-        <RowBetween>
-          <Fonts.white> Pool rate </Fonts.white>
-          <Fonts.white>
-            {stakingInfo
-              ? stakingInfo.active
-                ? `${stakingInfo.totalRewardRate
-                    ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                    ?.toFixed(0, { groupSeparator: ',' })} / week`
-                : '0 / week'
-              : '-'}
-          </Fonts.white>
+        <RowBetween style={{ width: '100%', justifyContent: 'space-between' }}>
+          <Fonts.black fontWeight={500} fontSize={14}>
+            <span>APR</span>
+          </Fonts.black>
+
+          <Fonts.black style={{ textAlign: 'right' }} fontWeight={500} fontSize={14}>
+            <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
+              🚀
+            </span>
+            {poolAPR}%
+          </Fonts.black>
         </RowBetween>
       </StatContainer>
-
       <Break />
       <BottomSection showBackground={true}>
-        <AutoColumn style={{ width: '100%' }}>
-          <RowBetween style={{ width: '100%', justifyContent: 'space-between' }}>
-            <Fonts.black color={'white'} fontWeight={500}>
-              <span>APR</span>
+        <AutoColumn style={{ width: '100%', gap: '5px' }}>
+          <RowBetween>
+            <Fonts.black fontSize={14}> Total deposited</Fonts.black>
+            <Fonts.black fontSize={14}>
+              {valueOfTotalStakedAmountInUSDC
+                ? `$${valueOfTotalStakedAmountInUSDC.toFixed(0, { groupSeparator: ',' })}`
+                : `${valueOfTotalStakedAmountInWETH?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} HYP`}
             </Fonts.black>
-
-            <Fonts.black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
-              <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
-                🚀
-              </span>
-              {poolAPR}%
+          </RowBetween>
+          <RowBetween>
+            <Fonts.black fontSize={14}> Pool rate </Fonts.black>
+            <Fonts.black fontSize={14}>
+              {stakingInfo
+                ? stakingInfo.active
+                  ? `${stakingInfo.totalRewardRate
+                      ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                      ?.toFixed(0, { groupSeparator: ',' })} / week`
+                  : '0 / week'
+                : '-'}
             </Fonts.black>
           </RowBetween>
           {isStaking && (
             <>
               <RowBetween style={{ width: '100%', justifyContent: 'space-between' }}>
-                <Fonts.black color={'white'} fontWeight={500}>
-                  <span>Your rate</span>
-                </Fonts.black>
+                <Fonts.black fontSize={14}>Your rate</Fonts.black>
 
-                <Fonts.black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
-                  <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
-                    ⚡
-                  </span>
+                <Fonts.black style={{ textAlign: 'right' }} fontSize={14}>
                   {stakingInfo
                     ? stakingInfo.active
                       ? `${stakingInfo.rewardRate

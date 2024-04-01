@@ -8,8 +8,9 @@ import Paginator from 'components/Paginator/Paginator';
 import { HideMedium } from 'components/Hide/hide-medium';
 import { HideSmall } from 'components/Hide/hide-small';
 import { apiUrl } from 'configs/server';
-import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
 import { Token } from 'models/schema';
+import Row from 'components/Row';
+import { HideExtraSmall } from 'components/Hide/hide-extra-small';
 
 export const Wrapper = styled.div`
   display: grid;
@@ -49,22 +50,32 @@ export default function TokenList() {
   }, []);
   const [page, setPage] = useState(1);
   return (
-    <div style={{ padding: '1em' }}>
+    <Row style={{ padding: '1em', width: '100%', justifyContent: 'center' }}>
       <Wrapper id="token-list-page" style={{ borderRadius: '1.5em' }}>
         <TokenListGrid>
-          <HideUltraSmall>
-            <Fonts.blue fontWeight={600}>#</Fonts.blue>
-          </HideUltraSmall>
-          <Fonts.blue fontWeight={600}>Token</Fonts.blue>
-          <Fonts.blue fontWeight={600}>Price</Fonts.blue>
+          <HideExtraSmall>
+            <Fonts.blue fontWeight={600} fontSize={16}>
+              #
+            </Fonts.blue>
+          </HideExtraSmall>
+          <Fonts.blue fontWeight={600} fontSize={16}>
+            Token
+          </Fonts.blue>
+          <Fonts.blue fontWeight={600} fontSize={16}>
+            Price
+          </Fonts.blue>
+          <Fonts.blue fontWeight={600} fontSize={16}>
+            Change
+          </Fonts.blue>
           <HideMedium>
-            <Fonts.blue fontWeight={600}>Price change</Fonts.blue>
-          </HideMedium>
-          <HideMedium>
-            <Fonts.blue fontWeight={600}>Volume 24H</Fonts.blue>
+            <Fonts.blue fontWeight={600} fontSize={16}>
+              Volume 24H
+            </Fonts.blue>
           </HideMedium>
           <HideSmall>
-            <Fonts.blue fontWeight={600}>Market cap</Fonts.blue>
+            <Fonts.blue fontWeight={600} fontSize={16}>
+              Market cap
+            </Fonts.blue>
           </HideSmall>
         </TokenListGrid>
         <Divider />
@@ -90,6 +101,6 @@ export default function TokenList() {
           }}
         ></Paginator>
       </Wrapper>
-    </div>
+    </Row>
   );
 }

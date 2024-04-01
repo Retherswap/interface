@@ -1,7 +1,7 @@
 import { apiUrl } from 'configs/server';
 import { Socket } from 'socket.io-client';
 import { formatNumber } from './formatNumber';
-import { Token } from 'models/schema';
+import { PairTransaction, Token } from 'models/schema';
 import {
   ResolutionString,
   ErrorCallback,
@@ -18,9 +18,11 @@ import {
   DatafeedConfiguration,
   IDatafeedChartApi,
   SubscribeBarsCallback,
+  Bar,
 } from './trading-view/charting_library';
 export class RetherswapDataFeed implements IExternalDatafeed, IDatafeedChartApi {
-  //private channelToSubscription = new Map();
+  private lastBarsCache = new Map();
+  private channelToSubscription = new Map<string, { channel: string; handler: (data: PairTransaction) => void }>();
   //private lastBar: Bar | undefined;
   private resolutions: { [key: string]: { resolution: string } } = {
     /*'1S': { resolution: '1 second' },
@@ -44,6 +46,10 @@ export class RetherswapDataFeed implements IExternalDatafeed, IDatafeedChartApi 
     private address: string | null | undefined
   ) {}
 
+  public setToken(token: Token) {
+    this.token = token;
+  }
+
   public getConfig(): DatafeedConfiguration {
     return {
       supported_resolutions: Object.keys(this.resolutions) as ResolutionString[],
@@ -59,32 +65,34 @@ export class RetherswapDataFeed implements IExternalDatafeed, IDatafeedChartApi 
     return { exchange: match[1], fromSymbol: match[2], toSymbol: match[3] };
   }
 
-  getNextBarTime(tradeTime, barTime) {
-    const date = new Date(barTime * 1000);
-    if (this.timeResolution === '1T') {
-      return new Date(tradeTime * 1000).getTime() / 1000;
-    } else if (this.timeResolution === '1') {
+  getNextBarTime(tradeTime, barTime, timeResolution): number {
+    const date = new Date(barTime);
+    if (timeResolution === '1T') {
+      return new Date(tradeTime).getTime();
+    } else if (timeResolution === '1') {
       date.setMinutes(date.getMinutes() + 1);
-    } else if (this.timeResolution === '5') {
+    } else if (timeResolution === '5') {
       date.setMinutes(date.getMinutes() + 5);
-    } else if (this.timeResolution === '30') {
+    } else if (timeResolution === '30') {
       date.setMinutes(date.getMinutes() + 30);
-    } else if (this.timeResolution === '60') {
+    } else if (timeResolution === '60') {
       date.setHours(date.getHours() + 1);
-    } else if (this.timeResolution === '6H') {
+    } else if (timeResolution === '240') {
+      date.setHours(date.getHours() + 4);
+    } else if (timeResolution === '360') {
       date.setHours(date.getHours() + 6);
-    } else if (this.timeResolution === '12H') {
+    } else if (timeResolution === '720') {
       date.setHours(date.getHours() + 12);
-    } else if (this.timeResolution === '1D') {
+    } else if (timeResolution === '1D') {
       date.setDate(date.getDate() + 1);
-    } else if (this.timeResolution === '4D') {
+    } else if (timeResolution === '4D') {
       date.setDate(date.getDate() + 1);
-    } else if (this.timeResolution === '1W') {
+    } else if (timeResolution === '1W') {
       date.setDate(date.getDate() + 7);
-    } else if (this.timeResolution === '1M') {
+    } else if (timeResolution === '1M') {
       date.setMonth(date.getMonth() + 1);
     }
-    return date.getTime() / 1000;
+    return date.getTime();
   }
 
   public onReady(callback: OnReadyCallback): void {
@@ -223,82 +231,21 @@ export class RetherswapDataFeed implements IExternalDatafeed, IDatafeedChartApi 
       data = data.map((bar) => {
         return {
           time: parseInt(bar.time),
-          low: bar.low,
-          high: bar.high,
-          open: bar.open,
-          close: bar.close,
+          low: Number(bar.low),
+          high: Number(bar.high),
+          open: Number(bar.open),
+          close: Number(bar.close),
           volume: Number(bar.volume),
         };
       });
+      if (periodParams.firstDataRequest) {
+        this.lastBarsCache.set(`${symbolInfo.ticker}`, { ...data[data.length - 1] });
+      }
       onResult(data);
     } catch (error) {
       console.log('[getBars]: Get error', error);
     }
   }
-
-  /*public subscribeBars(
-    symbolInfo: LibrarySymbolInfo,
-    resolution: ResolutionString,
-    onTick: SubscribeBarsCallback,
-    listenerGuid: string,
-    onResetCacheNeededCallback: () => void
-  ): void {
-    const parsedSymbol = this.parseFullSymbol(`${symbolInfo.exchange}:${symbolInfo.name}`);
-    if (!parsedSymbol) {
-      return;
-    }
-    const channelString = `0~${parsedSymbol.exchange}~${parsedSymbol.fromSymbol}~${parsedSymbol.toSymbol}`;
-    this.socket.on(channelString, (data) => {
-      console.log('[socket] Message:', data);
-      const [eventTypeStr, fromSymbol, toSymbol, , , tradeTimeStr, , tradePriceStr] = data.split('~');
-      if (parseInt(eventTypeStr) !== 0) {
-        return;
-      }
-      const tradePrice = parseFloat(tradePriceStr);
-      const tradeTime = parseInt(tradeTimeStr);
-      const channelString = `0~${fromSymbol}~${toSymbol}`;
-      const subscriptionItem = this.channelToSubscription.get(channelString);
-      if (subscriptionItem === undefined) {
-        return;
-      }
-      const lastBar = subscriptionItem.lastBar;
-      const nextDailyBarTime = this.getNextBarTime(tradeTime, lastBar.time);
-      let bar: Bar;
-      if (tradeTime >= nextDailyBarTime) {
-        bar = {
-          time: nextDailyBarTime,
-          open: tradePrice,
-          high: tradePrice,
-          low: tradePrice,
-          close: tradePrice,
-        };
-        console.log('[socket] Generate new bar', bar);
-      } else {
-        bar = {
-          ...lastBar,
-          high: Math.max(lastBar.high, tradePrice),
-          low: Math.min(lastBar.low, tradePrice),
-          close: tradePrice,
-        };
-        console.log('[socket] Update the latest bar by price', tradePrice);
-      }
-      console.log('[socket] Update the latest bar by price', tradePrice);
-      subscriptionItem.lastBar = bar;
-      subscriptionItem.handlers.forEach((handler) => handler.callback(bar));
-    });
-    this.channelToSubscription.set(listenerGuid, channelString);
-    console.log('[subscribeBars]: Subscribe to streaming. Channel:', channelString);
-  }
-
-  public unsubscribeBars(listenerGuid: string): void {
-    const channelString = this.channelToSubscription.get(listenerGuid);
-    if (channelString === undefined) {
-      return;
-    }
-    this.socket.off(channelString);
-    this.channelToSubscription.delete(listenerGuid);
-    console.log('[unsubscribeBars]: Unsubscribe from streaming. Channel:', channelString);
-  }*/
 
   public subscribeBars(
     symbolInfo: LibrarySymbolInfo,
@@ -307,9 +254,47 @@ export class RetherswapDataFeed implements IExternalDatafeed, IDatafeedChartApi 
     listenerGuid: string,
     onResetCacheNeededCallback: () => void
   ): void {
-    throw new Error('Method not implemented.');
+    const channelId = `tokens/${this.token.address.address}/transactions`;
+    const onTransaction = (data: PairTransaction) => {
+      const tradeTime = new Date(data.transaction.createdAt).getTime();
+      const lastBar = this.lastBarsCache.get(`${symbolInfo.ticker}`);
+      const nextBarTime = this.getNextBarTime(tradeTime, lastBar.time, resolution);
+      const tradePrice = Number(
+        this.token.id === data.inputToken.id ? data.inputTokenUsdQuote : data.outputTokenUsdQuote
+      );
+      let bar: Bar;
+      if (tradeTime >= nextBarTime) {
+        bar = {
+          time: nextBarTime,
+          open: tradePrice,
+          high: tradePrice,
+          low: tradePrice,
+          close: tradePrice,
+        };
+      } else {
+        bar = {
+          ...lastBar,
+          high: Math.max(lastBar.high, tradePrice),
+          low: Math.min(lastBar.low, tradePrice),
+          close: tradePrice,
+        };
+      }
+      this.lastBarsCache.set(`${symbolInfo.ticker}`, bar);
+      onTick(bar);
+    };
+    this.socket.on(channelId, (data: PairTransaction) => {
+      onTransaction(data);
+    });
+    this.channelToSubscription.set(listenerGuid, { channel: channelId, handler: onTransaction });
   }
+
   public unsubscribeBars(listenerGuid: string): void {
-    throw new Error('Method not implemented.');
+    const subscription = this.channelToSubscription.get(listenerGuid);
+    if (!subscription) {
+      return;
+    }
+    this.socket.off(subscription.channel, subscription.handler);
+    this.channelToSubscription.delete(listenerGuid);
+    console.log('[unsubscribeBars]: Unsubscribe from streaming. Channel:', subscription.channel);
   }
 }

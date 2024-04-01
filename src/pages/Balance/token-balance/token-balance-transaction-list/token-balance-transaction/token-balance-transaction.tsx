@@ -1,15 +1,12 @@
-import React from 'react';
-import Balance from '../balance';
+import React, { useEffect, useState } from 'react';
+import { apiUrl } from 'configs/server';
 import { useActiveWeb3React } from 'hooks';
-import TokenBalanceHeader from './token-balance-header';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { ChevronLeft } from 'react-feather';
 import styled from 'styled-components';
-import TokenBalancePriceCard from './token-balance-price-card';
-import TokenBalanceProfitCard from './token-balance-profit-card';
-import { useTokenBalance } from 'apis/balance-api';
-import TokenBalanceRewardCard from './token-balance-reward-card';
+import { Balance as BalanceModel } from 'models/schema';
+import Balance from 'pages/Balance/balance';
 
 const BackLink = styled(Link)`
   position: absolute;
@@ -40,28 +37,30 @@ const TokenBalanceContainer = styled.div`
   padding-bottom: 0.5em;
 `;
 
-export default function TokenBalance({
+export default function TokenBalanceTransaction({
   match: {
     params: { tokenAddress },
   },
 }: Readonly<RouteComponentProps<{ tokenAddress: string }>>) {
   const web3 = useActiveWeb3React();
-  const { balance } = useTokenBalance(web3.account ?? '', tokenAddress);
+  const [balance, setBalance] = useState<BalanceModel | undefined>(undefined);
+  useEffect(() => {
+    const fetchInfo = () => {
+      return fetch(`${apiUrl}/balances/address/${web3.account}/token/${tokenAddress}`)
+        .then((res) => res.json())
+        .then((d) => setBalance(d))
+        .catch((e) => {
+          console.error(e);
+        });
+    };
+    fetchInfo();
+  }, [web3.account, tokenAddress]);
   return (
     <Balance>
-      <BackLink to="/balance">
+      <BackLink to={`/balance/${tokenAddress}/transactions`}>
         <ChevronLeft size={25}></ChevronLeft>
       </BackLink>
-      <TokenBalanceContainer>
-        <TokenBalanceHeader balance={balance}></TokenBalanceHeader>
-        <TokenBalanceContent>
-          <TokenBalancePriceCard balance={balance}></TokenBalancePriceCard>
-          <TokenBalanceProfitCard balance={balance}></TokenBalanceProfitCard>
-          {(balance?.token?.rewards?.length ?? 0) > 0 && (
-            <TokenBalanceRewardCard balance={balance}></TokenBalanceRewardCard>
-          )}
-        </TokenBalanceContent>
-      </TokenBalanceContainer>
+      <TokenBalanceContainer>Zaz</TokenBalanceContainer>
     </Balance>
   );
 }

@@ -9,6 +9,7 @@ import Paginator from 'components/Paginator/Paginator';
 import { HideMedium } from 'components/Hide/hide-medium';
 import { apiUrl } from 'configs/server';
 import { PairTransaction, Token } from 'models/schema';
+import { useSocket } from 'hooks/useSocket';
 export const Divider = styled.div`
   width: 100%;
   height: 2px;
@@ -36,6 +37,26 @@ export default function TokenTransactionList({ token }: { token?: Token }) {
     fetchInfo();
   }, [token]);
   const [page, setPage] = useState(1);
+  const socket = useSocket();
+  useEffect(() => {
+    if (!socket || !token) {
+      return;
+    }
+    const channelId = `tokens/${token.address.address}/transactions`;
+    socket.on(channelId, (data: PairTransaction) => {
+      setTransactions((transactions) => {
+        const newTransactions = [...transactions];
+        const index = newTransactions.findIndex((t) => t.id === data.id);
+        if (index !== -1) {
+          newTransactions[index] = data;
+        } else {
+          newTransactions.unshift(data);
+        }
+        return newTransactions.splice(0, elementsPerPage * 10);
+      });
+    });
+    return () => {};
+  }, [token, socket]);
   return (
     <Column style={{ width: '100%' }}>
       <h1>Transactions</h1>

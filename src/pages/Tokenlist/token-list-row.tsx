@@ -11,8 +11,8 @@ import { HideMedium } from 'components/Hide/hide-medium';
 import { HideExtraSmall } from 'components/Hide/hide-extra-small';
 import { useCurrency } from 'hooks/useCurrency';
 import FullWidthSkeleton from 'components/Skeleton/full-width-skeleton';
-import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
 import { Token } from 'models/schema';
+import { useWindowSize } from 'hooks/useWindowSize';
 export const StyledLink = styled(Link)`
   text-decoration: none;
   cursor: pointer;
@@ -50,21 +50,29 @@ export default function TokenListRow({ index, token }: { index: number; token?: 
   const lastPrice = Number(token?.price?.[0]?.usdQuote ?? 0);
   const priceChange = lastPrice ? (price / lastPrice) * 100 - 100 : 0;
   const currency = useCurrency(token?.address?.address);
+  const windowSize = useWindowSize();
+  const fontSize = useMemo(() => {
+    return (windowSize.width ?? 0) < 768 ? 12 : 16;
+  }, [windowSize.width]);
   return (
     <StyledLink to={`/token/${token?.address?.address}`}>
       <TokenListGrid>
-        <HideUltraSmall>
-          <Fonts.black fontWeight={500}>{index}</Fonts.black>
-        </HideUltraSmall>
+        <HideExtraSmall>
+          <Fonts.black fontWeight={500} fontSize={fontSize}>
+            {index}
+          </Fonts.black>
+        </HideExtraSmall>
         <Row style={{ gap: '10px' }}>
-          <CurrencyLogo currency={currency} size="35px" />
+          <CurrencyLogo currency={currency} size="30px" />
           <Row style={{ gap: '5px' }}>
             {token ? (
               <>
                 <HideExtraSmall>
-                  <Fonts.black fontWeight={500}>{token.name}</Fonts.black>
+                  <Fonts.black fontWeight={500} fontSize={fontSize}>
+                    {token.name}
+                  </Fonts.black>
                 </HideExtraSmall>
-                <Fonts.black fontWeight={500}>
+                <Fonts.black fontWeight={500} fontSize={fontSize}>
                   <Row>
                     <HideExtraSmall>(</HideExtraSmall>
                     {token.symbol}
@@ -79,7 +87,24 @@ export default function TokenListRow({ index, token }: { index: number; token?: 
         </Row>
         <Row style={{ gap: '5px' }}>
           {token ? (
-            <Fonts.black fontWeight={500}>${formattedPrice}</Fonts.black>
+            <Fonts.black fontWeight={500} fontSize={fontSize}>
+              ${formattedPrice}
+            </Fonts.black>
+          ) : (
+            <FullWidthSkeleton width="75%"></FullWidthSkeleton>
+          )}
+        </Row>
+        <Row style={{ gap: '5px' }}>
+          {token ? (
+            priceChange > 0 ? (
+              <Fonts.green fontWeight={500} fontSize={fontSize}>
+                {priceChange.toFixed(2)}%
+              </Fonts.green>
+            ) : (
+              <Fonts.red fontWeight={500} fontSize={fontSize}>
+                {priceChange.toFixed(2)}%
+              </Fonts.red>
+            )
           ) : (
             <FullWidthSkeleton width="75%"></FullWidthSkeleton>
           )}
@@ -87,20 +112,9 @@ export default function TokenListRow({ index, token }: { index: number; token?: 
         <HideMedium>
           <Row style={{ gap: '5px' }}>
             {token ? (
-              priceChange > 0 ? (
-                <Fonts.green fontWeight={500}>{priceChange.toFixed(2)}%</Fonts.green>
-              ) : (
-                <Fonts.red fontWeight={500}>{priceChange.toFixed(2)}%</Fonts.red>
-              )
-            ) : (
-              <FullWidthSkeleton width="75%"></FullWidthSkeleton>
-            )}
-          </Row>
-        </HideMedium>
-        <HideMedium>
-          <Row style={{ gap: '5px' }}>
-            {token ? (
-              <Fonts.black fontWeight={500}>${formatNumber(volume)}</Fonts.black>
+              <Fonts.black fontWeight={500} fontSize={fontSize}>
+                ${formatNumber(volume)}
+              </Fonts.black>
             ) : (
               <FullWidthSkeleton width="75%"></FullWidthSkeleton>
             )}
@@ -109,7 +123,9 @@ export default function TokenListRow({ index, token }: { index: number; token?: 
         <HideSmall>
           <Row style={{ gap: '5px' }}>
             {token ? (
-              <Fonts.black fontWeight={500}>${formatNumber(Number(token.circulatingSupply) * price)}</Fonts.black>
+              <Fonts.black fontWeight={500} fontSize={fontSize}>
+                ${formatNumber(Number(token.circulatingSupply) * price)}
+              </Fonts.black>
             ) : (
               <FullWidthSkeleton width="75%"></FullWidthSkeleton>
             )}

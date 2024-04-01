@@ -214,7 +214,9 @@ export default function HeaderNavigationMenu({
                   </StyledNavLink>
                 )
               ) : (
-                <StyledLink style={{ cursor: 'default' }}>{t(item.title)}</StyledLink>
+                <StyledLink key={item.title} style={{ cursor: 'default' }}>
+                  {t(item.title)}
+                </StyledLink>
               )
             )}
           </MenuContent>

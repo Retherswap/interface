@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 import { JSBI, TokenAmount, ETHER } from '@retherswap/sdk';
 import { RouteComponentProps } from 'react-router-dom';
-import DoubleCurrencyLogo from '../../components/DoubleLogo';
 import { useCurrency } from '../../hooks/Tokens';
 import { useWalletModalToggle } from '../../state/application/hooks';
 import { Fonts } from '../../theme';
@@ -31,6 +30,8 @@ import usePrevious from '../../hooks/usePrevious';
 import useUSDCPrice from '../../utils/useUSDCPrice';
 import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK } from '../../constants';
 import usePoolAPR from 'hooks/usePoolAPR';
+import { HideExtraSmall } from 'components/Hide/hide-extra-small';
+import { ShowExtraSmall } from 'components/Hide/show-extra-small';
 
 const PageWrapper = styled(AutoColumn)`
   position: relative;
@@ -57,7 +58,7 @@ const BottomSection = styled(AutoColumn)`
 `;
 
 const StyledDataCard = styled(DataCard)<{ bgColor?: any; showBackground?: any }>`
-  background-color: ${({ theme }) => theme.blue2};
+  background-color: ${({ theme }) => theme.bg2};
   z-index: 2;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
@@ -72,14 +73,14 @@ const StyledBottomCard = styled(DataCard)<{ dim: any }>`
 `;
 
 const PoolData = styled(DataCard)`
-  background-color: ${({ theme }) => theme.blue2};
+  background-color: ${({ theme }) => theme.bg2};
   border: 1px solid ${({ theme }) => theme.bg4};
   padding: 1rem;
   z-index: 1;
 `;
 
 const VoteCard = styled(DataCard)`
-  background-color: ${({ theme }) => theme.blue2};
+  background-color: ${({ theme }) => theme.bg2};
   overflow: hidden;
 `;
 
@@ -91,6 +92,16 @@ const DataRow = styled(RowBetween)`
     flex-direction: column;
     gap: 12px;
   `};
+`;
+
+const PoolInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+  flex-direction: column;
+  gap: 12px;
+`};
 `;
 
 export default function Manage({
@@ -138,7 +149,7 @@ export default function Manage({
   const totalSupplyOfStakingToken = useTotalSupply(stakingInfo?.stakedAmount?.token);
   let [valueOfTotalStakedAmountInWETH, setValueOfTotalStakedAmountInWETH] = useState<TokenAmount | undefined>();
   useEffect(() => {
-    if (totalSupplyOfStakingToken && !disableTop && stakingTokenPair && stakingInfo && WETH) {
+    if (totalSupplyOfStakingToken && stakingTokenPair && stakingInfo && WETH) {
       // take the total amount of LP tokens staked, multiply by ETH value of all LP tokens, divide by all LP tokens
       setValueOfTotalStakedAmountInWETH(
         new TokenAmount(
@@ -223,13 +234,6 @@ export default function Manage({
   }, [account, toggleWalletModal]);
   return (
     <PageWrapper gap="lg" justify="center">
-      <RowBetween style={{ gap: '24px' }}>
-        <Fonts.mediumHeader style={{ margin: 0 }}>
-          {currencyA?.symbol}-{currencyB?.symbol} Liquidity Staking
-        </Fonts.mediumHeader>
-        <DoubleCurrencyLogo currency0={currencyA ?? undefined} currency1={currencyB ?? undefined} size={24} />
-      </RowBetween>
-
       <DataRow style={{ gap: '24px' }}>
         <PoolData>
           <AutoColumn gap="sm">
@@ -262,12 +266,12 @@ export default function Manage({
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <Fonts.white fontWeight={600}>Step 1. Get liquidity tokens</Fonts.white>
+                <Fonts.black fontWeight={600}>Step 1. Get liquidity tokens</Fonts.black>
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
-                <Fonts.white fontSize={14}>
+                <Fonts.black fontSize={14}>
                   {`${currencyA?.symbol}-${currencyB?.symbol} LP tokens are required. Once you've added liquidity to the ${currencyA?.symbol}-${currencyB?.symbol} pool you can stake your liquidity tokens on this page.`}
-                </Fonts.white>
+                </Fonts.black>
               </RowBetween>
               <ButtonPrimary
                 padding="8px"
@@ -312,22 +316,21 @@ export default function Manage({
               <CardNoise />
               <AutoColumn gap="md">
                 <RowBetween>
-                  <Fonts.white fontWeight={600}>Your liquidity deposits</Fonts.white>
+                  <Fonts.black fontWeight={600} fontSize={18}>
+                    Your liquidity deposits
+                  </Fonts.black>
                 </RowBetween>
                 <RowBetween style={{ alignItems: 'top' }}>
-                  <Fonts.white fontSize={36} fontWeight={600}>
+                  <Fonts.black fontSize={30} fontWeight={600}>
                     {stakingInfo?.stakedAmount?.toSignificant(6) ?? '-'}
-                  </Fonts.white>
+                  </Fonts.black>
                   <AutoColumn style={{ gap: '3px' }}>
-                    <Fonts.white fontSize={15}>
-                      LP: {currencyA?.symbol}-{currencyB?.symbol}
-                    </Fonts.white>
                     <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
-                      <Fonts.white fontSize={15}>{tokensCount[0]}</Fonts.white>
+                      <Fonts.black fontSize={15}>{tokensCount[0]}</Fonts.black>
                       <CurrencyLogo currency={currencyA ?? undefined} size={'24px'} />
                     </RowBetween>
                     <RowBetween style={{ justifyContent: 'end', gap: '5px' }}>
-                      <Fonts.white fontSize={15}>{tokensCount[1]}</Fonts.white>{' '}
+                      <Fonts.black fontSize={15}>{tokensCount[1]}</Fonts.black>{' '}
                       <CurrencyLogo currency={currencyB ?? undefined} size={'24px'} />
                     </RowBetween>
                   </AutoColumn>
@@ -340,7 +343,7 @@ export default function Manage({
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                  <Fonts.black>Your unclaimed {stakingInfo?.rewardToken.symbol}</Fonts.black>
+                  <Fonts.black fontSize={18}>Your unclaimed {stakingInfo?.rewardToken.symbol}</Fonts.black>
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
                   <ButtonSecondary
@@ -354,7 +357,7 @@ export default function Manage({
                 )}
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>
-                <Fonts.largeHeader fontSize={36} fontWeight={600}>
+                <Fonts.largeHeader fontSize={30} fontWeight={600}>
                   <CountUp
                     key={countUpAmount}
                     isCounting
@@ -366,7 +369,7 @@ export default function Manage({
                   />
                 </Fonts.largeHeader>
               </RowBetween>
-              <RowBetween style={{ alignItems: 'baseline' }}>
+              <PoolInfoContainer style={{ alignItems: 'baseline' }}>
                 <Fonts.black fontSize={16} fontWeight={500}>
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                     ⚡
@@ -379,12 +382,19 @@ export default function Manage({
                   {` ${stakingInfo?.rewardToken.symbol} / week`}
                 </Fonts.black>
                 <Fonts.black fontSize={16} fontWeight={500}>
+                  <ShowExtraSmall>
+                    <span role="img" aria-label="rocket-icon" style={{ marginRight: '8px ' }}>
+                      🚀
+                    </span>
+                  </ShowExtraSmall>
                   {poolAPR}% APR
-                  <span role="img" aria-label="rocket-icon" style={{ marginLeft: '8px ' }}>
-                    🚀
-                  </span>
+                  <HideExtraSmall>
+                    <span role="img" aria-label="rocket-icon" style={{ marginLeft: '8px ' }}>
+                      🚀
+                    </span>
+                  </HideExtraSmall>
                 </Fonts.black>
-              </RowBetween>
+              </PoolInfoContainer>
             </AutoColumn>
           </StyledBottomCard>
         </BottomSection>

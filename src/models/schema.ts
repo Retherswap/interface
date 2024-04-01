@@ -67,6 +67,7 @@ export interface Token {
   balance: Balance[] | null;
   lpPair: Pair | null;
   excludedSupplyAddresses: ExcludedSupplyAddresses[] | null;
+  rewards: TokenReward[] | null;
   address: Address;
 }
 
@@ -164,6 +165,7 @@ export interface PairTransaction {
   outputTokenQuote: number;
   inputTokenUsdQuote: number;
   outputTokenUsdQuote: number;
+  averageBuyPrice: number;
   type: PairTransactionType;
   transaction: Transaction;
   pair: Pair;
@@ -211,6 +213,18 @@ export interface Balance {
   balanceChanges: BalanceChange[] | null;
   spent: BalanceSpent | null;
   profit: BalanceProfit | null;
+}
+
+export interface TokenReward {
+  id: number;
+  idToken: number;
+  idRewardToken: number;
+  idAddress: number;
+  reason: TokenRewardSource;
+  reward: number;
+  token: Token;
+  rewardToken: Token;
+  address: Address;
 }
 
 export interface BalanceChange {
@@ -265,7 +279,13 @@ export interface BalanceProfit {
   id: number;
   idBalance: number;
   usdAmount: number;
+  buyPrice: number;
   balance: Balance;
+}
+
+export enum TokenRewardSource {
+  FARM = 'FARM',
+  HINU_DIVIDEND = 'HINU_DIVIDEND',
 }
 
 export enum PairTransactionType {
