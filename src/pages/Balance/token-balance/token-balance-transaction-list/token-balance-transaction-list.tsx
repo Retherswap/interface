@@ -12,6 +12,7 @@ import { transparentize } from 'polished';
 import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
 import { useSocket } from 'hooks/useSocket';
 import { useToken } from 'apis/token-api';
+import { useNativeToken } from 'hooks/useNativeToken';
 
 const BackLink = styled(Link)`
   position: absolute;
@@ -64,6 +65,7 @@ export default function TokenBalanceTransactionList({
 }: Readonly<RouteComponentProps<{ tokenAddress: string }>>) {
   const web3 = useActiveWeb3React();
   const { token } = useToken(tokenAddress);
+  const { nativeToken } = useNativeToken();
   const [transactions, setTransactions] = useState<PairTransaction[]>([]);
   useEffect(() => {
     if (!web3.account) {
@@ -105,19 +107,43 @@ export default function TokenBalanceTransactionList({
       return transactions.filter((transaction) => transaction.type === 'SWAP');
     }
     if (filter === 'buys') {
-      return transactions.filter((transaction) => transaction.type === 'SWAP');
+      return transactions.filter(
+        (transaction) =>
+          transaction.type === 'SWAP' &&
+          transaction.outputToken.address.address.toLowerCase() === tokenAddress.toLowerCase()
+      );
     }
     if (filter === 'sells') {
-      return transactions.filter((transaction) => transaction.type === 'SWAP');
+      return transactions.filter(
+        (transaction) =>
+          transaction.type === 'SWAP' &&
+          transaction.inputToken.address.address.toLowerCase() === tokenAddress.toLowerCase()
+      );
     }
     if (filter === 'gains') {
-      return transactions.filter((transaction) => transaction.type === 'SWAP');
+      return transactions.filter((transaction) => {
+        if (transaction.type !== 'SWAP' || !token || !nativeToken) {
+          return false;
+        }
+        if (transaction.inputToken.address.address.toLowerCase() === tokenAddress.toLowerCase()) {
+          return (transaction.inputTokenUsdQuote - transaction.averageBuyPrice) * transaction.inputAmount > 0;
+        }
+        return token.nativeQuote * nativeToken.usdPrice - transaction.outputTokenUsdQuote > 0;
+      });
     }
     if (filter === 'loss') {
-      return transactions.filter((transaction) => transaction.type === 'SWAP');
+      return transactions.filter((transaction) => {
+        if (transaction.type !== 'SWAP' || !token || !nativeToken) {
+          return false;
+        }
+        if (transaction.inputToken.address.address.toLowerCase() === tokenAddress.toLowerCase()) {
+          return (transaction.inputTokenUsdQuote - transaction.averageBuyPrice) * transaction.inputAmount <= 0;
+        }
+        return token.nativeQuote * nativeToken.usdPrice - transaction.outputTokenUsdQuote <= 0;
+      });
     }
     return transactions;
-  }, [filter, transactions]);
+  }, [filter, transactions, token, nativeToken, tokenAddress]);
   return (
     <Balance>
       <BackLink to={`/balance/${tokenAddress}`}>

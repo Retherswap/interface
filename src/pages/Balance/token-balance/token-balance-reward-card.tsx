@@ -4,14 +4,12 @@ import { Fonts } from 'theme';
 import { formatNumber } from 'utils/formatNumber';
 import Row, { RowBetween } from 'components/Row';
 import styled from 'styled-components';
-import { transparentize } from 'polished';
 import { HideUltraSmall } from 'components/Hide/hide-ultra-small';
 import { Balance } from 'models/schema';
 import Skeleton from 'react-loading-skeleton';
-import NoStyleLink from 'components/Link/no-style-link';
 import Gift from '../../../assets/images/gift.png';
 
-const TokenBalancePriceContainer = styled(NoStyleLink)`
+const TokenBalanceRewardContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -20,43 +18,53 @@ const TokenBalancePriceContainer = styled(NoStyleLink)`
   width: 100%;
   text-wrap: nowrap;
   padding: 1em;
-  cursor: pointer;
-  :hover {
-    background-color: ${({ theme }) => transparentize(0.1, theme.bg2)};
-  }
 `;
 
 export default function TokenBalanceRewardCard({ balance }: { balance?: Balance }) {
   const { nativeToken } = useNativeToken();
-  const reward = useMemo(() => {
+  const tokenReward = useMemo(() => {
     if (balance && balance.token.rewards) {
       let rewards = 0;
       for (const reward of balance.token.rewards) {
-        rewards += Number(reward.reward);
+        if (reward.idRewardToken === balance.token.id) {
+          rewards += Number(reward.reward);
+        }
       }
       return rewards;
     }
     return undefined;
   }, [balance]);
-  const rewardUsd = useMemo(() => {
-    if (!reward || !balance || !nativeToken) {
+  const tokenRewardUsd = useMemo(() => {
+    if (!tokenReward || !balance || !nativeToken) {
       return 0;
     }
-    return reward * (Number(balance?.token.nativeQuote) * Number(nativeToken?.usdPrice));
-  }, [reward, balance, nativeToken]);
+    return tokenReward * (Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice));
+  }, [balance, tokenReward, nativeToken]);
+  const rewardUsd = useMemo(() => {
+    if (!balance || !nativeToken || !balance.token.rewards) {
+      return 0;
+    }
+    let rewards = 0;
+    for (const reward of balance.token.rewards) {
+      if (reward.idRewardToken !== balance.token.id) {
+        rewards += Number(reward.reward) * (Number(reward.rewardToken.nativeQuote) * Number(nativeToken?.usdPrice));
+      }
+    }
+    return rewards;
+  }, [balance, nativeToken]);
   return (
-    <TokenBalancePriceContainer to={`/balance/${balance?.token.address.address}/profit`}>
+    <TokenBalanceRewardContainer>
       <RowBetween style={{ width: '100%' }}>
         <Row style={{ gap: '5px' }}>
           <HideUltraSmall style={{ height: '25px' }}>
             <img src={Gift} alt="cash" style={{ width: '20px', height: '20px' }}></img>
           </HideUltraSmall>
-          {balance && rewardUsd ? (
+          {balance && tokenRewardUsd ? (
             <>
               <Fonts.black fontWeight={800} fontSize={15}>
                 Rewards:
               </Fonts.black>
-              <Fonts.green fontSize={14}>$ {formatNumber(rewardUsd, { reduce: false })}</Fonts.green>
+              <Fonts.green fontSize={14}>$ {formatNumber(tokenRewardUsd, { reduce: false })}</Fonts.green>
             </>
           ) : (
             <Skeleton width="200px"></Skeleton>
@@ -64,14 +72,17 @@ export default function TokenBalanceRewardCard({ balance }: { balance?: Balance 
         </Row>
         <Row style={{ width: '100%', justifyContent: 'end' }}>
           <Fonts.black fontSize={14}>
-            {balance && rewardUsd ? (
-              formatNumber(reward) + ' ' + balance.token.symbol
+            {balance && tokenReward ? (
+              formatNumber(tokenReward) +
+              ' ' +
+              balance.token.symbol +
+              (rewardUsd - tokenRewardUsd > 0 ? ' + $' + formatNumber(rewardUsd - tokenRewardUsd) : '')
             ) : (
               <Skeleton width="200px"></Skeleton>
             )}
           </Fonts.black>
         </Row>
       </RowBetween>
-    </TokenBalancePriceContainer>
+    </TokenBalanceRewardContainer>
   );
 }

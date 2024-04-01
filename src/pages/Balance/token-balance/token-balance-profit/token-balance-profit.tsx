@@ -43,21 +43,28 @@ export default function TokenBalanceProfit({
   const web3 = useActiveWeb3React();
   const { balance } = useTokenBalance(web3.account ?? '', tokenAddress);
   const { nativeToken } = useNativeToken();
-  const realizedProfit = useMemo(() => {
+  const balanceUsd = useMemo(() => {
     if (balance && nativeToken) {
-      return Number(balance?.profit?.usdAmount ?? 0) - Number(balance?.spent?.usdAmount ?? 0);
+      return Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice);
     }
     return undefined;
   }, [balance, nativeToken]);
   const nonRealizedProfit = useMemo(() => {
-    if (balance && realizedProfit && nativeToken && balance.profit && balance.spent) {
+    if (balance && balanceUsd && balance.profit && balance.spent) {
+      return balanceUsd - Number(balance.balance) * Number(balance.averagePrice?.usdQuote);
+    }
+    return undefined;
+  }, [balance, balanceUsd]);
+  const realizedProfit = useMemo(() => {
+    if (balance) {
       return (
-        Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice) -
-        Math.max(Number(balance.spent.usdAmount) - Number(balance?.profit?.usdAmount ?? 0), 0)
+        Number(balance?.profit?.usdAmount ?? 0) -
+        Number(balance?.spent?.usdAmount ?? 0) +
+        Number(balance.balance) * Number(balance.averagePrice?.usdQuote)
       );
     }
     return undefined;
-  }, [balance, nativeToken, realizedProfit]);
+  }, [balance]);
   const totalProfit = useMemo(() => {
     if (nonRealizedProfit !== undefined && realizedProfit !== undefined) {
       return nonRealizedProfit + realizedProfit;
@@ -88,7 +95,6 @@ export default function TokenBalanceProfit({
         'Non realized',
         'Non realized profits/losses',
         'Realized profits/losses',
-
         `$${formatNumber(nonRealizedProfit ?? '0', { reduce: false })} USD`
       ),
       new ProfitTab(
@@ -127,9 +133,6 @@ export default function TokenBalanceProfit({
                 />
               ))}
             </RowBetween>
-            <Fonts.black fontSize={12} textAlign="center">
-              {selectedTab.description}
-            </Fonts.black>
           </Column>
         </TokenBalanceContainer>
       )}

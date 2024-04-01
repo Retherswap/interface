@@ -218,10 +218,12 @@ export interface Balance {
 export interface TokenReward {
   id: number;
   idToken: number;
+  idRewardToken: number;
   idAddress: number;
   reason: TokenRewardSource;
   reward: number;
   token: Token;
+  rewardToken: Token;
   address: Address;
 }
 
