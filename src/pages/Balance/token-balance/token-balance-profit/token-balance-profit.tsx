@@ -45,12 +45,7 @@ export default function TokenBalanceProfit({
   const { nativeToken } = useNativeToken();
   const realizedProfit = useMemo(() => {
     if (balance && nativeToken) {
-      return (
-        Number(balance?.profit?.usdAmount ?? 0) -
-        Number(balance?.spent?.usdAmount ?? 0) +
-        Number(balance.balance) * Number(balance.token.nativeQuote) * Number(nativeToken.usdPrice) -
-        Number(balance?.profit?.buyPrice ?? 0)
-      );
+      return Number(balance?.profit?.usdAmount ?? 0) - Number(balance?.spent?.usdAmount ?? 0);
     }
     return undefined;
   }, [balance, nativeToken]);

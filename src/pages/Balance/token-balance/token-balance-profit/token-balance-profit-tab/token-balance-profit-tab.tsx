@@ -6,7 +6,7 @@ const ProfitTabContainer = styled.div<{ active: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.4em 1em;
+  padding: 0.4em 5px;
   border-radius: 5px;
   width: 100%;
   color: ${({ theme, active }) => (active ? theme.text1 : theme.text3)};
@@ -19,6 +19,9 @@ const ProfitTabContainer = styled.div<{ active: boolean }>`
 const ProfitTabTitle = styled.span`
   font-size: 13px;
   font-weight: 500;
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+  font-size: 10px;
+  `}
 `;
 
 export class ProfitTab {
